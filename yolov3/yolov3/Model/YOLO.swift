@@ -13,6 +13,7 @@ import Accelerate
 enum YOLOType {
   case v3_Tiny
   case v3_416
+  case v3_nulp
   
   func description() -> String {
     switch self {
@@ -20,6 +21,8 @@ enum YOLOType {
       return "YOLOv3-416"
     case .v3_Tiny:
       return "YOLOv3-tiny"
+    case .v3_nulp:
+      return "YOLOv3-nulp"
     }
   }
   
@@ -29,13 +32,15 @@ enum YOLOType {
       return .v3_Tiny
     case "YOLOv3-416":
       return .v3_416
+    case "YOLOv3-nulp":
+      return .v3_nulp
     default:
       return .v3_Tiny
     }
   }
   
   static func modelNames() -> [String] {
-    return ["YOLOv3-tiny", "YOLOv3-416"]
+    return ["YOLOv3-tiny", "YOLOv3-416", "YOLOv3-nulp"]
   }
 }
 
@@ -48,7 +53,8 @@ class YOLO: NSObject {
   private let pixelBufferSize = CGSize(width: CGFloat(YOLO.inputSize),
                                        height: CGFloat(YOLO.inputSize))
   private let inputName = "image"
-  private var classes = [Float](repeating: 0, count: 80)
+
+  private var classes = [Float](repeating: 0, count: Settings.shared.isCustomModel() ? customLabels.count : labels.count)
   private var anchors: [String: Array<Float>]!
   
   var confidenceThreshold: Float
@@ -78,6 +84,9 @@ class YOLO: NSObject {
       self.anchors = tiny_anchors
     case .v3_416:
       url = Bundle.main.url(forResource: "yolo", withExtension:"mlmodelc")
+      self.anchors = anchors_416
+    case .v3_nulp:
+      url = Bundle.main.url(forResource: "yolo-nulp", withExtension:"mlmodelc")
       self.anchors = anchors_416
     }
     guard let modelURL = url else {
@@ -116,7 +125,7 @@ class YOLO: NSObject {
     var predictions = [Prediction]()
     let grid = out.shape[out.shape.count-1].intValue
     let gridSize = YOLO.inputSize / Float(grid)
-    let classesCount = labels.count
+    let classesCount = Settings.shared.isCustomModel() ? customLabels.count : labels.count
     let pointer = UnsafeMutablePointer<Double>(OpaquePointer(out.dataPointer))
     if out.strides.count < 3 {
       throw YOLOError.strideOutOfBounds
@@ -143,7 +152,8 @@ class YOLO: NSObject {
           let y_pos = (sigmoid(bby) + Float(y)) * gridSize
           let width = exp(bbw) * self.anchors[name]![2 * box_i]
           let height = exp(bbh) * self.anchors[name]![2 * box_i + 1]
-          for c in 0 ..< 80 {
+          let count = Settings.shared.isCustomModel() ? customLabels.count : labels.count
+          for c in 0 ..< count {
             classes[c] = Float(pointer[offset(ch: boxOffset + 5 + c, x: x, y: y)])
           }
           softmax(&classes)

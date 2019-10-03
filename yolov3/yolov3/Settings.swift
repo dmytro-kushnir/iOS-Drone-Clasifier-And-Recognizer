@@ -8,7 +8,7 @@
 
 import Foundation
 
-private let defaultModel = YOLOType.v3_Tiny
+private let defaultModel = YOLOType.v3_nulp
 private let defaultIOUThreshold: Float = 0.2
 private let defaultConfidenceThreshold: Float = 0.2
 private let defaultIsSmoothed = true
@@ -36,6 +36,10 @@ class Settings {
     iouThreshold = defaultIOUThreshold
     modelType = defaultModel
     isSmoothed = defaultIsSmoothed
+  }
+  
+  func isCustomModel() -> Bool {
+    return self.modelType.description() == "YOLOv3-nulp";
   }
   
   func save(modelType: YOLOType) -> Bool {

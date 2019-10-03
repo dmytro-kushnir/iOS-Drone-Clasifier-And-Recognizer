@@ -85,11 +85,12 @@ class PredictionLayer {
   
   func addBoundingBoxes(predictions: [YOLO.Prediction]) {
     for prediction in predictions {
+      let colors = Settings.shared.isCustomModel() ? ColorPallete.shared.colorsCustom : ColorPallete.shared.colors
       let boundingBox = BoundingBox(predRect: prediction.rect,
                                     transform: transform,
                                     label: labels[prediction.classIndex],
                                     confidence: prediction.score,
-                                    color: ColorPallete.shared.colors[prediction.classIndex])
+                                    color: colors[prediction.classIndex])
       boundingBox.addTo(layer: layer)
     }
   }

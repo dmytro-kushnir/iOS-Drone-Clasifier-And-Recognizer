@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+let isCustomModel = Settings.shared.isCustomModel();
+
 let labels = ["person","bike","car","motorbike","aeroplane","bus",
               "train","truck","boat","traffic light","fire hydrant",
               "stop sign","parking meter","bench","bird","cat","dog",
@@ -23,10 +25,12 @@ let labels = ["person","bike","car","motorbike","aeroplane","bus",
               "remote","keyboard","cell phone","microwave","oven","toaster",
               "sink","refrigerator","book","clock","vase","scissors",
               "teddy bear","hair drier","toothbrush"]
+let customLabels = ["nulp"]
 
 struct ColorPallete {
   static let shared = ColorPallete()
   let colors: [CGColor]
+  let colorsCustom: [CGColor]
   init() {
     colors = [
       ColorPallete.rgba(244,67,54,1), ColorPallete.rgba(33,150,243,1),
@@ -70,6 +74,7 @@ struct ColorPallete {
       ColorPallete.rgba(195,0,82 ,1), ColorPallete.rgba(118,118,118 ,1),
       ColorPallete.rgba(195,100,82 ,1), ColorPallete.rgba(32,118,108 ,1)
     ]
+    colorsCustom = [ColorPallete.rgba(191,54,12 ,1), ColorPallete.rgba(255,82,82 ,1)]
   }
   
   private static func rgba(_ red: CGFloat, _ green: CGFloat,
