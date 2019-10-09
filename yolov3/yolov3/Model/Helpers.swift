@@ -25,7 +25,7 @@ let labels = ["person","bike","car","motorbike","aeroplane","bus",
               "remote","keyboard","cell phone","microwave","oven","toaster",
               "sink","refrigerator","book","clock","vase","scissors",
               "teddy bear","hair drier","toothbrush"]
-let customLabels = ["nulp"]
+let customLabels = ["nulp", "nulp old"]
 
 struct ColorPallete {
   static let shared = ColorPallete()
@@ -74,7 +74,8 @@ struct ColorPallete {
       ColorPallete.rgba(195,0,82 ,1), ColorPallete.rgba(118,118,118 ,1),
       ColorPallete.rgba(195,100,82 ,1), ColorPallete.rgba(32,118,108 ,1)
     ]
-    colorsCustom = [ColorPallete.rgba(191,54,12 ,1), ColorPallete.rgba(255,82,82 ,1)]
+    colorsCustom = [ColorPallete.rgba(191,54,12 ,1), ColorPallete.rgba(255,82,82 ,1),
+          ColorPallete.rgba(243,156,18 ,1), ColorPallete.rgba(255,185,0 ,1)]
   }
   
   private static func rgba(_ red: CGFloat, _ green: CGFloat,
