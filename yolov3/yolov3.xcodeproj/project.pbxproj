@@ -13,8 +13,6 @@
 		111A044C22D6253800D93262 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 111A044B22D6253800D93262 /* Assets.xcassets */; };
 		111A8C3722E2015300F76A50 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111A8C3622E2015300F76A50 /* SettingsViewController.swift */; };
 		111A8C3922E20B2600F76A50 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111A8C3822E20B2600F76A50 /* Settings.swift */; };
-		111A8C3C22E6E3BD00F76A50 /* yolo-tiny.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 111A8C3A22E6E3BD00F76A50 /* yolo-tiny.mlmodel */; };
-		111A8C3D22E6E3BD00F76A50 /* yolo.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 111A8C3B22E6E3BD00F76A50 /* yolo.mlmodel */; };
 		111A8C3F22E706ED00F76A50 /* BBSmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111A8C3E22E706ED00F76A50 /* BBSmoother.swift */; };
 		1132B4C822C633D500E7E509 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1132B4C722C633D500E7E509 /* AppDelegate.swift */; };
 		1132B4CD22C633D500E7E509 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1132B4CB22C633D500E7E509 /* Main.storyboard */; };
@@ -24,6 +22,10 @@
 		1173E16E22CB8E0100324100 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E16D22CB8E0100324100 /* UIImageExtension.swift */; };
 		1173E17022CB909900324100 /* YOLO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E16F22CB909900324100 /* YOLO.swift */; };
 		1173E17222CB940000324100 /* YOLOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E17122CB940000324100 /* YOLOError.swift */; };
+		2A5077ED2380314100C9EAB3 /* DroneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5077EC2380314100C9EAB3 /* DroneViewController.swift */; };
+		2AAF13862380268B00D0887C /* yolo.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2AAF13832380268B00D0887C /* yolo.mlmodel */; };
+		2AAF13872380268B00D0887C /* yolo-nulp.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2AAF13842380268B00D0887C /* yolo-nulp.mlmodel */; };
+		2AAF13882380268B00D0887C /* yolo-tiny.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2AAF13852380268B00D0887C /* yolo-tiny.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,8 +35,6 @@
 		111A044B22D6253800D93262 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		111A8C3622E2015300F76A50 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		111A8C3822E20B2600F76A50 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
-		111A8C3A22E6E3BD00F76A50 /* yolo-tiny.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = "yolo-tiny.mlmodel"; path = "../../models/yolo-tiny.mlmodel"; sourceTree = "<group>"; };
-		111A8C3B22E6E3BD00F76A50 /* yolo.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = yolo.mlmodel; path = ../../models/yolo.mlmodel; sourceTree = "<group>"; };
 		111A8C3E22E706ED00F76A50 /* BBSmoother.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBSmoother.swift; sourceTree = "<group>"; };
 		1132B4C422C633D400E7E509 /* yolov3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yolov3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1132B4C722C633D500E7E509 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -46,6 +46,10 @@
 		1173E16D22CB8E0100324100 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		1173E16F22CB909900324100 /* YOLO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YOLO.swift; sourceTree = "<group>"; };
 		1173E17122CB940000324100 /* YOLOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YOLOError.swift; sourceTree = "<group>"; };
+		2A5077EC2380314100C9EAB3 /* DroneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DroneViewController.swift; sourceTree = "<group>"; };
+		2AAF13832380268B00D0887C /* yolo.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = yolo.mlmodel; path = ../../models/yolo.mlmodel; sourceTree = "<group>"; };
+		2AAF13842380268B00D0887C /* yolo-nulp.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = "yolo-nulp.mlmodel"; path = "../../models/yolo-nulp.mlmodel"; sourceTree = "<group>"; };
+		2AAF13852380268B00D0887C /* yolo-tiny.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = "yolo-tiny.mlmodel"; path = "../../models/yolo-tiny.mlmodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +66,7 @@
 		111A044522D5F87B00D93262 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				2A5077EC2380314100C9EAB3 /* DroneViewController.swift */,
 				111A044222D4FB3D00D93262 /* PhotoViewController.swift */,
 				113F20C322D74AEA001837AD /* OnlineViewController.swift */,
 				111A8C3622E2015300F76A50 /* SettingsViewController.swift */,
@@ -122,8 +127,9 @@
 		113F20C222D74A69001837AD /* MLModels */ = {
 			isa = PBXGroup;
 			children = (
-				111A8C3A22E6E3BD00F76A50 /* yolo-tiny.mlmodel */,
-				111A8C3B22E6E3BD00F76A50 /* yolo.mlmodel */,
+				2AAF13842380268B00D0887C /* yolo-nulp.mlmodel */,
+				2AAF13852380268B00D0887C /* yolo-tiny.mlmodel */,
+				2AAF13832380268B00D0887C /* yolo.mlmodel */,
 			);
 			name = MLModels;
 			sourceTree = "<group>";
@@ -200,15 +206,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				111A8C3922E20B2600F76A50 /* Settings.swift in Sources */,
-				111A8C3C22E6E3BD00F76A50 /* yolo-tiny.mlmodel in Sources */,
 				1132B4C822C633D500E7E509 /* AppDelegate.swift in Sources */,
 				111A044A22D5FA3000D93262 /* Helpers.swift in Sources */,
 				1173E14B22CB3C5B00324100 /* ModelProvider.swift in Sources */,
+				2AAF13872380268B00D0887C /* yolo-nulp.mlmodel in Sources */,
 				111A044822D5F91600D93262 /* PredictionLayer.swift in Sources */,
-				111A8C3D22E6E3BD00F76A50 /* yolo.mlmodel in Sources */,
 				111A044322D4FB3D00D93262 /* PhotoViewController.swift in Sources */,
+				2AAF13882380268B00D0887C /* yolo-tiny.mlmodel in Sources */,
+				2AAF13862380268B00D0887C /* yolo.mlmodel in Sources */,
 				1173E17022CB909900324100 /* YOLO.swift in Sources */,
 				113F20C422D74AEA001837AD /* OnlineViewController.swift in Sources */,
+				2A5077ED2380314100C9EAB3 /* DroneViewController.swift in Sources */,
 				111A8C3F22E706ED00F76A50 /* BBSmoother.swift in Sources */,
 				1173E16E22CB8E0100324100 /* UIImageExtension.swift in Sources */,
 				1173E17222CB940000324100 /* YOLOError.swift in Sources */,
@@ -359,7 +367,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JH6X85KXSY;
+				DEVELOPMENT_TEAM = 6TFGP63BUV;
 				INFOPLIST_FILE = yolov3/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -377,7 +385,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JH6X85KXSY;
+				DEVELOPMENT_TEAM = 6TFGP63BUV;
 				INFOPLIST_FILE = yolov3/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

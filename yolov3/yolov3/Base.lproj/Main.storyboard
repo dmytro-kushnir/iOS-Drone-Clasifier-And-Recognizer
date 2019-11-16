@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uBU-Mp-hdj">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uBU-Mp-hdj">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -290,6 +288,22 @@
             </objects>
             <point key="canvasLocation" x="-2602.4000000000001" y="-842.36453201970448"/>
         </scene>
+        <!--Drone-->
+        <scene sceneID="cNP-0A-7VV">
+            <objects>
+                <viewController id="E1b-zd-avz" customClass="DroneViewController" customModule="yolov3" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="PQh-VF-WRA">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="Vsz-tj-pxE"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Drone" id="taj-pM-jxl"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="D8d-6f-dR5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-5438" y="16"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="uKG-6d-9oX">
             <objects>
@@ -298,11 +312,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="48p-CH-dor" kind="relationship" relationship="viewControllers" id="crh-jD-xiU"/>
                         <segue destination="T20-v8-Lry" kind="relationship" relationship="viewControllers" id="hqV-2r-rwl"/>
-                        <segue destination="6Km-U2-dOY" kind="relationship" relationship="viewControllers" id="Eme-ZM-2sa"/>
+                        <segue destination="E1b-zd-avz" kind="relationship" relationship="viewControllers" id="Nnr-My-Lhu"/>
+                        <segue destination="48p-CH-dor" kind="relationship" relationship="viewControllers" id="crh-jD-xiU"/>
+                        <segue destination="6Km-U2-dOY" kind="relationship" relationship="viewControllers" id="Uiq-O1-6p7"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VeO-oE-oz4" userLabel="First Responder" sceneMemberID="firstResponder"/>
