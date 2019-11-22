@@ -22,7 +22,9 @@ class DroneViewController: UIViewController {
       case .wifiUp:
           tello.enterCommandMode()
           break
-      }
+      case .command:
+          break
+    }
   }
   
   // MARK: - View Management
@@ -51,11 +53,11 @@ class DroneViewController: UIViewController {
     
     if connectedToSSID(ssidArray: ssidArray, SSID: "TELLO") {
         tello.state = .wifiUp
-        self.WiFiImageView.image = UIImage(named: "WiFi100")
+//        self.WiFiImageView.image = UIImage(named: "WiFi100")
         print("Connected to Tello WiFi.")
     }
     else {
-        self.WiFiImageView.image = UIImage(named: "WiFiDisconnected")
+//        self.WiFiImageView.image = UIImage(named: "WiFiDisconnected")
         showNoWiFiAlert()
     }
   }
