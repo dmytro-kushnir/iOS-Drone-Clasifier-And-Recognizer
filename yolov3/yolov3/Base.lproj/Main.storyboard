@@ -298,9 +298,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jm6-4N-YUZ">
-                                <rect key="frame" x="164" y="633" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d0p-qC-vMW">
+                                <rect key="frame" x="271" y="560" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Land"/>
+                                <connections>
+                                    <action selector="landTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="pAh-NM-pLT"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ua-mT-ftG">
+                                <rect key="frame" x="42" y="560" width="95" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Stop Machine"/>
+                                <connections>
+                                    <action selector="stopTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="W3h-2l-qvd"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jm6-4N-YUZ">
+                                <rect key="frame" x="160" y="625" width="55" height="30"/>
+                                <state key="normal" title="Take off"/>
                                 <connections>
                                     <action selector="takeOffTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="nZf-wV-QfY"/>
                                 </connections>
@@ -308,8 +324,8 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="jm6-4N-YUZ" firstAttribute="leading" secondItem="Vsz-tj-pxE" secondAttribute="leading" constant="164" id="40d-Un-h7k"/>
-                            <constraint firstItem="jm6-4N-YUZ" firstAttribute="top" secondItem="Vsz-tj-pxE" secondAttribute="top" constant="589" id="Fh4-w1-jlo"/>
+                            <constraint firstItem="jm6-4N-YUZ" firstAttribute="leading" secondItem="Vsz-tj-pxE" secondAttribute="leading" constant="148" id="40d-Un-h7k"/>
+                            <constraint firstItem="jm6-4N-YUZ" firstAttribute="top" secondItem="Vsz-tj-pxE" secondAttribute="top" constant="587" id="Fh4-w1-jlo"/>
                             <constraint firstItem="Vsz-tj-pxE" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="jm6-4N-YUZ" secondAttribute="trailing" symbolic="YES" id="pS0-8h-DLz"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Vsz-tj-pxE"/>
@@ -318,7 +334,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D8d-6f-dR5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5438" y="16"/>
+            <point key="canvasLocation" x="-5439.1999999999998" y="15.517241379310345"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="uKG-6d-9oX">

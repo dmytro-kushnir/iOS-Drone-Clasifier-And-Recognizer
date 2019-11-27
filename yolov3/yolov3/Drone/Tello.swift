@@ -15,7 +15,7 @@
 //  Copyright © 2019 DmytOlh Pty Ltd. All rights reserved.
 //
 import UIKit
-import SwiftSocket
+import SwiftSocket	
 
 enum STATE: String {
     case disconnected = "WiFi disconnected"
@@ -94,5 +94,20 @@ class Tello : CustomStringConvertible {
     
     func enterCommandMode() {
         sendMessage(msg: CMD.start)
+    }
+  
+    func takeOff() {
+        sendMessage(msg: CMD.takeOff)
+    }
+    
+    func land() {
+        sendMessage(msg: CMD.land)
+    }
+    
+    func stop() {
+        sendMessage(msg: CMD.land)
+        DispatchQueue.main.asyncAfter(deadline: .now() + TIME_BTW_COMMANDS, execute: {
+            self.sendMessage(msg: CMD.stop)
+        })
     }
 }
