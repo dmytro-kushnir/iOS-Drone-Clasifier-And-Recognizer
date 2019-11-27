@@ -23,34 +23,51 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate {
   // MARK: - IBActions
   
   @IBAction func takeOffTapped(_ sender: UIButton) {
+    droneControlMethod(command: "takeOff")
+  }
+  
+  func droneControlMethod(command: String) {
       switch tello.state {
-      case .disconnected:
-          showNoWiFiAlert()
-          break
-      case .wifiUp:
-          tello.enterCommandMode()
-          tello.takeOff()
-          break
-      case .command:
-          tello.takeOff()
-          break
+        case .disconnected:
+            checkConnection()
+            break
+        case .wifiUp:
+            tello.enterCommandMode()
+            switch command {
+              case "takeOff":
+                tello.takeOff()
+                break
+              case "land":
+                tello.land()
+                break
+              case "stop":
+                tello.stop()
+                break
+              default:
+                break
+            }
+            break
+        case .command:
+            tello.takeOff()
+            break
     }
   }
   
   @IBAction func landTapped(_ sender: UIButton) {
-      tello.land()
+    droneControlMethod(command: "land")
   }
   
   @IBAction func stopTapped(_ sender: UIButton) {
-      tello.stop()
+    droneControlMethod(command: "stop")
   }
   
   // MARK: - View Management
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+
     if #available(iOS 13.0, *) {
+        // for ios 13 and higer we need ask location permissions in order to obtain wifi info
         let status = CLLocationManager.authorizationStatus()
         if status == .authorizedWhenInUse {
             updateWiFi()
@@ -81,17 +98,20 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate {
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     
-    // Check if connected to Tello WiFi
+
+  }
+  
+  // Check if connected to Tello WiFi
+  func checkConnection() {
     let ssidArray = currentSSID()
 
     if connectedToSSID(ssidArray: ssidArray, SSID: "TELLO") {
-        tello.state = .wifiUp
-//        self.WiFiImageView.image = UIImage(named: "WiFi100")
-        print("Connected to Tello WiFi.")
+      tello.state = .wifiUp
+      print("Connected to Tello WiFi.")
+      droneControlMethod(command: "")
     }
     else {
-//        self.WiFiImageView.image = UIImage(named: "WiFiDisconnected")
-        showNoWiFiAlert()
+      showNoWiFiAlert()
     }
   }
   
