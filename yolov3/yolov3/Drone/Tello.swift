@@ -103,6 +103,14 @@ class Tello : CustomStringConvertible {
     func land() {
         sendMessage(msg: CMD.land)
     }
+  
+    func streamOn() {
+        sendMessage(msg: CMD.streamOn)
+    }
+  
+    func streamOff() {
+        sendMessage(msg: CMD.streamOff)
+    }
     
     func stop() {
         sendMessage(msg: CMD.land)

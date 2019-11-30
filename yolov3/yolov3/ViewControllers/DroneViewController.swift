@@ -9,22 +9,19 @@
 import UIKit
 import SystemConfiguration.CaptiveNetwork
 import CoreLocation
+import VideoToolbox
+import SwiftSocket
 
-class DroneViewController: UIViewController, CLLocationManagerDelegate {
-  @IBOutlet weak var WiFiImageView: UIImageView!
-  
+
+class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFrameDecoderDelegate {
+  @IBOutlet weak var videoView: UIImageView!
+
+  var streamServer: UDPServer!
   var locationManager = CLLocationManager()
-  var currentNetworkInfos: Array<NetworkInfo>? {
-      get {
-          return SSID.fetchNetworkInfo()
-      }
-  }
   let tello = Tello()
+  var frameDecoder: VideoFrameDecoder!
+
   // MARK: - IBActions
-  
-  @IBAction func takeOffTapped(_ sender: UIButton) {
-    droneControlMethod(command: "takeOff")
-  }
   
   func droneControlMethod(command: String) {
       switch tello.state {
@@ -34,13 +31,16 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate {
         case .wifiUp:
             tello.enterCommandMode()
             switch command {
-              case "takeOff":
-                tello.takeOff()
+              case "start":
+                tello.streamOn()
+                startStreamServer()
+              // tello.start()
                 break
               case "land":
                 tello.land()
                 break
               case "stop":
+                tello.streamOff()
                 tello.stop()
                 break
               default:
@@ -48,9 +48,13 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate {
             }
             break
         case .command:
-            tello.takeOff()
+           // tello.start()
             break
     }
+  }
+  
+  @IBAction func startTapped(_ sender: UIButton) {
+    droneControlMethod(command: "start")
   }
   
   @IBAction func landTapped(_ sender: UIButton) {
@@ -81,7 +85,7 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate {
   }
   
   func updateWiFi() {
-      print("SSID: \(currentNetworkInfos?.first?.ssid ?? "")")
+    print("SSID: \(currentSSID().first ?? "")")
   }
   
   func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -121,39 +125,38 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate {
       alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
       self.present(alert, animated: true)
   }
-  
+   
   override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
   }
-}
+  
+  internal func receivedDisplayableFrame(_ frame: CVPixelBuffer) {
+      var cgImage: CGImage?
+      VTCreateCGImageFromCVPixelBuffer(frame, options: nil, imageOut: &cgImage)
+      
+      if let cgImage = cgImage {
+          DispatchQueue.main.async {
+              self.videoView.image = UIImage(cgImage: cgImage)
+          }
+      } else {
+          print("Video stream fail")
+      }
+  }
 
-
-public class SSID {
-    class func fetchNetworkInfo() -> [NetworkInfo]? {
-        if let interfaces: NSArray = CNCopySupportedInterfaces() {
-            var networkInfos = [NetworkInfo]()
-            for interface in interfaces {
-                let interfaceName = interface as! String
-                var networkInfo = NetworkInfo(interface: interfaceName,
-                                              success: false,
-                                              ssid: nil,
-                                              bssid: nil)
-                if let dict = CNCopyCurrentNetworkInfo(interfaceName as CFString) as NSDictionary? {
-                    networkInfo.success = true
-                    networkInfo.ssid = dict[kCNNetworkInfoKeySSID as String] as? String
-                    networkInfo.bssid = dict[kCNNetworkInfoKeyBSSID as String] as? String
-                }
-                networkInfos.append(networkInfo)
-            }
-            return networkInfos
-        }
-        return nil
-    }
-}
-
-struct NetworkInfo {
-    var interface: String
-    var success: Bool = false
-    var ssid: String?
-    var bssid: String?
+  
+  func startStreamServer() {
+      streamServer = UDPServer(address: "0.0.0.0", port: 11111)
+      DispatchQueue.global(qos: .userInteractive).async {
+          var currentImg: [Byte] = []
+          let (data, remoteip, remoteport) = self.streamServer.recv(2048)
+          if let d = data {
+              currentImg = currentImg + d
+              
+              if d.count < 1460 && currentImg.count > 40 {
+                  self.frameDecoder.interpretRawFrameData(&currentImg)
+                  currentImg = []
+              }
+          }
+      }
+  }
 }
