@@ -298,16 +298,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d0p-qC-vMW">
-                                <rect key="frame" x="271" y="560" width="34" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Land"/>
-                                <connections>
-                                    <action selector="landTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="pAh-NM-pLT"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ua-mT-ftG">
-                                <rect key="frame" x="42" y="560" width="95" height="30"/>
+                                <rect key="frame" x="42" y="630" width="95" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Stop Machine"/>
                                 <connections>
@@ -315,8 +307,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jm6-4N-YUZ">
-                                <rect key="frame" x="172" y="625" width="32" height="30"/>
-                                <state key="normal" title="start"/>
+                                <rect key="frame" x="42" y="584" width="87" height="30"/>
+                                <state key="normal" title="start camera"/>
                                 <connections>
                                     <action selector="startTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="ARO-bl-OBh"/>
                                 </connections>
@@ -325,6 +317,22 @@
                                 <rect key="frame" x="0.0" y="57" width="375" height="495"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOO-bf-ZSb">
+                                <rect key="frame" x="267" y="584" width="54" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="TakeOff"/>
+                                <connections>
+                                    <action selector="takeoffTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="4et-Fn-KZp"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d0p-qC-vMW">
+                                <rect key="frame" x="267" y="630" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Land"/>
+                                <connections>
+                                    <action selector="landTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="pAh-NM-pLT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -341,7 +349,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D8d-6f-dR5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5439.1999999999998" y="15.517241379310345"/>
+            <point key="canvasLocation" x="-4758" y="409"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="uKG-6d-9oX">

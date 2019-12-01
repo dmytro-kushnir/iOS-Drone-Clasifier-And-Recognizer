@@ -45,19 +45,27 @@ class Tello : CustomStringConvertible {
     let IP_ADDRESS = "192.168.10.1"
     let UDP_CMD_PORT = 8889
     let UDP_STATE_PORT = 8890
+    let UDP_VS_ADDRESS = "0.0.0.0"
     let UDP_VS_PORT = 11111
     let TIME_BTW_COMMANDS = 0.5
     
     var state: STATE
     var client: UDPClient?
+    var streamServer: UDPServer!
     
     init(port: Int32) {
         self.state = .disconnected
         client = UDPClient(address: IP_ADDRESS, port: port)
+        streamServer = UDPServer(address: UDP_VS_ADDRESS, port: Int32(UDP_VS_PORT))
     }
     
     convenience init() {
         self.init(port: 8889)
+    }
+  
+    deinit {
+      client?.close()
+      streamServer.close()
     }
     
     // MARK: - UDP Methods
@@ -89,6 +97,15 @@ class Tello : CustomStringConvertible {
         }
         return "Error - SwiftSocket unknown response."
     }
+  
+
+  func getStream() -> [Byte]? {
+    let (data, remoteip, remoteport) = self.streamServer.recv(2048)
+    print("Server remote Ip received", remoteip)
+    print("Server remote port recieved", remoteport)
+    
+    return data!
+  }
     
     // MARK: - Tello Command Methods
     

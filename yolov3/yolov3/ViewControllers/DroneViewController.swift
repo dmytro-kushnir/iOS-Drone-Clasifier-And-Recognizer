@@ -10,34 +10,40 @@ import UIKit
 import SystemConfiguration.CaptiveNetwork
 import CoreLocation
 import VideoToolbox
-import SwiftSocket
-
 
 class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFrameDecoderDelegate {
   @IBOutlet weak var videoView: UIImageView!
 
-  var streamServer: UDPServer!
   var locationManager = CLLocationManager()
   let tello = Tello()
   var frameDecoder: VideoFrameDecoder!
+  var isConnected = false
 
   // MARK: - IBActions
   
-  func droneControlMethod(command: String) {
+  func droneControlMethod(command: String = "") {
       switch tello.state {
         case .disconnected:
-            checkConnection()
+            // trying to check if device connvected to the frone wifi
+            isConnected = checkConnection()
+            if (isConnected) {
+              tello.state = .wifiUp
+              tello.enterCommandMode()
+              droneControlMethod(command: command)
+              print("Connected to Tello WiFi.")
+            }
             break
         case .wifiUp:
-            tello.enterCommandMode()
             switch command {
-              case "start":
+              case "startstream":
                 tello.streamOn()
                 startStreamServer()
-              // tello.start()
                 break
               case "land":
                 tello.land()
+                break
+              case "takeoff":
+                tello.takeOff()
                 break
               case "stop":
                 tello.streamOff()
@@ -48,13 +54,16 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
             }
             break
         case .command:
-           // tello.start()
             break
     }
   }
   
+  @IBAction func takeoffTapped(_ sender: UIButton) {
+    droneControlMethod(command: "takeoff")
+  }
+  
   @IBAction func startTapped(_ sender: UIButton) {
-    droneControlMethod(command: "start")
+    droneControlMethod(command: "startstream")
   }
   
   @IBAction func landTapped(_ sender: UIButton) {
@@ -69,6 +78,8 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    VideoFrameDecoder.delegate = self
+    frameDecoder = VideoFrameDecoder()
 
     if #available(iOS 13.0, *) {
         // for ios 13 and higer we need ask location permissions in order to obtain wifi info
@@ -105,17 +116,17 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
 
   }
   
-  // Check if connected to Tello WiFi
-  func checkConnection() {
+  // Check if device is connected to Tello WiFi
+  func checkConnection() -> Bool {
     let ssidArray = currentSSID()
+    let ssidName = "TELLO"
 
-    if connectedToSSID(ssidArray: ssidArray, SSID: "TELLO") {
-      tello.state = .wifiUp
-      print("Connected to Tello WiFi.")
-      droneControlMethod(command: "")
+    if connectedToSSID(ssidArray: ssidArray, SSID: ssidName) {
+      return true
     }
     else {
       showNoWiFiAlert()
+      return false
     }
   }
   
@@ -142,21 +153,21 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
           print("Video stream fail")
       }
   }
-
   
   func startStreamServer() {
-      streamServer = UDPServer(address: "0.0.0.0", port: 11111)
       DispatchQueue.global(qos: .userInteractive).async {
-          var currentImg: [Byte] = []
-          let (data, remoteip, remoteport) = self.streamServer.recv(2048)
-          if let d = data {
-              currentImg = currentImg + d
-              
-              if d.count < 1460 && currentImg.count > 40 {
-                  self.frameDecoder.interpretRawFrameData(&currentImg)
-                  currentImg = []
+        var currentImg: [UInt8] = []
+        while self.checkConnection() {
+          let data = self.tello.getStream()
+              if let d = data {
+                  currentImg = currentImg + d
+                  
+                  if d.count < 1460 && currentImg.count > 40 {
+                      self.frameDecoder.interpretRawFrameData(&currentImg)
+                      currentImg = []
+                  }
               }
-          }
+        }
       }
   }
 }
