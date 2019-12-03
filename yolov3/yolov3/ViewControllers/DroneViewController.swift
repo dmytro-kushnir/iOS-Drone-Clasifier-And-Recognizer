@@ -37,6 +37,7 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
             switch command {
               case "startstream":
                 tello.streamOn()
+                isConnected = true
                 startStreamServer()
                 break
               case "land":
@@ -47,6 +48,7 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
                 break
               case "stop":
                 tello.streamOff()
+                isConnected = false
                 tello.stop()
                 break
               default:
@@ -157,7 +159,7 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
   func startStreamServer() {
       DispatchQueue.global(qos: .userInteractive).async {
         var currentImg: [UInt8] = []
-        while self.checkConnection() {
+        while self.isConnected {
           let data = self.tello.getStream()
               if let d = data {
                   currentImg = currentImg + d

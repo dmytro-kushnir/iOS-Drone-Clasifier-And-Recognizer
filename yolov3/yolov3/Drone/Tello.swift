@@ -50,12 +50,12 @@ class Tello : CustomStringConvertible {
     let TIME_BTW_COMMANDS = 0.5
     
     var state: STATE
-    var client: UDPClient?
     var streamServer: UDPServer!
+    var commandClient: UDPClient!
     
     init(port: Int32) {
         self.state = .disconnected
-        client = UDPClient(address: IP_ADDRESS, port: port)
+        commandClient = UDPClient(address: IP_ADDRESS, port: port)
         streamServer = UDPServer(address: UDP_VS_ADDRESS, port: Int32(UDP_VS_PORT))
     }
     
@@ -64,7 +64,7 @@ class Tello : CustomStringConvertible {
     }
   
     deinit {
-      client?.close()
+      commandClient.close()
       streamServer.close()
     }
     
@@ -72,25 +72,11 @@ class Tello : CustomStringConvertible {
     
     @discardableResult
     func sendMessage(msg: String) -> String {
-        guard let client = self.client else { return "Error - UDP client not found" }
+        guard let client = self.commandClient else { return "Error - UDP client not found" }
         
         switch client.send(string: msg) {
         case .success:
             print("\(msg) command sent to UDP Server.")
-            let (byteArray, senderIPAddress, senderPort) = client.recv(1024)
-            
-            //  Use optional chaining to fail gracefully if response is invalid
-            if let data = byteArray, let string = String(data: Data(data), encoding: .utf8) {
-                print("Cient received: \(string)\nsender: \(senderIPAddress)\nport: \(senderPort)")
-                if string == RECV.ok {
-                    self.state = .command
-                    return RECV.ok
-                }
-            }
-            else {
-                print("Client error while trying to receive.")
-                return "Error - UDP client received invalid data."
-            }
         case .failure(let error):
             print(String(describing: error))
             return "Error - " + String(describing: error)
@@ -100,7 +86,7 @@ class Tello : CustomStringConvertible {
   
 
   func getStream() -> [Byte]? {
-    let (data, remoteip, remoteport) = self.streamServer.recv(2048)
+    let (data, remoteip, remoteport) = streamServer.recv(2048)
     print("Server remote Ip received", remoteip)
     print("Server remote port recieved", remoteport)
     
