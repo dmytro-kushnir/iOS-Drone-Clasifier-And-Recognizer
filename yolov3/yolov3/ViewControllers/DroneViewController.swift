@@ -87,23 +87,23 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
         // for ios 13 and higer we need ask location permissions in order to obtain wifi info
         let status = CLLocationManager.authorizationStatus()
         if status == .authorizedWhenInUse {
-            updateWiFi()
+            printWifiStatus()
         } else {
             locationManager.delegate = self
             locationManager.requestWhenInUseAuthorization()
         }
     } else {
-        updateWiFi()
+        printWifiStatus()
     }
   }
   
-  func updateWiFi() {
+  func printWifiStatus() {
     print("SSID: \(currentSSID().first ?? "")")
   }
   
   func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
       if status == .authorizedWhenInUse {
-          updateWiFi()
+          printWifiStatus()
       }
   }
   
@@ -115,7 +115,7 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     
-
+    droneControlMethod(command: "startstream")
   }
   
   // Check if device is connected to Tello WiFi
@@ -124,10 +124,11 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
     let ssidName = "TELLO"
 
     if connectedToSSID(ssidArray: ssidArray, SSID: ssidName) {
+      isConnected = true;
       return true
-    }
-    else {
+    } else {
       showNoWiFiAlert()
+      isConnected = false;
       return false
     }
   }
