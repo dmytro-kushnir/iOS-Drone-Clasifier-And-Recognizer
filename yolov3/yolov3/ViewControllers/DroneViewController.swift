@@ -10,6 +10,7 @@ import UIKit
 import SystemConfiguration.CaptiveNetwork
 import CoreLocation
 import VideoToolbox
+import AVFoundation
 
 class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFrameDecoderDelegate {
   @IBOutlet weak var videoView: UIImageView!
@@ -18,7 +19,16 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
   let tello = Tello()
   var frameDecoder: VideoFrameDecoder!
   var isConnected = false
-
+  let captureSession = AVCaptureSession()
+  let videoOutput = AVCaptureVideoDataOutput()
+  var previewLayer: AVCaptureVideoPreviewLayer?
+  weak var modelProvider: ModelProvider!
+  var predictionLayer: PredictionLayer!
+  let smoother = Smoother()
+  let semaphore = DispatchSemaphore(value: 1)
+  
+  var lastTimestamp = CMTime()
+  let maxFPS = 30
   // MARK: - IBActions
   
   func droneControlMethod(command: String = "") {
@@ -144,6 +154,10 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
     return .lightContent
   }
   
+  func resizePreviewLayer() {
+    videoView?.frame = videoView.bounds
+  }
+  
   internal func receivedDisplayableFrame(_ frame: CVPixelBuffer) {
       var cgImage: CGImage?
       VTCreateCGImageFromCVPixelBuffer(frame, options: nil, imageOut: &cgImage)
@@ -151,6 +165,15 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
       if let cgImage = cgImage {
           DispatchQueue.main.async {
               self.videoView.image = UIImage(cgImage: cgImage)
+              self.modelProvider = ModelProvider.shared
+              self.predictionLayer = PredictionLayer()
+              self.predictionLayer.update(imageViewFrame: self.videoView.frame,
+                                   imageSize: CGSize(width: 720, height: 1280))
+              if let previewLayer = self.previewLayer {
+                self.videoView.layer.addSublayer(previewLayer)
+                self.predictionLayer.addToParentLayer(self.videoView.layer)
+                self.resizePreviewLayer()
+              }
           }
       } else {
           print("Video stream fail")
@@ -173,4 +196,58 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
         }
       }
   }
+  
+  func showAlert(title: String, msg: String) {
+    let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    self.present(alert, animated: true, completion: nil)
+  }
+}
+
+extension DroneViewController: ModelProviderDelegate {
+
+  func show(predictions: [YOLO.Prediction]?,
+            stat: ModelProvider.Statistics, error: YOLOError?) {
+    guard let predictions = predictions else {
+      guard let error = error else {
+        showAlert(title: "Error!", msg: "Unknow error")
+        return
+      }
+      if let errorDescription = error.errorDescription {
+        showAlert(title: "Error!", msg: errorDescription)
+      } else {
+        showAlert(title: "Error!", msg: "Unknow error")
+      }
+      return
+    }
+    predictionLayer.clear()
+    if Settings.shared.isSmoothed {
+      smoother.addToFrameHistory(predictions: predictions)
+      predictionLayer.addBoundingBoxes(predictions: smoother.getSmoothedBBoxes())
+    } else {
+      predictionLayer.addBoundingBoxes(predictions: predictions)
+    }
+    predictionLayer.show()
+//    self.fpsLabel.text = "FPS: " + String(format: "%.2f", stat.fps)
+//    self.secPerFrameLabel.text = "SecPerFrame: " + String(format: "%.2f", stat.timeForFrame)
+  }
+  
+}
+
+extension DroneViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
+  
+  public func captureOutput(_ output: AVCaptureOutput,
+                            didOutput sampleBuffer: CMSampleBuffer,
+                            from connection: AVCaptureConnection) {
+    let timestamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+    let deltaTime = timestamp - lastTimestamp
+    if deltaTime >= CMTimeMake(value: 1, timescale: Int32(maxFPS)) {
+      if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+        if let frame = UIImage(pixelBuffer: imageBuffer) {
+          modelProvider.predict(frame: frame)
+        }
+      }
+    }
+  }
+
 }
