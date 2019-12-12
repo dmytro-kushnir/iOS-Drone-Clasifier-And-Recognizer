@@ -9,38 +9,46 @@
 import UIKit
 import SystemConfiguration.CaptiveNetwork
 import CoreLocation
+import VideoToolbox
 
-class DroneViewController: UIViewController, CLLocationManagerDelegate {
-  @IBOutlet weak var WiFiImageView: UIImageView!
-  
+class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFrameDecoderDelegate {
+  @IBOutlet weak var videoView: UIImageView!
+
   var locationManager = CLLocationManager()
-  var currentNetworkInfos: Array<NetworkInfo>? {
-      get {
-          return SSID.fetchNetworkInfo()
-      }
-  }
   let tello = Tello()
+  var frameDecoder: VideoFrameDecoder!
+  var isConnected = false
+
   // MARK: - IBActions
   
-  @IBAction func takeOffTapped(_ sender: UIButton) {
-    droneControlMethod(command: "takeOff")
-  }
-  
-  func droneControlMethod(command: String) {
+  func droneControlMethod(command: String = "") {
       switch tello.state {
         case .disconnected:
-            checkConnection()
+            // trying to check if device connvected to the frone wifi
+            isConnected = checkConnection()
+            if (isConnected) {
+              tello.state = .wifiUp
+              tello.enterCommandMode()
+              droneControlMethod(command: command)
+              print("Connected to Tello WiFi.")
+            }
             break
         case .wifiUp:
-            tello.enterCommandMode()
             switch command {
-              case "takeOff":
-                tello.takeOff()
+              case "startstream":
+                tello.streamOn()
+                isConnected = true
+                startStreamServer()
                 break
               case "land":
                 tello.land()
                 break
+              case "takeoff":
+                tello.takeOff()
+                break
               case "stop":
+                tello.streamOff()
+                isConnected = false
                 tello.stop()
                 break
               default:
@@ -48,9 +56,16 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate {
             }
             break
         case .command:
-            tello.takeOff()
             break
     }
+  }
+  
+  @IBAction func takeoffTapped(_ sender: UIButton) {
+    droneControlMethod(command: "takeoff")
+  }
+  
+  @IBAction func startTapped(_ sender: UIButton) {
+    droneControlMethod(command: "startstream")
   }
   
   @IBAction func landTapped(_ sender: UIButton) {
@@ -65,28 +80,30 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    VideoFrameDecoder.delegate = self
+    frameDecoder = VideoFrameDecoder()
 
     if #available(iOS 13.0, *) {
         // for ios 13 and higer we need ask location permissions in order to obtain wifi info
         let status = CLLocationManager.authorizationStatus()
         if status == .authorizedWhenInUse {
-            updateWiFi()
+            printWifiStatus()
         } else {
             locationManager.delegate = self
             locationManager.requestWhenInUseAuthorization()
         }
     } else {
-        updateWiFi()
+        printWifiStatus()
     }
   }
   
-  func updateWiFi() {
-      print("SSID: \(currentNetworkInfos?.first?.ssid ?? "")")
+  func printWifiStatus() {
+    print("SSID: \(currentSSID().first ?? "")")
   }
   
   func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
       if status == .authorizedWhenInUse {
-          updateWiFi()
+          printWifiStatus()
       }
   }
   
@@ -98,20 +115,21 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate {
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     
-
+    droneControlMethod(command: "startstream")
   }
   
-  // Check if connected to Tello WiFi
-  func checkConnection() {
+  // Check if device is connected to Tello WiFi
+  func checkConnection() -> Bool {
     let ssidArray = currentSSID()
+    let ssidName = "TELLO"
 
-    if connectedToSSID(ssidArray: ssidArray, SSID: "TELLO") {
-      tello.state = .wifiUp
-      print("Connected to Tello WiFi.")
-      droneControlMethod(command: "")
-    }
-    else {
+    if connectedToSSID(ssidArray: ssidArray, SSID: ssidName) {
+      isConnected = true;
+      return true
+    } else {
       showNoWiFiAlert()
+      isConnected = false;
+      return false
     }
   }
   
@@ -121,39 +139,38 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate {
       alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
       self.present(alert, animated: true)
   }
-  
+   
   override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
   }
-}
-
-
-public class SSID {
-    class func fetchNetworkInfo() -> [NetworkInfo]? {
-        if let interfaces: NSArray = CNCopySupportedInterfaces() {
-            var networkInfos = [NetworkInfo]()
-            for interface in interfaces {
-                let interfaceName = interface as! String
-                var networkInfo = NetworkInfo(interface: interfaceName,
-                                              success: false,
-                                              ssid: nil,
-                                              bssid: nil)
-                if let dict = CNCopyCurrentNetworkInfo(interfaceName as CFString) as NSDictionary? {
-                    networkInfo.success = true
-                    networkInfo.ssid = dict[kCNNetworkInfoKeySSID as String] as? String
-                    networkInfo.bssid = dict[kCNNetworkInfoKeyBSSID as String] as? String
-                }
-                networkInfos.append(networkInfo)
-            }
-            return networkInfos
+  
+  internal func receivedDisplayableFrame(_ frame: CVPixelBuffer) {
+      var cgImage: CGImage?
+      VTCreateCGImageFromCVPixelBuffer(frame, options: nil, imageOut: &cgImage)
+      
+      if let cgImage = cgImage {
+          DispatchQueue.main.async {
+              self.videoView.image = UIImage(cgImage: cgImage)
+          }
+      } else {
+          print("Video stream fail")
+      }
+  }
+  
+  func startStreamServer() {
+      DispatchQueue.global(qos: .userInteractive).async {
+        var currentImg: [UInt8] = []
+        while self.isConnected {
+          let data = self.tello.getStream()
+              if let d = data {
+                  currentImg = currentImg + d
+                  
+                  if d.count < 1460 && currentImg.count > 40 {
+                      self.frameDecoder.interpretRawFrameData(&currentImg)
+                      currentImg = []
+                  }
+              }
         }
-        return nil
-    }
-}
-
-struct NetworkInfo {
-    var interface: String
-    var success: Bool = false
-    var ssid: String?
-    var bssid: String?
+      }
+  }
 }

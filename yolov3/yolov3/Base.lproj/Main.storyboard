@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uBU-Mp-hdj">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uBU-Mp-hdj">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -298,16 +298,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d0p-qC-vMW">
-                                <rect key="frame" x="271" y="560" width="34" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Land"/>
-                                <connections>
-                                    <action selector="landTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="pAh-NM-pLT"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ua-mT-ftG">
-                                <rect key="frame" x="42" y="560" width="95" height="30"/>
+                                <rect key="frame" x="42" y="630" width="95" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Stop Machine"/>
                                 <connections>
@@ -315,26 +307,49 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jm6-4N-YUZ">
-                                <rect key="frame" x="160" y="625" width="55" height="30"/>
-                                <state key="normal" title="Take off"/>
+                                <rect key="frame" x="42" y="576" width="87" height="30"/>
+                                <state key="normal" title="start camera"/>
                                 <connections>
-                                    <action selector="takeOffTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="nZf-wV-QfY"/>
+                                    <action selector="startTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="ARO-bl-OBh"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOO-bf-ZSb">
+                                <rect key="frame" x="267" y="576" width="54" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="TakeOff"/>
+                                <connections>
+                                    <action selector="takeoffTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="4et-Fn-KZp"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d0p-qC-vMW">
+                                <rect key="frame" x="267" y="630" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Land"/>
+                                <connections>
+                                    <action selector="landTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="pAh-NM-pLT"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M6Q-MT-0EO">
+                                <rect key="frame" x="16" y="44" width="343" height="506"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="jm6-4N-YUZ" firstAttribute="leading" secondItem="Vsz-tj-pxE" secondAttribute="leading" constant="148" id="40d-Un-h7k"/>
-                            <constraint firstItem="jm6-4N-YUZ" firstAttribute="top" secondItem="Vsz-tj-pxE" secondAttribute="top" constant="587" id="Fh4-w1-jlo"/>
+                            <constraint firstItem="jm6-4N-YUZ" firstAttribute="top" secondItem="Vsz-tj-pxE" secondAttribute="top" constant="573" id="Fh4-w1-jlo"/>
                             <constraint firstItem="Vsz-tj-pxE" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="jm6-4N-YUZ" secondAttribute="trailing" symbolic="YES" id="pS0-8h-DLz"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Vsz-tj-pxE"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Drone" id="taj-pM-jxl"/>
+                    <connections>
+                        <outlet property="videoView" destination="M6Q-MT-0EO" id="4B0-QF-8fj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D8d-6f-dR5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5439.1999999999998" y="15.517241379310345"/>
+            <point key="canvasLocation" x="-4759.1999999999998" y="408.62068965517244"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="uKG-6d-9oX">
@@ -347,8 +362,8 @@
                         <color key="tintColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="T20-v8-Lry" kind="relationship" relationship="viewControllers" id="hqV-2r-rwl"/>
                         <segue destination="E1b-zd-avz" kind="relationship" relationship="viewControllers" id="Nnr-My-Lhu"/>
+                        <segue destination="T20-v8-Lry" kind="relationship" relationship="viewControllers" id="hqV-2r-rwl"/>
                         <segue destination="48p-CH-dor" kind="relationship" relationship="viewControllers" id="crh-jD-xiU"/>
                         <segue destination="6Km-U2-dOY" kind="relationship" relationship="viewControllers" id="Uiq-O1-6p7"/>
                     </connections>

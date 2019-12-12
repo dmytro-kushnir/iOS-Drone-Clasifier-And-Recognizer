@@ -45,50 +45,53 @@ class Tello : CustomStringConvertible {
     let IP_ADDRESS = "192.168.10.1"
     let UDP_CMD_PORT = 8889
     let UDP_STATE_PORT = 8890
+    let UDP_VS_ADDRESS = "0.0.0.0"
     let UDP_VS_PORT = 11111
     let TIME_BTW_COMMANDS = 0.5
     
     var state: STATE
-    var client: UDPClient?
+    var streamServer: UDPServer!
+    var commandClient: UDPClient!
     
     init(port: Int32) {
         self.state = .disconnected
-        client = UDPClient(address: IP_ADDRESS, port: port)
+        commandClient = UDPClient(address: IP_ADDRESS, port: port)
+        streamServer = UDPServer(address: UDP_VS_ADDRESS, port: Int32(UDP_VS_PORT))
     }
     
     convenience init() {
         self.init(port: 8889)
+    }
+  
+    deinit {
+      commandClient.close()
+      streamServer.close()
     }
     
     // MARK: - UDP Methods
     
     @discardableResult
     func sendMessage(msg: String) -> String {
-        guard let client = self.client else { return "Error - UDP client not found" }
+        guard let client = self.commandClient else { return "Error - UDP client not found" }
         
         switch client.send(string: msg) {
         case .success:
             print("\(msg) command sent to UDP Server.")
-            let (byteArray, senderIPAddress, senderPort) = client.recv(1024)
-            
-            //  Use optional chaining to fail gracefully if response is invalid
-            if let data = byteArray, let string = String(data: Data(data), encoding: .utf8) {
-                print("Cient received: \(string)\nsender: \(senderIPAddress)\nport: \(senderPort)")
-                if string == RECV.ok {
-                    self.state = .command
-                    return RECV.ok
-                }
-            }
-            else {
-                print("Client error while trying to receive.")
-                return "Error - UDP client received invalid data."
-            }
         case .failure(let error):
             print(String(describing: error))
             return "Error - " + String(describing: error)
         }
         return "Error - SwiftSocket unknown response."
     }
+  
+
+  func getStream() -> [Byte]? {
+    let (data, remoteip, remoteport) = streamServer.recv(2048)
+    print("Server remote Ip received", remoteip)
+    print("Server remote port recieved", remoteport)
+    
+    return data!
+  }
     
     // MARK: - Tello Command Methods
     
@@ -102,6 +105,14 @@ class Tello : CustomStringConvertible {
     
     func land() {
         sendMessage(msg: CMD.land)
+    }
+  
+    func streamOn() {
+        sendMessage(msg: CMD.streamOn)
+    }
+  
+    func streamOff() {
+        sendMessage(msg: CMD.streamOff)
     }
     
     func stop() {
