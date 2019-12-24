@@ -298,48 +298,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ua-mT-ftG">
-                                <rect key="frame" x="42" y="630" width="95" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Stop Machine"/>
-                                <connections>
-                                    <action selector="stopTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="W3h-2l-qvd"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jm6-4N-YUZ">
-                                <rect key="frame" x="42" y="576" width="87" height="30"/>
-                                <state key="normal" title="start camera"/>
-                                <connections>
-                                    <action selector="startTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="ARO-bl-OBh"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOO-bf-ZSb">
-                                <rect key="frame" x="267" y="576" width="54" height="30"/>
+                                <rect key="frame" x="37" y="570" width="54" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="TakeOff"/>
                                 <connections>
                                     <action selector="takeoffTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="4et-Fn-KZp"/>
                                 </connections>
                             </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M6Q-MT-0EO">
+                                <rect key="frame" x="16" y="44" width="343" height="506"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d0p-qC-vMW">
-                                <rect key="frame" x="267" y="630" width="34" height="30"/>
+                                <rect key="frame" x="293" y="570" width="34" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Land"/>
                                 <connections>
                                     <action selector="landTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="pAh-NM-pLT"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M6Q-MT-0EO">
-                                <rect key="frame" x="16" y="44" width="343" height="506"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="jm6-4N-YUZ" firstAttribute="leading" secondItem="Vsz-tj-pxE" secondAttribute="leading" constant="148" id="40d-Un-h7k"/>
-                            <constraint firstItem="jm6-4N-YUZ" firstAttribute="top" secondItem="Vsz-tj-pxE" secondAttribute="top" constant="573" id="Fh4-w1-jlo"/>
-                            <constraint firstItem="Vsz-tj-pxE" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="jm6-4N-YUZ" secondAttribute="trailing" symbolic="YES" id="pS0-8h-DLz"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Vsz-tj-pxE"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Drone" id="taj-pM-jxl"/>

@@ -52,11 +52,6 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
               case "takeoff":
                 tello.takeOff()
                 break
-              case "stop":
-                tello.streamOff()
-                isConnected = false
-                tello.stop()
-                break
               default:
                 break
             }
@@ -69,18 +64,11 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
   @IBAction func takeoffTapped(_ sender: UIButton) {
     droneControlMethod(command: "takeoff")
   }
-  
-  @IBAction func startTapped(_ sender: UIButton) {
-    droneControlMethod(command: "startstream")
-  }
-  
+
   @IBAction func landTapped(_ sender: UIButton) {
     droneControlMethod(command: "land")
   }
-  
-  @IBAction func stopTapped(_ sender: UIButton) {
-    droneControlMethod(command: "stop")
-  }
+
   
   // MARK: - View Management
   
