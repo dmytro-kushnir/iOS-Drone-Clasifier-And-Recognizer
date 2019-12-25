@@ -34,6 +34,10 @@ struct CMD {
     static let takeOff = "takeoff"
     static let land = "land"
     static let stop = "emergency"
+    static let forward = "forward"
+    static let back = "back"
+    static let rotateClockwise = "cw"
+    static let rotateCounterClockwise = "ccw"
 }
 
 class Tello : CustomStringConvertible {
@@ -66,6 +70,31 @@ class Tello : CustomStringConvertible {
     deinit {
       commandClient.close()
       streamServer.close()
+    }
+
+    // Validation
+    private func validateDistance(x: Int) -> Int{
+        if x < 20 {
+            return 20;
+        }
+
+        if x > 500 {
+            return 500;
+        }
+
+        return x;
+    }
+
+    private func validateDegree(x: Int) -> Int{
+        if x < 1 {
+            return 1;
+        }
+
+        if x > 3600 {
+            return 3600;
+        }
+
+        return x;
     }
     
     // MARK: - UDP Methods
@@ -114,7 +143,27 @@ class Tello : CustomStringConvertible {
     func streamOff() {
         sendMessage(msg: CMD.streamOff)
     }
-    
+  
+    func forward(x: Int) {
+        x = validateDistance(x)
+        sendMessage(msg: "\(CMD.forward) + \(x)")
+    }
+  
+    func back(x: Int) {
+        x = validateDistance(x)
+        sendMessage(msg: "\(CMD.back) \(x)")
+    } 
+
+    func rotate(x: Int) {
+        x = validateDegree(x)
+        sendMessage(msg: "\(CMD.rotateClockwise) \(x)")
+    }
+
+    func rotateCounterClockwise(x: Int) {
+        x = validateDegree(x)
+        sendMessage(msg: "\(CMD.rotateCounterClockwise) \(x)")
+    }
+
     func stop() {
         sendMessage(msg: CMD.land)
         DispatchQueue.main.asyncAfter(deadline: .now() + TIME_BTW_COMMANDS, execute: {
