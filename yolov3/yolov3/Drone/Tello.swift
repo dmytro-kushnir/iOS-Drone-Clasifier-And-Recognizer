@@ -32,6 +32,10 @@ struct CMD {
     static let streamOn = "streamon"
     static let streamOff = "streamoff"
     static let takeOff = "takeoff"
+    static let takeOff = "up"
+    static let takeOff = "down"
+    static let takeOff = "left"
+    static let takeOff = "right"
     static let land = "land"
     static let stop = "emergency"
     static let forward = "forward"
@@ -142,6 +146,26 @@ class Tello : CustomStringConvertible {
   
     func streamOff() {
         sendMessage(msg: CMD.streamOff)
+    }
+
+    func up(x: Int) {
+        x = validateDistance(x)
+        sendMessage(msg: "\(CMD.up) + \(x)")
+    }
+
+    func down(x: Int) {
+        x = validateDistance(x)
+        sendMessage(msg: "\(CMD.down) + \(x)")
+    }
+
+    func left(x: Int) {
+        x = validateDistance(x)
+        sendMessage(msg: "\(CMD.left) + \(x)")
+    }
+
+    func right(x: Int) {
+        x = validateDistance(x)
+        sendMessage(msg: "\(CMD.right) + \(x)")
     }
   
     func forward(x: Int) {
