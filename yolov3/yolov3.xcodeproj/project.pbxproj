@@ -28,6 +28,8 @@
 		2AAF13882380268B00D0887C /* yolo-tiny.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 2AAF13852380268B00D0887C /* yolo-tiny.mlmodel */; };
 		9F3DD9642385AF00003D3094 /* wifi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DD9632385AF00003D3094 /* wifi.swift */; };
 		9F3DD9662385B20B003D3094 /* Tello.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DD9652385B20B003D3094 /* Tello.swift */; };
+		9F4AC5D223B4A6B70014C9C8 /* H254Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4AC5D123B4A6B70014C9C8 /* H254Decoder.swift */; };
+		9F4AC5D623B4B3300014C9C8 /* AVJoyStick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4AC5D523B4B3300014C9C8 /* AVJoyStick.swift */; };
 		E1ABC6BA7BF2B15FE8ACA171 /* Pods_yolov3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A24D49CF7E878AD870A79C5 /* Pods_yolov3.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +60,8 @@
 		60DA8F88C62AC8A1A6275540 /* Pods-yolov3.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yolov3.release.xcconfig"; path = "Target Support Files/Pods-yolov3/Pods-yolov3.release.xcconfig"; sourceTree = "<group>"; };
 		9F3DD9632385AF00003D3094 /* wifi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wifi.swift; sourceTree = "<group>"; };
 		9F3DD9652385B20B003D3094 /* Tello.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tello.swift; sourceTree = "<group>"; };
+		9F4AC5D123B4A6B70014C9C8 /* H254Decoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = H254Decoder.swift; sourceTree = "<group>"; };
+		9F4AC5D523B4B3300014C9C8 /* AVJoyStick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVJoyStick.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,8 +170,10 @@
 		9F3DD9622385AEEA003D3094 /* Drone */ = {
 			isa = PBXGroup;
 			children = (
+				9F4AC5D123B4A6B70014C9C8 /* H254Decoder.swift */,
 				9F3DD9632385AF00003D3094 /* wifi.swift */,
 				9F3DD9652385B20B003D3094 /* Tello.swift */,
+				9F4AC5D523B4B3300014C9C8 /* AVJoyStick.swift */,
 			);
 			path = Drone;
 			sourceTree = "<group>";
@@ -305,6 +311,8 @@
 				1173E16E22CB8E0100324100 /* UIImageExtension.swift in Sources */,
 				1173E17222CB940000324100 /* YOLOError.swift in Sources */,
 				111A8C3722E2015300F76A50 /* SettingsViewController.swift in Sources */,
+				9F4AC5D623B4B3300014C9C8 /* AVJoyStick.swift in Sources */,
+				9F4AC5D223B4A6B70014C9C8 /* H254Decoder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

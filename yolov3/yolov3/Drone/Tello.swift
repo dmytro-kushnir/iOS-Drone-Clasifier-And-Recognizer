@@ -32,10 +32,10 @@ struct CMD {
     static let streamOn = "streamon"
     static let streamOff = "streamoff"
     static let takeOff = "takeoff"
-    static let takeOff = "up"
-    static let takeOff = "down"
-    static let takeOff = "left"
-    static let takeOff = "right"
+    static let up = "up"
+    static let down = "down"
+    static let left = "left"
+    static let right = "right"
     static let land = "land"
     static let stop = "emergency"
     static let forward = "forward"
@@ -149,42 +149,42 @@ class Tello : CustomStringConvertible {
     }
 
     func up(x: Int) {
-        x = validateDistance(x)
+      let x = validateDistance(x: x)
         sendMessage(msg: "\(CMD.up) + \(x)")
     }
 
     func down(x: Int) {
-        x = validateDistance(x)
+      let x = validateDistance(x: x)
         sendMessage(msg: "\(CMD.down) + \(x)")
     }
 
     func left(x: Int) {
-        x = validateDistance(x)
+      let x = validateDistance(x: x)
         sendMessage(msg: "\(CMD.left) + \(x)")
     }
 
     func right(x: Int) {
-        x = validateDistance(x)
+      let x = validateDistance(x: x)
         sendMessage(msg: "\(CMD.right) + \(x)")
     }
   
     func forward(x: Int) {
-        x = validateDistance(x)
+      let x = validateDistance(x: x)
         sendMessage(msg: "\(CMD.forward) + \(x)")
     }
   
     func back(x: Int) {
-        x = validateDistance(x)
+      let x = validateDistance(x: x)
         sendMessage(msg: "\(CMD.back) \(x)")
     } 
 
     func rotate(x: Int) {
-        x = validateDegree(x)
+      let x = validateDegree(x: x)
         sendMessage(msg: "\(CMD.rotateClockwise) \(x)")
     }
 
     func rotateCounterClockwise(x: Int) {
-        x = validateDegree(x)
+      let x = validateDegree(x: x)
         sendMessage(msg: "\(CMD.rotateCounterClockwise) \(x)")
     }
 

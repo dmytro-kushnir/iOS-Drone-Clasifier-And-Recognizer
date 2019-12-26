@@ -2,7 +2,7 @@
 //  VideoFrameDecoder.swift
 //  ImprovedCubeCamera
 //
-//  Created by DmitrOlh on 3/19/18.
+//  Created by DmitrOlh on 10/19/19.
 //  Copyright © 2019 DmitrOlh. All rights reserved.
 //
 
