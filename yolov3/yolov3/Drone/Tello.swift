@@ -32,8 +32,16 @@ struct CMD {
     static let streamOn = "streamon"
     static let streamOff = "streamoff"
     static let takeOff = "takeoff"
+    static let up = "up"
+    static let down = "down"
+    static let left = "left"
+    static let right = "right"
     static let land = "land"
     static let stop = "emergency"
+    static let forward = "forward"
+    static let back = "back"
+    static let rotateClockwise = "cw"
+    static let rotateCounterClockwise = "ccw"
 }
 
 class Tello : CustomStringConvertible {
@@ -66,6 +74,31 @@ class Tello : CustomStringConvertible {
     deinit {
       commandClient.close()
       streamServer.close()
+    }
+
+    // Validation
+    private func validateDistance(x: Int) -> Int{
+        if x < 20 {
+            return 20;
+        }
+
+        if x > 500 {
+            return 500;
+        }
+
+        return x;
+    }
+
+    private func validateDegree(x: Int) -> Int{
+        if x < 1 {
+            return 1;
+        }
+
+        if x > 3600 {
+            return 3600;
+        }
+
+        return x;
     }
     
     // MARK: - UDP Methods
@@ -114,7 +147,47 @@ class Tello : CustomStringConvertible {
     func streamOff() {
         sendMessage(msg: CMD.streamOff)
     }
-    
+
+    func up(x: Int) {
+      let x = validateDistance(x: x)
+        sendMessage(msg: "\(CMD.up) + \(x)")
+    }
+
+    func down(x: Int) {
+      let x = validateDistance(x: x)
+        sendMessage(msg: "\(CMD.down) + \(x)")
+    }
+
+    func left(x: Int) {
+      let x = validateDistance(x: x)
+        sendMessage(msg: "\(CMD.left) + \(x)")
+    }
+
+    func right(x: Int) {
+      let x = validateDistance(x: x)
+        sendMessage(msg: "\(CMD.right) + \(x)")
+    }
+  
+    func forward(x: Int) {
+      let x = validateDistance(x: x)
+        sendMessage(msg: "\(CMD.forward) + \(x)")
+    }
+  
+    func back(x: Int) {
+      let x = validateDistance(x: x)
+        sendMessage(msg: "\(CMD.back) \(x)")
+    } 
+
+    func rotate(x: Int) {
+      let x = validateDegree(x: x)
+        sendMessage(msg: "\(CMD.rotateClockwise) \(x)")
+    }
+
+    func rotateCounterClockwise(x: Int) {
+      let x = validateDegree(x: x)
+        sendMessage(msg: "\(CMD.rotateCounterClockwise) \(x)")
+    }
+
     func stop() {
         sendMessage(msg: CMD.land)
         DispatchQueue.main.asyncAfter(deadline: .now() + TIME_BTW_COMMANDS, execute: {
