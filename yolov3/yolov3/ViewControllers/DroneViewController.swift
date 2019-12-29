@@ -52,6 +52,30 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
               case "takeoff":
                 tello.takeOff()
                 break
+              case "left":
+                tello.left(x: 20)
+                break;
+              case "up":
+                tello.up(x: 20)
+                break;
+              case "down":
+                tello.down(x: 20)
+                break;
+              case "right":
+                tello.right(x: 20)
+                break;
+              case "forward":
+                tello.forward(x: 20)
+                break;
+              case "back":
+                tello.back(x: 20)
+                break;
+              case "rotate":
+                tello.rotate(x: 20)
+                break;
+              case "rotateClockWise":
+                tello.rotateCounterClockwise(x: 20)
+                break;
               default:
                 break
             }
