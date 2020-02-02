@@ -13,6 +13,8 @@ import VideoToolbox
 
 class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFrameDecoderDelegate {
   @IBOutlet weak var videoView: UIImageView!
+  @IBOutlet weak var landGesture: UIImageView!
+  @IBOutlet weak var takeOffGesture: UIImageView!
 
   var locationManager = CLLocationManager()
   let tello = Tello()
@@ -22,10 +24,15 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
   var predictionLayer: PredictionLayer!
   var processed = false
   var processStarted = false
-  
   var lastTimestamp = CMTime()
   let maxFPS = 30
-  // MARK: - IBActions
+  
+  struct Ratio {
+    let direction: CGFloat
+    let w: CGFloat
+    let h: CGFloat
+  }
+  var observanceHistory = [Ratio]()
   
   func droneControlMethod(command: String = "") {
       switch tello.state {
@@ -84,20 +91,23 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
             break
     }
   }
-  
-  @IBAction func takeoffTapped(_ sender: UIButton) {
-    droneControlMethod(command: "takeoff")
-  }
-
-  @IBAction func landTapped(_ sender: UIButton) {
-    droneControlMethod(command: "land")
-  }
 
   
   // MARK: - View Management
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    // create tap gesture recognizer
+    let tapGestureTakeOff = UITapGestureRecognizer(target: self, action: #selector(DroneViewController.takeOffTapped(gesture:)))
+    let tapGestureLand = UITapGestureRecognizer(target: self, action: #selector(DroneViewController.landTapped(gesture:)))
+      // add it to the image view;
+    takeOffGesture.addGestureRecognizer(tapGestureTakeOff)
+    landGesture.addGestureRecognizer(tapGestureLand)
+      // make sure imageView can be interacted with by user
+    takeOffGesture.isUserInteractionEnabled = true
+    landGesture.isUserInteractionEnabled = true
+    
     VideoFrameDecoder.delegate = self
     frameDecoder = VideoFrameDecoder()
 
@@ -118,6 +128,21 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
     modelProvider.delegate = self
     predictionLayer = PredictionLayer()
     predictionLayer.addToParentLayer(videoView.layer)
+    self.videoView.frame = self.videoView.bounds
+  }
+  
+  @objc func landTapped(gesture: UIGestureRecognizer) {
+      // if the tapped view is a UIImageView then set it to imageview
+      if (gesture.view as? UIImageView) != nil {
+          droneControlMethod(command: "land")
+      }
+  }
+  
+  @objc func takeOffTapped(gesture: UIGestureRecognizer) {
+      // if the tapped view is a UIImageView then set it to imageview
+      if (gesture.view as? UIImageView) != nil {
+          droneControlMethod(command: "takeoff")
+      }
   }
   
   func printWifiStatus() {
@@ -180,10 +205,6 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
     return .lightContent
   }
   
-  func resizePreviewLayer() {
-    videoView?.frame = videoView.bounds
-  }
-  
   internal func receivedDisplayableFrame(_ frame: CVPixelBuffer) {
       var cgImage: CGImage?
       VTCreateCGImageFromCVPixelBuffer(frame, options: nil, imageOut: &cgImage)
@@ -210,20 +231,19 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
   }
   
   func startStreamServer() {
-      DispatchQueue.global(qos: .userInteractive).async {
-        var currentImg: [UInt8] = []
-        while self.isConnected {
-          let data = self.tello.getStream()
-              if let d = data {
-                  currentImg = currentImg + d
-                  
-                  if d.count < 1460 && currentImg.count > 40 {
-                      self.frameDecoder.interpretRawFrameData(&currentImg)
-                      currentImg = []
-                  }
-              }
+    DispatchQueue.global(qos: .userInteractive).async {
+      var currentImg: [UInt8] = []
+      while self.isConnected {
+        let data = self.tello.getStream()
+        if let d = data {
+          currentImg = currentImg + d
+          if d.count < 1460 && currentImg.count > 40 {
+              self.frameDecoder.interpretRawFrameData(&currentImg)
+              currentImg = []
+          }
         }
       }
+    }
   }
   
   func showAlert(title: String, msg: String) {
@@ -231,10 +251,17 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
     self.present(alert, animated: true, completion: nil)
   }
+  
+  func getAngle(fromPoint: CGPoint, toPoint: CGPoint) -> CGFloat {
+      let dx: CGFloat = fromPoint.x - toPoint.x
+      let dy: CGFloat = fromPoint.y - toPoint.y
+      let twoPi: CGFloat = 2 * CGFloat(Double.pi)
+      let radians: CGFloat = (atan2(dy, -dx) + twoPi).truncatingRemainder(dividingBy: twoPi)
+      return radians * 360 / twoPi
+  }
 }
 
 extension DroneViewController: ModelProviderDelegate {
-
   func show(predictions: [YOLO.Prediction]?,
             stat: ModelProvider.Statistics, error: YOLOError?) {
     guard let predictions = predictions else {
@@ -250,35 +277,32 @@ extension DroneViewController: ModelProviderDelegate {
       return
     }
     if processStarted {
-      predictionLayer.addBoundingBoxes(predictions: predictions)
+      for prediction in predictions {
+        // person class filtering
+        if prediction.classIndex == 0 {
+          if prediction.score > 0.75 {
+            predictionLayer.addBoundingBoxes(prediction: prediction)
+            // 375x600, with coordinates: x=0, y=0
+            let frame = videoView.frame
+            // recalculate center position
+//            let center = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+            
+            let widthRatio =  frame.size.width / prediction.rect.size.width
+            let heigthRatio = frame.size.height / prediction.rect.size.height
+            let direction = getAngle(fromPoint: videoView.center, toPoint: prediction.rect.origin)
+            print(direction)
+            observanceHistory.append(Ratio(direction: direction, w: widthRatio, h: heigthRatio))
+            // remove observation history after some period
+            if (observanceHistory.count > 50) {
+              observanceHistory.removeAll()
+            }
+          }
+        }
+      }
       predictionLayer.show()
       processed = true
       processStarted = false
     }
   }
-  
 }
 
-// MARK: - UIImagePickerControllerDelegate
-
-extension DroneViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-  
-  @objc func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-    self.dismiss(animated: true)
-    predictionLayer.show()
-  }
-  
-  @objc func imagePickerController(_ picker: UIImagePickerController,
-                             didFinishPickingMediaWithInfo info:
-    [UIImagePickerController.InfoKey : Any]) {
-    if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-      self.videoView.image = pickedImage
-      self.videoView.backgroundColor = .clear
-      predictionLayer.update(imageViewFrame: videoView.frame, imageSize: pickedImage.size)
-      predictionLayer.clear()
-      processed = false
-    }
-    self.dismiss(animated: true)
-  }
-
-}
