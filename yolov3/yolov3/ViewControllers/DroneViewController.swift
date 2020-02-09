@@ -29,8 +29,7 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
   
   struct Ratio {
     let direction: CGFloat
-    let w: CGFloat
-    let h: CGFloat
+    let distance: CGFloat
   }
   var observanceHistory = [Ratio]()
   
@@ -280,22 +279,25 @@ extension DroneViewController: ModelProviderDelegate {
       for prediction in predictions {
         // person class filtering
         if prediction.classIndex == 0 {
-          if prediction.score > 0.75 {
-            predictionLayer.addBoundingBoxes(prediction: prediction)
-            // 375x600, with coordinates: x=0, y=0
-            let frame = videoView.frame
-            // recalculate center position
-//            let center = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+          predictionLayer.addBoundingBoxes(prediction: prediction)
+          // 375x600, with coordinates: x=0, y=0
+          let frame = videoView.frame
+
+          // recalculate center position
+          // let center = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
             
-            let widthRatio =  frame.size.width / prediction.rect.size.width
-            let heigthRatio = frame.size.height / prediction.rect.size.height
-            let direction = getAngle(fromPoint: videoView.center, toPoint: prediction.rect.origin)
-            print(direction)
-            observanceHistory.append(Ratio(direction: direction, w: widthRatio, h: heigthRatio))
-            // remove observation history after some period
-            if (observanceHistory.count > 50) {
-              observanceHistory.removeAll()
-            }
+          let frameSize =  frame.size.width * frame.size.height
+          let predictionSize = prediction.rect.size.width * prediction.rect.size.height
+
+          let distanceRatio = (frameSize / predictionSize) * 100
+          let direction = getAngle(fromPoint: videoView.center, toPoint: prediction.rect.origin)
+
+          print(direction, distanceRatio)
+
+          observanceHistory.append(Ratio(direction: direction, distance: distanceRatio))
+          // remove observation history after some period
+          if (observanceHistory.count > 100) {
+            observanceHistory.removeAll()
           }
         }
       }
