@@ -27,11 +27,8 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
   var lastTimestamp = CMTime()
   let maxFPS = 30
   
-  struct Ratio {
-    let direction: CGFloat
-    let distance: CGFloat
-  }
-  var observanceHistory = [Ratio]()
+  // this is for boxes prediction
+  var predictedBoxes: [(angle: CGFloat, distance: CGFloat, score: Float, classIndex: Int)] = []
   
   func droneControlMethod(command: String = "") {
       switch tello.state {
@@ -251,13 +248,72 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
     self.present(alert, animated: true, completion: nil)
   }
   
-  func getAngle(fromPoint: CGPoint, toPoint: CGPoint) -> CGFloat {
-      let dx: CGFloat = fromPoint.x - toPoint.x
+  func getAngleAndDistance(fromPoint: CGPoint, toPoint: CGPoint) -> (CGFloat, CGFloat) {
+      let dx: CGFloat = toPoint.x - fromPoint.x
       let dy: CGFloat = fromPoint.y - toPoint.y
       let twoPi: CGFloat = 2 * CGFloat(Double.pi)
-      let radians: CGFloat = (atan2(dy, -dx) + twoPi).truncatingRemainder(dividingBy: twoPi)
-      return radians * 360 / twoPi
+      let angle: CGFloat = atan2(dy, dx) * 360 / twoPi
+      let distance: CGFloat = hypot(dx, dy)
+    
+    return (angle, distance)
   }
+  
+  func compareTwoValues(a: CGFloat, b: CGFloat) -> CGFloat {
+    if (a > b) {
+      return a - b
+    } else {
+      return b - a
+    }
+  }
+  
+  func predictMovement(box: (angle: CGFloat, distance: CGFloat, score: Float, classIndex: Int)) {
+    if (predictedBoxes.count <= 1) {
+        predictedBoxes.append(box)
+    } else {
+      let previousBox =  predictedBoxes.last
+      let maximumDegreeDifference: CGFloat = 20.0
+      let delta = compareTwoValues(a: box.angle, b: previousBox!.angle)
+      if (delta < maximumDegreeDifference) {
+        predictedBoxes.append(box)
+      }
+      // remove observation history after some period
+      if (predictedBoxes.count == 30) {
+        let lastBox =  predictedBoxes.last
+        performMovement(box: lastBox!)
+        predictedBoxes.removeAll()
+      }
+    }
+    
+    
+  }
+  
+  func performMovement(box: (angle: CGFloat, distance: CGFloat, score: Float, classIndex: Int)) {
+    let angle = box.angle
+    
+    let moveRatio = 20; // todo perform the coef of movement length
+    if (angle > 0 && angle < 90) {
+//      droneControlMethod(command: "right")
+//      droneControlMethod(command: "up")
+      print("I")
+                  droneControlMethod(command: "rotate")
+    } else if (angle > 90 && angle < 180) {
+//      droneControlMethod(command: "right")
+//      droneControlMethod(command: "down")
+      print("II")
+                  droneControlMethod(command: "rotate")
+    } else if (angle > -90 && angle < 0) {
+//      droneControlMethod(command: "left")
+//      droneControlMethod(command: "up")
+      print("III")
+                  droneControlMethod(command: "rotateClockWise")
+    } else if (angle < -90 && angle > -180) {
+//      droneControlMethod(command: "left")
+//      droneControlMethod(command: "down")
+      print("IV")
+            droneControlMethod(command: "rotateClockWise")
+    }
+  }
+  
 }
 
 extension DroneViewController: ModelProviderDelegate {
@@ -289,16 +345,13 @@ extension DroneViewController: ModelProviderDelegate {
           let frameSize =  frame.size.width * frame.size.height
           let predictionSize = prediction.rect.size.width * prediction.rect.size.height
 
-          let distanceRatio = (frameSize / predictionSize) * 100
-          let direction = getAngle(fromPoint: videoView.center, toPoint: prediction.rect.origin)
-
-          print(direction, distanceRatio)
-
-          observanceHistory.append(Ratio(direction: direction, distance: distanceRatio))
-          // remove observation history after some period
-          if (observanceHistory.count > 100) {
-            observanceHistory.removeAll()
-          }
+          let distanceRatio = (frameSize / predictionSize)
+          let (angle, distance) = getAngleAndDistance(fromPoint: videoView.center, toPoint: prediction.rect.origin)
+//          print(angle)
+//          print(distance)
+          
+          let box = (angle, distance, prediction.score, prediction.classIndex)
+          predictMovement(box: box)
         }
       }
       predictionLayer.show()

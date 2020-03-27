@@ -76,11 +76,11 @@ class VideoFrameDecoder {
             
             if sps != nil && pps != nil {
                 if !createFormatDescription(sps: sps!, pps: pps!) {
-                    print("===== ===== Failed to create formatDesc")
+//                    print("===== ===== Failed to create formatDesc")
                     return
                 }
                 if !createDecompressionSession() {
-                    print("===== ===== Failed to create decompressionSession")
+//                    print("===== ===== Failed to create decompressionSession")
                     return
                 }
             }
@@ -200,7 +200,7 @@ class VideoFrameDecoder {
         if imageBuffer != nil && status == noErr {
             decoder.imageDecompressed(image: imageBuffer!)
         } else {
-            print("===== Failed to decompress. VT Error \(status)")
+//            print("===== Failed to decompress. VT Error \(status)")
         }
     }
     
