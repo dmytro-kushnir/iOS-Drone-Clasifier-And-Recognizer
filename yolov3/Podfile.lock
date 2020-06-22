@@ -5,7 +5,7 @@ DEPENDENCIES:
   - SwiftSocket
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - SwiftSocket
 
 SPEC CHECKSUMS:

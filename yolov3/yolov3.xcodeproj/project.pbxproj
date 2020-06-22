@@ -15,7 +15,6 @@
 		111A8C3922E20B2600F76A50 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111A8C3822E20B2600F76A50 /* Settings.swift */; };
 		111A8C3F22E706ED00F76A50 /* BBSmoother.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111A8C3E22E706ED00F76A50 /* BBSmoother.swift */; };
 		1132B4C822C633D500E7E509 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1132B4C722C633D500E7E509 /* AppDelegate.swift */; };
-		1132B4CD22C633D500E7E509 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1132B4CB22C633D500E7E509 /* Main.storyboard */; };
 		1132B4D222C633D600E7E509 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1132B4D022C633D600E7E509 /* LaunchScreen.storyboard */; };
 		113F20C422D74AEA001837AD /* OnlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113F20C322D74AEA001837AD /* OnlineViewController.swift */; };
 		1173E14B22CB3C5B00324100 /* ModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E14A22CB3C5B00324100 /* ModelProvider.swift */; };
@@ -30,7 +29,8 @@
 		9F3DD9662385B20B003D3094 /* Tello.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DD9652385B20B003D3094 /* Tello.swift */; };
 		9F4AC5D223B4A6B70014C9C8 /* H254Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4AC5D123B4A6B70014C9C8 /* H254Decoder.swift */; };
 		9F4AC5D623B4B3300014C9C8 /* AVJoyStick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4AC5D523B4B3300014C9C8 /* AVJoyStick.swift */; };
-		E1ABC6BA7BF2B15FE8ACA171 /* Pods_yolov3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A24D49CF7E878AD870A79C5 /* Pods_yolov3.framework */; };
+		D6EA150225E130223D465405 /* Pods_yolov3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAAF9F4284D70C952FBD0A52 /* Pods_yolov3.framework */; };
+		E1ECB66223E75C8C00743FC4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1ECB66123E75C8B00743FC4 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,7 +43,6 @@
 		111A8C3E22E706ED00F76A50 /* BBSmoother.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBSmoother.swift; sourceTree = "<group>"; };
 		1132B4C422C633D400E7E509 /* yolov3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = yolov3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1132B4C722C633D500E7E509 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1132B4CC22C633D500E7E509 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1132B4D122C633D600E7E509 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1132B4D322C633D600E7E509 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		113F20C322D74AEA001837AD /* OnlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineViewController.swift; sourceTree = "<group>"; };
@@ -55,13 +54,15 @@
 		2AAF13832380268B00D0887C /* yolo.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = yolo.mlmodel; path = ../../models/yolo.mlmodel; sourceTree = "<group>"; };
 		2AAF13842380268B00D0887C /* yolo-nulp.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = "yolo-nulp.mlmodel"; path = "../../models/yolo-nulp.mlmodel"; sourceTree = "<group>"; };
 		2AAF13852380268B00D0887C /* yolo-tiny.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = "yolo-tiny.mlmodel"; path = "../../models/yolo-tiny.mlmodel"; sourceTree = "<group>"; };
-		3A24D49CF7E878AD870A79C5 /* Pods_yolov3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_yolov3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3DE8722089490F92A862727E /* Pods-yolov3.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yolov3.debug.xcconfig"; path = "Target Support Files/Pods-yolov3/Pods-yolov3.debug.xcconfig"; sourceTree = "<group>"; };
-		60DA8F88C62AC8A1A6275540 /* Pods-yolov3.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yolov3.release.xcconfig"; path = "Target Support Files/Pods-yolov3/Pods-yolov3.release.xcconfig"; sourceTree = "<group>"; };
+		2B92ECC53662B7405C23F9DD /* Pods-yolov3.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yolov3.release.xcconfig"; path = "Target Support Files/Pods-yolov3/Pods-yolov3.release.xcconfig"; sourceTree = "<group>"; };
 		9F3DD9632385AF00003D3094 /* wifi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wifi.swift; sourceTree = "<group>"; };
 		9F3DD9652385B20B003D3094 /* Tello.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tello.swift; sourceTree = "<group>"; };
 		9F4AC5D123B4A6B70014C9C8 /* H254Decoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = H254Decoder.swift; sourceTree = "<group>"; };
 		9F4AC5D523B4B3300014C9C8 /* AVJoyStick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVJoyStick.swift; sourceTree = "<group>"; };
+		CFF0F8E0083437648F226D09 /* Pods-yolov3.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yolov3.debug.xcconfig"; path = "Target Support Files/Pods-yolov3/Pods-yolov3.debug.xcconfig"; sourceTree = "<group>"; };
+		E1B0751A23B909F300AE06B9 /* yolov3.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = yolov3.entitlements; sourceTree = "<group>"; };
+		E1ECB66123E75C8B00743FC4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		FAAF9F4284D70C952FBD0A52 /* Pods_yolov3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_yolov3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1ABC6BA7BF2B15FE8ACA171 /* Pods_yolov3.framework in Frameworks */,
+				D6EA150225E130223D465405 /* Pods_yolov3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,7 +107,7 @@
 				1132B4C622C633D400E7E509 /* yolov3 */,
 				1132B4C522C633D400E7E509 /* Products */,
 				4DE49E4EA643C58E7723759A /* Pods */,
-				68BB704870C60678AE4396A7 /* Frameworks */,
+				C6B91D97A7FA15918B93F9E7 /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -125,6 +126,7 @@
 		1132B4C622C633D400E7E509 /* yolov3 */ = {
 			isa = PBXGroup;
 			children = (
+				E1B0751A23B909F300AE06B9 /* yolov3.entitlements */,
 				9F3DD9622385AEEA003D3094 /* Drone */,
 				113F20C222D74A69001837AD /* MLModels */,
 				111A044622D5F8AC00D93262 /* Model */,
@@ -132,9 +134,9 @@
 				1132B4C722C633D500E7E509 /* AppDelegate.swift */,
 				111A8C3822E20B2600F76A50 /* Settings.swift */,
 				1173E16D22CB8E0100324100 /* UIImageExtension.swift */,
-				1132B4CB22C633D500E7E509 /* Main.storyboard */,
 				1132B4D022C633D600E7E509 /* LaunchScreen.storyboard */,
 				111A044B22D6253800D93262 /* Assets.xcassets */,
+				E1ECB66123E75C8B00743FC4 /* Main.storyboard */,
 				1132B4D322C633D600E7E509 /* Info.plist */,
 			);
 			path = yolov3;
@@ -153,18 +155,10 @@
 		4DE49E4EA643C58E7723759A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				3DE8722089490F92A862727E /* Pods-yolov3.debug.xcconfig */,
-				60DA8F88C62AC8A1A6275540 /* Pods-yolov3.release.xcconfig */,
+				CFF0F8E0083437648F226D09 /* Pods-yolov3.debug.xcconfig */,
+				2B92ECC53662B7405C23F9DD /* Pods-yolov3.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		68BB704870C60678AE4396A7 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				3A24D49CF7E878AD870A79C5 /* Pods_yolov3.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		9F3DD9622385AEEA003D3094 /* Drone */ = {
@@ -178,6 +172,14 @@
 			path = Drone;
 			sourceTree = "<group>";
 		};
+		C6B91D97A7FA15918B93F9E7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FAAF9F4284D70C952FBD0A52 /* Pods_yolov3.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -185,11 +187,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1132B4D622C633D600E7E509 /* Build configuration list for PBXNativeTarget "yolov3" */;
 			buildPhases = (
-				2B16EBBE444CFF1BB31E0464 /* [CP] Check Pods Manifest.lock */,
+				6DB53A24B7789C933F0C0024 /* [CP] Check Pods Manifest.lock */,
 				1132B4C022C633D400E7E509 /* Sources */,
 				1132B4C122C633D400E7E509 /* Frameworks */,
 				1132B4C222C633D400E7E509 /* Resources */,
-				5E4DCA5AC9668F25E2502044 /* [CP] Embed Pods Frameworks */,
+				C8BC6299540E80C1E2E4A6B3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -238,16 +240,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1ECB66223E75C8C00743FC4 /* Main.storyboard in Resources */,
 				1132B4D222C633D600E7E509 /* LaunchScreen.storyboard in Resources */,
 				111A044C22D6253800D93262 /* Assets.xcassets in Resources */,
-				1132B4CD22C633D500E7E509 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2B16EBBE444CFF1BB31E0464 /* [CP] Check Pods Manifest.lock */ = {
+		6DB53A24B7789C933F0C0024 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -269,7 +271,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5E4DCA5AC9668F25E2502044 /* [CP] Embed Pods Frameworks */ = {
+		C8BC6299540E80C1E2E4A6B3 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -319,14 +321,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		1132B4CB22C633D500E7E509 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1132B4CC22C633D500E7E509 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		1132B4D022C633D600E7E509 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -456,9 +450,10 @@
 		};
 		1132B4D722C633D600E7E509 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3DE8722089490F92A862727E /* Pods-yolov3.debug.xcconfig */;
+			baseConfigurationReference = CFF0F8E0083437648F226D09 /* Pods-yolov3.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = yolov3/yolov3.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JH6X85KXSY;
 				INFOPLIST_FILE = yolov3/Info.plist;
@@ -466,7 +461,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = dimaKush.yolov3;
+				PRODUCT_BUNDLE_IDENTIFIER = dimaKush.yolov31;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -475,9 +470,10 @@
 		};
 		1132B4D822C633D600E7E509 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 60DA8F88C62AC8A1A6275540 /* Pods-yolov3.release.xcconfig */;
+			baseConfigurationReference = 2B92ECC53662B7405C23F9DD /* Pods-yolov3.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = yolov3/yolov3.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JH6X85KXSY;
 				INFOPLIST_FILE = yolov3/Info.plist;
@@ -485,7 +481,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = dimaKush.yolov3;
+				PRODUCT_BUNDLE_IDENTIFIER = dimaKush.yolov31;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

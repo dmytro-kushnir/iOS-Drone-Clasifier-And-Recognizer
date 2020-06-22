@@ -49,7 +49,6 @@ class VideoFrameDecoder {
         
         // SPS parameters
         if naluType == 7 {
-            print("===== NALU type SPS")
             for i in 4..<40 {
                 if frameData[i] == 0 && frameData[i+1] == 0 && frameData[i+2] == 0 && frameData[i+3] == 1 {
                     ppsStartIndex = i // Includes the start header
@@ -64,7 +63,6 @@ class VideoFrameDecoder {
         
         // PPS parameters
         if naluType == 8 {
-            print("===== NALU type PPS")
             for i in ppsStartIndex+4..<ppsStartIndex+34 {
                 if frameData[i] == 0 && frameData[i+1] == 0 && frameData[i+2] == 0 && frameData[i+3] == 1 {
                     frameStartIndex = i
@@ -78,18 +76,17 @@ class VideoFrameDecoder {
             
             if sps != nil && pps != nil {
                 if !createFormatDescription(sps: sps!, pps: pps!) {
-                    print("===== ===== Failed to create formatDesc")
+//                    print("===== ===== Failed to create formatDesc")
                     return
                 }
                 if !createDecompressionSession() {
-                    print("===== ===== Failed to create decompressionSession")
+//                    print("===== ===== Failed to create decompressionSession")
                     return
                 }
             }
         }
         
         if (naluType == 1 || naluType == 5) && decompressionSession != nil {
-            print("===== NALU type \(naluType)")
             // If this is successful, the callback will be called
             // The callback will send the decoded, decompressed frame to the delegate
             decodeFrameData(Array(frameData[frameStartIndex...]))
@@ -201,10 +198,9 @@ class VideoFrameDecoder {
         duration: CMTime) in
         let decoder: VideoFrameDecoder = Unmanaged<VideoFrameDecoder>.fromOpaque(decompressionOutputRefCon!).takeUnretainedValue()
         if imageBuffer != nil && status == noErr {
-            print("===== Image successfully decompressed")
             decoder.imageDecompressed(image: imageBuffer!)
         } else {
-            print("===== Failed to decompress. VT Error \(status)")
+//            print("===== Failed to decompress. VT Error \(status)")
         }
     }
     

@@ -113,7 +113,9 @@ extension PhotoViewController: ModelProviderDelegate {
       return
     }
     if processStarted {
-      predictionLayer.addBoundingBoxes(predictions: predictions)
+      for prediction in predictions {
+        predictionLayer.addBoundingBoxes(prediction: prediction)
+      }
       predictionLayer.show()
       processed = true
       detectButton.setTitle("Clear", for: .normal)

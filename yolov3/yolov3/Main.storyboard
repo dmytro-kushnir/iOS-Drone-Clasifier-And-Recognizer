@@ -298,32 +298,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOO-bf-ZSb">
-                                <rect key="frame" x="37" y="570" width="54" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="TakeOff"/>
-                                <connections>
-                                    <action selector="takeoffTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="4et-Fn-KZp"/>
-                                </connections>
-                            </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M6Q-MT-0EO">
-                                <rect key="frame" x="16" y="44" width="343" height="506"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="600"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d0p-qC-vMW">
-                                <rect key="frame" x="293" y="570" width="34" height="30"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="drone-take-off" translatesAutoresizingMaskIntoConstraints="NO" id="BMr-zc-HhU">
+                                <rect key="frame" x="286" y="640" width="63" height="53"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Land"/>
-                                <connections>
-                                    <action selector="landTapped:" destination="E1b-zd-avz" eventType="touchUpInside" id="pAh-NM-pLT"/>
-                                </connections>
-                            </button>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="drone-land" translatesAutoresizingMaskIntoConstraints="NO" id="Njf-sL-Lbw">
+                                <rect key="frame" x="16" y="637" width="78" height="56"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="Vsz-tj-pxE"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Drone" id="taj-pM-jxl"/>
                     <connections>
+                        <outlet property="landGesture" destination="Njf-sL-Lbw" id="5sx-7g-PTv"/>
+                        <outlet property="takeOffGesture" destination="BMr-zc-HhU" id="cN3-un-b8w"/>
                         <outlet property="videoView" destination="M6Q-MT-0EO" id="4B0-QF-8fj"/>
                     </connections>
                 </viewController>
@@ -354,6 +348,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="drone-land" width="512" height="512"/>
+        <image name="drone-take-off" width="512" height="512"/>
         <image name="yolo" width="1337" height="710"/>
     </resources>
 </document>

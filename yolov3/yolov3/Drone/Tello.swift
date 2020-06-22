@@ -120,8 +120,6 @@ class Tello : CustomStringConvertible {
 
   func getStream() -> [Byte]? {
     let (data, remoteip, remoteport) = streamServer.recv(2048)
-    print("Server remote Ip received", remoteip)
-    print("Server remote port recieved", remoteport)
     
     return data!
   }
@@ -150,27 +148,27 @@ class Tello : CustomStringConvertible {
 
     func up(x: Int) {
       let x = validateDistance(x: x)
-        sendMessage(msg: "\(CMD.up) + \(x)")
+        sendMessage(msg: "\(CMD.up) \(x)")
     }
 
     func down(x: Int) {
       let x = validateDistance(x: x)
-        sendMessage(msg: "\(CMD.down) + \(x)")
+        sendMessage(msg: "\(CMD.down) \(x)")
     }
 
     func left(x: Int) {
       let x = validateDistance(x: x)
-        sendMessage(msg: "\(CMD.left) + \(x)")
+        sendMessage(msg: "\(CMD.left) \(x)")
     }
 
     func right(x: Int) {
       let x = validateDistance(x: x)
-        sendMessage(msg: "\(CMD.right) + \(x)")
+        sendMessage(msg: "\(CMD.right) \(x)")
     }
   
     func forward(x: Int) {
       let x = validateDistance(x: x)
-        sendMessage(msg: "\(CMD.forward) + \(x)")
+        sendMessage(msg: "\(CMD.forward) \(x)")
     }
   
     func back(x: Int) {

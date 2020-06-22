@@ -151,9 +151,16 @@ extension OnlineViewController: ModelProviderDelegate {
     predictionLayer.clear()
     if Settings.shared.isSmoothed {
       smoother.addToFrameHistory(predictions: predictions)
-      predictionLayer.addBoundingBoxes(predictions: smoother.getSmoothedBBoxes())
+      for prediction in predictions {
+        predictionLayer.addBoundingBoxes(prediction: prediction)
+      }
+      for prediction in smoother.getSmoothedBBoxes() {
+        predictionLayer.addBoundingBoxes(prediction: prediction)
+      }
     } else {
-      predictionLayer.addBoundingBoxes(predictions: predictions)
+      for prediction in predictions {
+        predictionLayer.addBoundingBoxes(prediction: prediction)
+      }
     }
     predictionLayer.show()
     self.fpsLabel.text = "FPS: " + String(format: "%.2f", stat.fps)
