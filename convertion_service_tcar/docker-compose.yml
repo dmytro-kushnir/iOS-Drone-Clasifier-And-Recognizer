@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+    convertion-service:
+      build: .
+      expose:
+        - '5000'
+      networks:
+        - tcar-network
+      environment:
+        PYTHONUNBUFFERED: 1,
+        PYTHONIOENCODING: UTF-8
+        MODEL_CFG_PATH: './models_yolo/yolov4-mish.cfg'
+        MODEL_WEIGHTS_PATH: './models_yolo/yolov4-mish.weights'
+        MODEL_COREML_PATH: './models_yolo/yolov4-mish.mlmodel'
+      volumes: ['./scripts/yolov4:/app']
+networks:
+  tcar-network:
+    driver: bridge

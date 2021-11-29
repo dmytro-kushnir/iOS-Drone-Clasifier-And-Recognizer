@@ -2,3 +2,4 @@ models
 .DS_Store
 .idea
 yolo_tcar/build
+convertion_service_tcar/scripts/yolov4/models_yolo
