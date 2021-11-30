@@ -2,6 +2,7 @@ version: '3.7'
 services:
     convertion-service:
       build: .
+      image: tcar-network:convertion-service
       expose:
         - '5000'
       networks:
@@ -9,10 +10,10 @@ services:
       environment:
         PYTHONUNBUFFERED: 1,
         PYTHONIOENCODING: UTF-8
-        MODEL_CFG_PATH: './models_yolo/yolov4-mish.cfg'
-        MODEL_WEIGHTS_PATH: './models_yolo/yolov4-mish.weights'
-        MODEL_COREML_PATH: './models_yolo/yolov4-mish.mlmodel'
-      volumes: ['./scripts/yolov4:/app']
+        MODEL_CFG_PATH: './input_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}.cfg'
+        MODEL_WEIGHTS_PATH: './input_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}.weights'
+        MODEL_COREML_PATH: './output_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}.mlmodel'
+      volumes: ['./:/app']
 networks:
   tcar-network:
     driver: bridge
