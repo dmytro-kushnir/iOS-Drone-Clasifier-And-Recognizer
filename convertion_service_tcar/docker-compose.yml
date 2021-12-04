@@ -10,9 +10,11 @@ services:
       environment:
         PYTHONUNBUFFERED: 1,
         PYTHONIOENCODING: UTF-8
+        MODEL_NAMES: './input_models/.names'
         MODEL_CFG_PATH: './input_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}.cfg'
+        MODEL_CFG_TEMP_PATH: './input_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}_tmp.cfg'
         MODEL_WEIGHTS_PATH: './input_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}.weights'
-        MODEL_COREML_PATH: './output_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}.mlmodel'
+        MODEL_COREML_PATH: './output_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}.mlpackage'
       volumes: ['./:/app']
 networks:
   tcar-network:
