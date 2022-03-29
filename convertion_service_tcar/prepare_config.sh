@@ -1,6 +1,7 @@
 #!/bin/sh
 
 sed 's/subdivisions.*//
+s/blur.*//
 s/decay.*//
 s/angle.*//
 s/saturation.*//
@@ -20,6 +21,8 @@ s/truth_thresh.*//
 s/random.*//
 s/resize.*//
 s/max_delta.*//
+
+s/stopbackward.*//
 ' $1 > $2
 
 echo 'Configs  convert converted sucessfully'

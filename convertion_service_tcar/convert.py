@@ -1,8 +1,11 @@
 import argparse
 import os
+import numpy as np
 from coremltools import ImageType
+from coremltools.models.utils import save_spec
 from yolov4.tf import YOLOv4
 import coremltools as ct
+import json
 
 parser = argparse.ArgumentParser(description='Yolo4 To CoreML Converter.')
 parser.add_argument('-n', '--names_path', help='Path to names file.')
@@ -25,19 +28,23 @@ def _main(args):
         '.weights'), '{} is not a .weights file'.format(weights_path)
 
     assert mlpackage_path.endswith(
-        '.mlpackage'), 'output path {} is not a .mlpackage file'.format(mlpackage_path)
+        '.mlpackage') | mlpackage_path.endswith(
+        '.mlmodel'), 'output path {} is not a .mlpackage or .mlmodel file'.format(mlpackage_path)
 
     print('names: ', names_path)
     print('config: ', config_path)
     print('weights: ', weights_path)
-    print('mlpackage: ', names_path)
+    print('mlpackage: ', mlpackage_path)
 
     yolo.config.parse_names(names_path)
+
+    names = json.encoder.JSONEncoder().encode(yolo.config.names)
+    print('names: ', names)
+
     yolo.config.parse_cfg(config_path)
 
     yolo.make_model()
     yolo.load_weights(weights_path, weights_type="yolo")
-    yolo.summary(summary_type="yolo")
     yolo.summary()
 
 
@@ -52,9 +59,14 @@ def _main(args):
                        debug=False
                        )
 
+    model.user_defined_metadata['yolo.anchors'] = np.array2string(yolo.config.anchors, separator=',')
+    model.user_defined_metadata['yolo.names'] = names
+
     model.save(mlpackage_path)
 
-    #yolo.inference(media_path="kite.jpg")
+    print('model.is_package', model.is_package)
+    if (model.is_package) :
+        save_spec(model.get_spec(), mlpackage_path)
 
 
 if __name__ == '__main__':
