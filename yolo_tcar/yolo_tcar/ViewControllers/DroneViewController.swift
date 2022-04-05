@@ -351,7 +351,7 @@ extension DroneViewController: ModelProviderDelegate {
 //          print(distance)
           
           let box = (angle, distance, prediction.score, prediction.classIndex)
-          predictMovement(box: box)
+//          predictMovement(box: box)
         }
       }
       predictionLayer.show()

@@ -25,4 +25,4 @@ s/max_delta.*//
 s/stopbackward.*//
 ' $1 > $2
 
-echo 'Configs  convert converted sucessfully'
+echo 'Configs converted successfully'

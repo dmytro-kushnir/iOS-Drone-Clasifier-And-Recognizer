@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uBU-Mp-hdj">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uBU-Mp-hdj">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -28,13 +28,16 @@
         <!--Settings-->
         <scene sceneID="wgD-7U-kS5">
             <objects>
-                <viewController id="6Km-U2-dOY" customClass="SettingsViewController" customModule="yolov3" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="6Km-U2-dOY" customClass="SettingsViewController" customModule="yolo_tcar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lYh-bz-Szi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qrZ-cc-E35">
+                            <pickerView opaque="NO" tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qrZ-cc-E35" colorLabel="IBBuiltInLabel-Red">
                                 <rect key="frame" x="0.0" y="135" width="375" height="216"/>
+                                <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="contentStretch" x="0.0" y="0.20000000000000001" width="1" height="1"/>
                                 <connections>
                                     <outlet property="dataSource" destination="6Km-U2-dOY" id="7fg-sP-J3P"/>
                                     <outlet property="delegate" destination="6Km-U2-dOY" id="OGZ-yE-I69"/>
@@ -48,15 +51,19 @@
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose IOU Threshold" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1QG-62-Oaf">
                                 <rect key="frame" x="0.0" y="401" width="375" height="21"/>
+                                <color key="backgroundColor" systemColor="systemGreenColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
+                                <color key="highlightedColor" systemColor="quaternaryLabelColor"/>
+                                <color key="shadowColor" systemColor="labelColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose Object Confidence Threshold" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y9E-0E-CjR">
                                 <rect key="frame" x="0.0" y="522" width="375" height="21"/>
+                                <color key="backgroundColor" systemColor="systemGreenColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
+                                <color key="shadowColor" systemColor="labelColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KXo-a5-RjA">
                                 <rect key="frame" x="317" y="447" width="58" height="21"/>
@@ -82,15 +89,18 @@
                                     <action selector="confChanged" destination="6Km-U2-dOY" eventType="valueChanged" id="x08-fc-Wgn"/>
                                 </connections>
                             </slider>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nca-iU-yCd">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nca-iU-yCd">
                                 <rect key="frame" x="98" y="690" width="34" height="30"/>
+                                <color key="backgroundColor" systemColor="systemYellowColor"/>
                                 <state key="normal" title="Save"/>
                                 <connections>
                                     <action selector="save" destination="6Km-U2-dOY" eventType="touchUpInside" id="Hs1-Hl-3Io"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yra-rV-ltE">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yra-rV-ltE">
                                 <rect key="frame" x="211" y="690" width="106" height="30"/>
+                                <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                <color key="tintColor" systemColor="systemPinkColor"/>
                                 <state key="normal" title="Restore Default"/>
                                 <connections>
                                     <action selector="restoreDefault" destination="6Km-U2-dOY" eventType="touchUpInside" id="Ny3-RI-YkV"/>
@@ -98,6 +108,8 @@
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Online Smoother:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vub-eN-RQ1">
                                 <rect key="frame" x="49" y="611" width="133" height="21"/>
+                                <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                <color key="tintColor" systemColor="linkColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -106,6 +118,7 @@
                                 <rect key="frame" x="241" y="606" width="51" height="31"/>
                             </switch>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="gjt-bC-5gc"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="Zkc-Va-PXg" firstAttribute="leading" secondItem="vub-eN-RQ1" secondAttribute="trailing" constant="59" id="0E6-z7-IeZ"/>
@@ -142,7 +155,6 @@
                             <constraint firstItem="qrZ-cc-E35" firstAttribute="top" secondItem="4Ho-Mf-w39" secondAttribute="bottom" constant="20" id="tKB-Fb-CFp"/>
                             <constraint firstItem="Zkc-Va-PXg" firstAttribute="top" secondItem="b61-pW-5al" secondAttribute="bottom" constant="13" id="trg-8C-ZCz"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="gjt-bC-5gc"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" id="Gnq-D7-BVB"/>
                     <connections>
@@ -161,23 +173,29 @@
         <!--Photo View Controller-->
         <scene sceneID="B3R-DQ-mus">
             <objects>
-                <viewController id="nHS-8v-nIf" customClass="PhotoViewController" customModule="yolov3" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="nHS-8v-nIf" customClass="PhotoViewController" customModule="yolo_tcar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Yoa-fp-iDQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="phW-RL-mxV">
-                                <rect key="frame" x="164" y="681" width="47" height="30"/>
-                                <state key="normal" title="Detect"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ziY-7k-2Nc">
+                                <rect key="frame" x="0.0" y="88" width="375" height="531"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="phW-RL-mxV">
+                                <rect key="frame" x="164" y="711" width="47" height="30"/>
+                                <color key="backgroundColor" systemColor="systemYellowColor"/>
+                                <state key="normal" title="Detect">
+                                    <color key="titleColor" systemColor="systemGreenColor"/>
+                                    <color key="titleShadowColor" systemColor="systemGreenColor"/>
+                                </state>
                                 <connections>
                                     <action selector="processImage" destination="nHS-8v-nIf" eventType="touchUpInside" id="mJy-yz-T20"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ziY-7k-2Nc">
-                                <rect key="frame" x="0.0" y="88" width="375" height="641"/>
-                            </imageView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="XWJ-00-1fT"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" systemColor="labelColor"/>
                         <constraints>
                             <constraint firstItem="ziY-7k-2Nc" firstAttribute="leading" secondItem="XWJ-00-1fT" secondAttribute="leading" id="CRF-jO-PBr"/>
                             <constraint firstItem="XWJ-00-1fT" firstAttribute="trailing" secondItem="ziY-7k-2Nc" secondAttribute="trailing" id="FVW-x7-4x9"/>
@@ -187,7 +205,6 @@
                             <constraint firstItem="phW-RL-mxV" firstAttribute="leading" secondItem="XWJ-00-1fT" secondAttribute="leading" constant="164" id="c0z-qc-PN9"/>
                             <constraint firstItem="XWJ-00-1fT" firstAttribute="bottom" secondItem="ziY-7k-2Nc" secondAttribute="bottom" id="xVn-CR-VV6"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="XWJ-00-1fT"/>
                     </view>
                     <navigationItem key="navigationItem" id="HQS-jj-jFD">
                         <barButtonItem key="leftBarButtonItem" systemItem="organize" id="jkl-gH-Msy">
@@ -208,12 +225,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hqC-zD-nho" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1702" y="-69"/>
+            <point key="canvasLocation" x="-1703.2" y="-69.458128078817737"/>
         </scene>
         <!--Online-->
         <scene sceneID="tPW-iT-qLj">
             <objects>
-                <viewController id="48p-CH-dor" customClass="OnlineViewController" customModule="yolov3" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="48p-CH-dor" customClass="OnlineViewController" customModule="yolo_tcar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hUO-ti-3a6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -254,6 +271,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="jo0-re-UF9"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="jo0-re-UF9" firstAttribute="trailing" secondItem="M80-7S-1Gn" secondAttribute="trailing" constant="250" id="D5b-ne-9oJ"/>
@@ -276,7 +294,6 @@
                             <constraint firstItem="jo0-re-UF9" firstAttribute="trailing" secondItem="faX-Tu-X9z" secondAttribute="trailing" id="yQM-Sa-ULt"/>
                             <constraint firstItem="jo0-re-UF9" firstAttribute="bottom" secondItem="faX-Tu-X9z" secondAttribute="bottom" id="yuo-g5-WGM"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="jo0-re-UF9"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Online" id="U0r-z4-RS5"/>
                     <connections>
@@ -293,7 +310,7 @@
         <!--Drone-->
         <scene sceneID="cNP-0A-7VV">
             <objects>
-                <viewController id="E1b-zd-avz" customClass="DroneViewController" customModule="yolov3" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="E1b-zd-avz" customClass="DroneViewController" customModule="yolo_tcar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PQh-VF-WRA">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -311,8 +328,8 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="Vsz-tj-pxE"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Drone" id="taj-pM-jxl"/>
                     <connections>
@@ -333,7 +350,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="tintColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" systemColor="systemPurpleColor"/>
                     </tabBar>
                     <connections>
                         <segue destination="E1b-zd-avz" kind="relationship" relationship="viewControllers" id="Nnr-My-Lhu"/>
@@ -347,9 +364,34 @@
             <point key="canvasLocation" x="-4201" y="-444"/>
         </scene>
     </scenes>
+    <color key="tintColor" systemColor="systemGreenColor"/>
     <resources>
         <image name="drone-land" width="512" height="512"/>
         <image name="drone-take-off" width="512" height="512"/>
         <image name="yolo" width="1337" height="710"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="quaternaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.17999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemPurpleColor">
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

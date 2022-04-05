@@ -1,10 +1,4 @@
 FROM python:3.7
-#
-#ARG ç
-#ARG MODEL_CFG_PATH
-#ARG MODEL_CFG_TEMP_PATH
-#ARG MODEL_WEIGHTS_PATH
-#ARG MODEL_COREML_PATH
 
 COPY requirements.txt /app/requirements.txt
 WORKDIR /app
@@ -15,4 +9,4 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 ENTRYPOINT  sh ./prepare_config.sh ${MODEL_CFG_PATH} ${MODEL_CFG_TEMP_PATH} & \
-            python ./convert.py -n ${MODEL_CFG_PATH} -c ${MODEL_CFG_TEMP_PATH} -w ${MODEL_WEIGHTS_PATH} -m ${MODEL_COREML_PATH}
+            python ./convert.py -n ${MODEL_NAMES} -c ${MODEL_CFG_TEMP_PATH} -w ${MODEL_WEIGHTS_PATH} -m ${MODEL_COREML_PATH}

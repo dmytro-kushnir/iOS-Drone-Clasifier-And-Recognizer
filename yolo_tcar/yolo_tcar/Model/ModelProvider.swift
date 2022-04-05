@@ -2,9 +2,7 @@
 //  ModelProvider.swift
 // yolo_tcar
 //
-//  
-//  
-//
+
 
 import UIKit
 import CoreML
@@ -15,7 +13,7 @@ protocol ModelProviderDelegate: class {
             error: YOLOError?)
 }
 
-@available(macOS 10.13, iOS 11.0, tvOS 11.0, watchOS 4.0, *)
+@available(macOS 10.13, iOS 15.0, tvOS 11.0, watchOS 4.0, *)
 class ModelProvider {
   
   struct Statistics {
@@ -52,7 +50,9 @@ class ModelProvider {
       do {
         let startTime = CACurrentMediaTime()
         let predictions = try self.model.predict(frame: frame)
+        print(predictions)
         let elapsed = CACurrentMediaTime() - startTime
+        print(elapsed)
         self.showResultOnMain(predictions: predictions, elapsed: Float(elapsed), error: nil)
       } catch let error as YOLOError {
         self.showResultOnMain(predictions: nil, elapsed: -1, error: error)

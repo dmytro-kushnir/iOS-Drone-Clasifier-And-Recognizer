@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   version = "1.3">
+   <BuildAction>
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForRunning = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1132B4C322C633D400E7E509"
+               BuildableName = "yolo_tcar.app"
+               BlueprintName = "yolo_tcar"
+               ReferencedContainer = "container:../yolo_tcar.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <LaunchAction
+      useCustomWorkingDirectory = "YES"
+      buildConfiguration = "Debug"
+      allowLocationSimulation = "YES"
+      customWorkingDirectory = "/Users/dmytro.kushnir/Develop/ios-text-clasifier-and-recognizer/yolo_tcar">
+      <BuildableProductRunnable>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "1132B4C322C633D400E7E509"
+            BuildableName = "yolo_tcar.app"
+            BlueprintName = "yolo_tcar"
+            ReferencedContainer = "container:../yolo_tcar.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <LocationScenarioReference
+         identifier = "com.apple.dt.IDEFoundation.CurrentLocationScenarioIdentifier"
+         referenceType = "1">
+      </LocationScenarioReference>
+   </LaunchAction>
+</Scheme>

@@ -6,7 +6,7 @@
 
 import Foundation
 
-private let defaultModel = YOLOType.v3_Tiny
+private let defaultModel = YOLOType.v4_Tiny
 private let defaultIOUThreshold: Float = 0.9
 private let defaultConfidenceThreshold: Float = 0.8
 private let defaultIsSmoothed = true

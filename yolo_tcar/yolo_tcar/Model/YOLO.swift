@@ -2,45 +2,42 @@
 //  YOLO.swift
 // yolo_tcar
 //
-//  
-//  
-//
 
 import CoreML
 import UIKit
 import Accelerate
 
 enum YOLOType {
-  case v3_Tiny
-  case v3_416
   case v3_nulp
-  
+  case v4_416
+  case v4_Tiny
+
   func description() -> String {
     switch self {
-    case .v3_416:
-      return "YOLOv3-416"
-    case .v3_Tiny:
-      return "YOLOv3-tiny"
     case .v3_nulp:
       return "YOLOv3-nulp"
+    case .v4_416:
+      return "YOLOv4-416"
+    case .v4_Tiny:
+      return "YOLOv4-tiny"
     }
   }
   
   static func initFrom(name: String) -> YOLOType {
     switch name {
-    case "YOLOv3-tiny":
-      return .v3_Tiny
-    case "YOLOv3-416":
-      return .v3_416
     case "YOLOv3-nulp":
       return .v3_nulp
+    case "YOLOv4-416":
+      return .v4_416
+    case "YOLOv4-tiny":
+      return .v4_Tiny
     default:
-      return .v3_Tiny
+      return .v4_Tiny
     }
   }
   
   static func modelNames() -> [String] {
-    return ["YOLOv3-tiny", "YOLOv3-416", "YOLOv3-nulp"]
+    return ["YOLOv3-nulp", "YOLOv4-tiny", "YOLOv4-416"]
   }
 }
 
@@ -52,7 +49,7 @@ class YOLO: NSObject {
   private var model: MLModel?
   private let pixelBufferSize = CGSize(width: CGFloat(YOLO.inputSize),
                                        height: CGFloat(YOLO.inputSize))
-  private let inputName = "image"
+  private let inputName = "input_1"
 
   private var classes = [Float](repeating: 0, count: Settings.shared.isCustomModel() ? customLabels.count : labels.count)
   private var anchors: [String: Array<Float>]!
@@ -79,21 +76,23 @@ class YOLO: NSObject {
     var url: URL? = nil
     self.type = type
     switch type {
-    case .v3_Tiny:
-      url = Bundle.main.url(forResource: "yolo-tiny", withExtension:"mlmodelc")
+    case .v4_Tiny:
+      url = Bundle.main.url(forResource: "yolov4_tiny", withExtension:"mlmodelc")
       self.anchors = tiny_anchors
-    case .v3_416:
-      url = Bundle.main.url(forResource: "yolo", withExtension:"mlmodelc")
+    case .v4_416:
+      url = Bundle.main.url(forResource: "yolov4", withExtension:"mlmodelc")
       self.anchors = anchors_416
     case .v3_nulp:
       url = Bundle.main.url(forResource: "yolo-nulp", withExtension:"mlmodelc")
       self.anchors = anchors_416
     }
+
     guard let modelURL = url else {
       throw YOLOError.modelFileNotFound
     }
     do {
       model = try MLModel(contentsOf: modelURL)
+
     } catch let error {
       print(error)
       throw YOLOError.modelCreationError
@@ -112,6 +111,7 @@ class YOLO: NSObject {
     }
     let output = try model.prediction(from: input)
     var predictions = [Prediction]()
+
     for name in output.featureNames {
       let res = try process(output: output.featureValue(for: name)!.multiArrayValue!,
                             name: name)
@@ -120,13 +120,14 @@ class YOLO: NSObject {
     nonMaxSuppression(boxes: &predictions, threshold: iouThreshold)
     return predictions
   }
-  
+
   private func process(output out: MLMultiArray, name: String) throws -> [Prediction] {
     var predictions = [Prediction]()
     let grid = out.shape[out.shape.count-1].intValue
     let gridSize = YOLO.inputSize / Float(grid)
     let classesCount = Settings.shared.isCustomModel() ? customLabels.count : labels.count
     let pointer = UnsafeMutablePointer<Double>(OpaquePointer(out.dataPointer))
+
     if out.strides.count < 3 {
       throw YOLOError.strideOutOfBounds
     }
@@ -244,7 +245,7 @@ extension YOLO {
 
 // MARK: - YOLOInput
 
-@available(macOS 10.13, iOS 11.0, tvOS 11.0, watchOS 4.0, *)
+@available(macOS 10.13, iOS 15.0, tvOS 11.0, watchOS 4.0, *)
 private class YOLOInput : MLFeatureProvider {
   
   var inputImage: CVPixelBuffer
