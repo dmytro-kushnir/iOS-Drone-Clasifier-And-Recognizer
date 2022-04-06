@@ -44,7 +44,6 @@ enum YOLOType {
 class YOLO: NSObject {
   
   static let inputSize: Float = 416.0
-  static let boxesPerCell: Int = 3
   
   private var model: MLModel?
   private let pixelBufferSize = CGSize(width: CGFloat(YOLO.inputSize),
@@ -52,8 +51,7 @@ class YOLO: NSObject {
   private let inputName = "input_1"
 
   private var classes = [Float](repeating: 0, count: Settings.shared.isCustomModel() ? customLabels.count : labels.count)
-  private var anchors: [String: Array<Float>]!
-  
+
   var confidenceThreshold: Float
   var iouThreshold: Float
   
@@ -68,6 +66,7 @@ class YOLO: NSObject {
   override init() {
     confidenceThreshold = Settings.shared.confidenceThreshold
     iouThreshold = Settings.shared.iouThreshold
+  
     super.init()
   }
   
@@ -75,16 +74,14 @@ class YOLO: NSObject {
     self.init()
     var url: URL? = nil
     self.type = type
+
     switch type {
     case .v4_Tiny:
       url = Bundle.main.url(forResource: "yolov4_tiny", withExtension:"mlmodelc")
-      self.anchors = tiny_anchors
     case .v4_416:
       url = Bundle.main.url(forResource: "yolov4", withExtension:"mlmodelc")
-      self.anchors = anchors_416
     case .v3_nulp:
       url = Bundle.main.url(forResource: "yolo-nulp", withExtension:"mlmodelc")
-      self.anchors = anchors_416
     }
 
     guard let modelURL = url else {
@@ -92,11 +89,40 @@ class YOLO: NSObject {
     }
     do {
       model = try MLModel(contentsOf: modelURL)
-
     } catch let error {
       print(error)
       throw YOLOError.modelCreationError
     }
+  }
+
+  public static func parseAnchors(model: MLModel) -> [(Float,Float)] {
+    print(model.modelDescription)
+    let userDefines = model.modelDescription.metadata[MLModelMetadataKey.creatorDefinedKey] as? NSDictionary
+    let anchorsString = userDefines?["yolo.anchors"] as? String
+
+    return YOLO.parseAnchorsString(anchorsString: anchorsString!)
+  }
+
+  public static func parseNames(model: MLModel) throws -> [Int:String] {
+    guard let userDefines = model.modelDescription.metadata[MLModelMetadataKey.creatorDefinedKey] as? NSDictionary else { return [:]}
+    guard let anchorsString = userDefines["yolo.names"] as? String else { return [:] }
+    guard let data = anchorsString.data(using: .utf8) else { return [:] }
+    return try JSONDecoder().decode([Int:String].self, from: data)
+  }
+
+  static func parseAnchorsString(anchorsString: String) -> [(Float, Float)] {
+    let splitted = anchorsString.trimmingCharacters(in: ["[","]", " "]).split(separator: "\n")
+
+    var anchors = [(Float, Float)](repeating: (0.0, 0.0), count: splitted.count)
+    for n in 0 ..< splitted.count {
+      let pair = splitted[n].description.trimmingCharacters(in: ["[", "]", ",", " "]).split(separator: ",").map { val in
+        Float(val.trimmingCharacters(in: [" "]))
+      }
+      anchors[n].0 = pair[0]!
+      anchors[n].1 = pair[1]!
+    }
+
+    return anchors
   }
   
   func predict(frame: UIImage) throws -> [Prediction] {
@@ -109,70 +135,179 @@ class YOLO: NSObject {
     guard let model = self.model else {
       throw YOLOError.noModel
     }
+
     let output = try model.prediction(from: input)
     var predictions = [Prediction]()
 
-    for name in output.featureNames {
-      let res = try process(output: output.featureValue(for: name)!.multiArrayValue!,
-                            name: name)
+    let featureNames = output.featureNames
+
+    let outputFeatures = featureNames.map { name in
+              (name, output.featureValue(for: name)!.multiArrayValue!)}.map { pair in
+              Output(name: pair.0, array: pair.1, rows: pair.1.shape[1].intValue, cols: pair.1.shape[2].intValue, blockSize: pair.1.shape[3].intValue)
+            }.sorted { $0.rows > $1.rows}
+
+    let anchors = YOLO.parseAnchors(model: model)
+
+    let names = try YOLO.parseNames(model: model)
+    let classesCount = names.count
+
+    var index = 0
+    let anchorStride = anchors.count / outputFeatures.count
+
+    for output in outputFeatures {
+      let _anchors = Array<(Float, Float)>(anchors[index * anchorStride ..< (index+1) * anchorStride])
+      let res = try process(output: output, anchors: _anchors, classesCount: classesCount)
       predictions.append(contentsOf: res)
+      index += 1
     }
     nonMaxSuppression(boxes: &predictions, threshold: iouThreshold)
+
     return predictions
   }
 
-  private func process(output out: MLMultiArray, name: String) throws -> [Prediction] {
-    var predictions = [Prediction]()
-    let grid = out.shape[out.shape.count-1].intValue
-    let gridSize = YOLO.inputSize / Float(grid)
-    let classesCount = Settings.shared.isCustomModel() ? customLabels.count : labels.count
-    let pointer = UnsafeMutablePointer<Double>(OpaquePointer(out.dataPointer))
+  struct Output {
+    var name: String
+    var array: MLMultiArray
+    var rows: Int
+    var cols: Int
+    var blockSize: Int
+  }
 
-    if out.strides.count < 3 {
+  private func process(output: Output, anchors: [(Float, Float)], classesCount: Int) throws -> [Prediction] {
+    let boxesPerCell = output.blockSize / (classesCount + 5)
+
+    let cnt = output.array.count
+    let cnt_req = output.blockSize * output.rows * output.cols
+    assert(cnt == cnt_req)
+    assert(output.array.dataType == .float32)
+
+
+    // The 416x416 image is divided into a 13x13 grid. Each of these grid cells
+    // will predict 5 bounding boxes (boxesPerCell). A bounding box consists of
+    // five data items: x, y, width, height, and a confidence score. Each grid
+    // cell also predicts which class each bounding box belongs to.
+    //
+    // The "features" array therefore contains (nu  mClasses + 5)*boxesPerCell
+    // values for each grid cell, i.e. 125 channels.+ The total features array
+    // contains 125x13x13 elements.
+    // NOTE: It turns out that accessing the elements in the multi-array as
+    // `features[[channel, cy, cx] as [NSNumber]].floatValue` is kinda slow.
+    // It's much faster to use direct memory access to the features.
+
+    var predictions = [Prediction]()
+
+    let pointer = UnsafeMutablePointer<Float32>(OpaquePointer(output.array.dataPointer))
+
+    if output.array.strides.count < 3 {
       throw YOLOError.strideOutOfBounds
     }
-    let channelStride = out.strides[out.strides.count-3].intValue
-    let yStride = out.strides[out.strides.count-2].intValue
-    let xStride = out.strides[out.strides.count-1].intValue
-    func offset(ch: Int, x: Int, y: Int) -> Int {
+
+    let yStride = output.array.strides[1].intValue
+    let xStride = output.array.strides[2].intValue
+    let channelStride = output.array.strides[3].intValue
+
+    @inline(__always) func offset(_ ch: Int, _ x: Int, _ y: Int) -> Int {
       return ch * channelStride + y * yStride + x * xStride
     }
-    for x in 0 ..< grid {
-      for y in 0 ..< grid {
-        for box_i in 0 ..< YOLO.boxesPerCell {
+
+    var confidenceMax = Float(0)
+
+    for x in 0 ..< output.rows {
+      for y in 0 ..< output.cols {
+        for box_i in 0 ..< boxesPerCell {
+
+          // For the first bounding box (box_i=0) we have to read channels (boxOffset) 0-24,
+          // for box_i=1 we have to read channels 25-49, and so on.
           let boxOffset = box_i * (classesCount + 5)
-          let bbx = Float(pointer[offset(ch: boxOffset, x: x, y: y)])
-          let bby = Float(pointer[offset(ch: boxOffset + 1, x: x, y: y)])
-          let bbw = Float(pointer[offset(ch: boxOffset + 2, x: x, y: y)])
-          let bbh = Float(pointer[offset(ch: boxOffset + 3, x: x, y: y)])
-          let confidence = sigmoid(Float(pointer[offset(ch: boxOffset + 4, x: x, y: y)]))
-          if confidence < confidenceThreshold {
-            continue
+
+          var bbx = Float(pointer[offset(boxOffset, x, y)])
+          var bby = Float(pointer[offset(boxOffset + 1, x, y)])
+          var bbw = Float(pointer[offset(boxOffset + 2, x, y)])
+          var bbh = Float(pointer[offset(boxOffset + 3, x, y)])
+          let obj = Float(pointer[offset(boxOffset + 4, x, y)])
+          var exist = false
+
+          // The confidence value for the bounding box is given by obj. We use
+          // the logistic sigmoid to turn this into a percentage.
+//          let confidence = sigmoid(obj)
+
+          // Gather the predicted classes for this anchor box and softmax them,
+          // so we can interpret these numbers as percentages.
+          var classes = [Float](repeating: 0, count: classesCount)
+
+          if (obj > confidenceThreshold) {
+            for c in 0 ..< classesCount {
+              let bbox_c = Float(pointer[offset(boxOffset + 5 + c, x, y)])
+              let prob = bbox_c * obj
+              if (prob > confidenceThreshold) {
+                classes[c] = prob;
+                exist   = true
+              } else {
+                classes[c] = 0
+              }
+            }
           }
-          let x_pos = (sigmoid(bbx) + Float(x)) * gridSize
-          let y_pos = (sigmoid(bby) + Float(y)) * gridSize
-          let width = exp(bbw) * self.anchors[name]![2 * box_i]
-          let height = exp(bbh) * self.anchors[name]![2 * box_i + 1]
-          let count = Settings.shared.isCustomModel() ? customLabels.count : labels.count
-          for c in 0 ..< count {
-            classes[c] = Float(pointer[offset(ch: boxOffset + 5 + c, x: x, y: y)])
-          }
-          softmax(&classes)
+
+//         softmax(&classes)
+
+          // Find the index of the class with the largest score.
           let (detectedClass, bestClassScore) = argmax(classes)
-          let confidenceInClass = bestClassScore * confidence
-          if confidenceInClass < confidenceThreshold {
-            continue
+
+          // Combine the confidence score for the bounding box, which tells us
+          // how likely it is that there is an object in this box (but not what
+          // kind of object it is), with the largest class prediction, which
+          // tells us what kind of object it detected (but not where).
+          let confidenceInClass = bestClassScore * obj
+
+          confidenceMax = max(confidenceMax, confidenceInClass)
+
+          if (exist) {
+
+
+          // The predicted tx and ty coordinates are relative to the location
+          // of the grid cell; we use the logistic sigmoid to constrain these
+          // coordinates to the range 0 - 1. Then we add the cell coordinates
+          // (0-12) and multiply by the number of pixels per grid cell (32).
+          // Now x and y represent center of the bounding box in the original
+          // 416x416 image space.
+//            bbx = (sigmoid(bbx) + Float(x)) * Float(output.cols)
+//            bby = (sigmoid(bby) + Float(y)) * Float(output.rows)
+
+            bbx = (bbx + Float(x)) / Float(output.cols)
+            bby = (bby + Float(y)) / Float(output.rows)
+
+            let anchor = anchors[box_i]
+            print("anchor \(anchor)")
+
+          // The size of the bounding box, tw and th, is predicted relative to
+          // the size of an "anchor" box. Here we also transform the width and
+          // height into the original 416x416 image space.
+            bbw = exp(bbw) * anchor.0
+            bbh = exp(bbh) * anchor.1
+
+//            bbw = bbw * bbw * 4 * anchor.0
+//            bbh = bbh * bbh * 4 * anchor.1
+
+
+          // Since we compute 13x13x5 = 845 bounding boxes, we only want to
+          // keep the ones whose combined score is over a certain threshold.
+            let rect = CGRect(x: CGFloat(bbx - bbw/2.0), y: CGFloat(bby - bbh/2.0),
+                    width: CGFloat(bbw), height: CGFloat(bbh))
+
+            let prediction = Prediction(classIndex: detectedClass,
+                    score: confidenceInClass,
+                    rect: rect)
+
+            predictions.append(prediction)
           }
-          predictions.append(Prediction(classIndex: detectedClass,
-                                  score: confidenceInClass,
-                                  rect: CGRect(x: CGFloat(x_pos - width / 2),
-                                               y: CGFloat(y_pos - height / 2),
-                                               width: CGFloat(width),
-                                               height: CGFloat(height))))
+        }
         }
       }
-    }
+
+    print("predictions [\(output.rows) x \(output.cols)]: max conf: \(confidenceMax), threshold: \(confidenceThreshold)")
+
     return predictions
+
   }
 
 }

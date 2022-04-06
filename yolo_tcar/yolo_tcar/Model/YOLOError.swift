@@ -28,7 +28,7 @@ extension YOLOError: LocalizedError {
     case .strideOutOfBounds:
       return "Stride array Out Of Bounds"
     case .unknownError:
-      return "Some unknown error"
+      return "Some unknown Yolo error"
     }
   }
 }
