@@ -2,9 +2,6 @@
 //  BoundingBox.swift
 // yolo_tcar
 //
-//  Created by Alexander on 10/07/2019.
-//  
-//
 
 import Foundation
 import UIKit
@@ -19,7 +16,6 @@ class PredictionLayer {
   }
   
   struct BoundingBox {
-
     let layer = CAShapeLayer()
     let textLayer = CATextLayer()
 
@@ -28,10 +24,19 @@ class PredictionLayer {
           color: CGColor) {
       layer.fillColor = UIColor.clear.cgColor
       layer.lineWidth = 2
-      let rect = CGRect(x: predRect.origin.x / transform.ratioX + transform.addX,
-                        y: predRect.origin.y / transform.ratioY + transform.addY,
-                        width: predRect.width / transform.ratioX,
-                        height: predRect.height / transform.ratioY)
+      // The predicted bounding box is in the coordinate space of the input
+      // image, which is a square image of 416x416 pixels. We want to show it
+      // on the video preview, which is as wide as the screen and has a 16:9
+     // aspect ratio. The video preview also may be letterboxed at the top
+     // and bottom.
+      var rect = predRect
+      rect.origin.x *=  transform.ratioX
+      rect.origin.x += transform.addX
+      rect.origin.y *= transform.ratioY
+      rect.origin.y += transform.addY
+      rect.size.width *=  transform.ratioX
+      rect.size.height *= transform.ratioY
+
       let path = UIBezierPath(rect: rect)
       layer.path = path.cgPath
       layer.strokeColor = color
@@ -69,12 +74,19 @@ class PredictionLayer {
   func update(imageViewFrame: CGRect, imageSize: CGSize) {
     let ratio = fmin(imageViewFrame.width / imageSize.width,
                  imageViewFrame.height / imageSize.height)
-    imageRect = CGRect(x: 0, y: 0, width: imageSize.width * ratio,
-                       height: imageSize.height * ratio)
-    imageRect!.origin.y = imageViewFrame.height / 2 - imageRect!.height / 2
+
+    imageRect = CGRect(
+          x: 0,
+          y: 0,
+          width: imageSize.width * ratio,
+          height: imageSize.height * ratio
+    )
+
     imageRect!.origin.x = imageViewFrame.width / 2 - imageRect!.width / 2
-    transform.ratioX = CGFloat(YOLO.inputSize) / imageRect!.width
-    transform.ratioY = CGFloat(YOLO.inputSize) / imageRect!.height
+    imageRect!.origin.y = imageViewFrame.height / 2 - imageRect!.height / 2
+
+    transform.ratioX = imageRect!.width
+    transform.ratioY =  imageRect!.height
     transform.addX = imageRect!.origin.x
     transform.addY = imageRect!.origin.y
   }
@@ -83,14 +95,14 @@ class PredictionLayer {
     parent.addSublayer(layer)
   }
   
-  func addBoundingBoxes(prediction: YOLO.Prediction) {
+  func addBoundingBoxes(prediction: YOLO.Prediction, dimensions: CGRect) {
       let colors = Settings.shared.isCustomModel() ? ColorPallete.shared.colorsCustom : ColorPallete.shared.colors
       let labelsParsed = Settings.shared.isCustomModel() ? customLabels : labels
       let boundingBox = BoundingBox(predRect: prediction.rect,
                                     transform: transform,
                                     label: labelsParsed[prediction.classIndex],
                                     confidence: prediction.score,
-                                    color: colors[prediction.classIndex])
+                                    color: colors[prediction.classIndex]
       boundingBox.addTo(layer: layer)
   }
   

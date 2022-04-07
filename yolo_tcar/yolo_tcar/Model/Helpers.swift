@@ -89,8 +89,8 @@ let anchors1_tiny: [Float] = [81,82 , 135,169,  344,319]
 let anchors2_tiny: [Float] = [10,14,  23,27,  37,58]
 
 let tiny_anchors = [
-  "output1": anchors1_tiny,
-  "output2": anchors2_tiny
+  "Identity": anchors1_tiny,
+  "Identity_1": anchors2_tiny
 ]
 
 let anchors1: [Float] = [116,90,  156,198,  373,326]

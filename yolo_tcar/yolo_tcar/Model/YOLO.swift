@@ -22,7 +22,7 @@ enum YOLOType {
       return "YOLOv4-tiny"
     }
   }
-  
+
   static func initFrom(name: String) -> YOLOType {
     switch name {
     case "YOLOv3-nulp":
@@ -35,16 +35,16 @@ enum YOLOType {
       return .v4_Tiny
     }
   }
-  
+
   static func modelNames() -> [String] {
     return ["YOLOv3-nulp", "YOLOv4-tiny", "YOLOv4-416"]
   }
 }
 
 class YOLO: NSObject {
-  
+
   static let inputSize: Float = 416.0
-  
+
   private var model: MLModel?
   private let pixelBufferSize = CGSize(width: CGFloat(YOLO.inputSize),
                                        height: CGFloat(YOLO.inputSize))
@@ -54,9 +54,9 @@ class YOLO: NSObject {
 
   var confidenceThreshold: Float
   var iouThreshold: Float
-  
+
   var type: YOLOType!
-  
+
   struct Prediction {
     let classIndex: Int
     let score: Float
@@ -66,10 +66,10 @@ class YOLO: NSObject {
   override init() {
     confidenceThreshold = Settings.shared.confidenceThreshold
     iouThreshold = Settings.shared.iouThreshold
-  
+
     super.init()
   }
-  
+
   convenience init(type: YOLOType) throws {
     self.init()
     var url: URL? = nil
@@ -124,7 +124,7 @@ class YOLO: NSObject {
 
     return anchors
   }
-  
+
   func predict(frame: UIImage) throws -> [Prediction] {
     guard let cvBufferInput = frame.pixelBuffer(width: Int(YOLO.inputSize),
                                                 height: Int(YOLO.inputSize)) else {
@@ -240,7 +240,7 @@ class YOLO: NSObject {
               let bbox_c = Float(pointer[offset(boxOffset + 5 + c, x, y)])
               let prob = bbox_c * obj
               if (prob > confidenceThreshold) {
-                classes[c] = prob;
+                classes[c] = bbox_c;
                 exist   = true
               } else {
                 classes[c] = 0
@@ -248,7 +248,7 @@ class YOLO: NSObject {
             }
           }
 
-//         softmax(&classes)
+         softmax(&classes)
 
           // Find the index of the class with the largest score.
           let (detectedClass, bestClassScore) = argmax(classes)
@@ -344,7 +344,7 @@ extension YOLO {
       i += 1
     }
   }
-  
+
   static func IOU(a: CGRect, b: CGRect) -> Float {
     let areaA = a.width * a.height
     if areaA <= 0 { return 0 }
@@ -354,7 +354,7 @@ extension YOLO {
     let intersectionArea = intersection.width * intersection.height
     return Float(intersectionArea / (areaA + areaB - intersectionArea))
   }
-  
+
   private func argmax(_ x: [Float]) -> (Int, Float) {
     let len = vDSP_Length(x.count)
     var i: vDSP_Length = 0
@@ -362,17 +362,49 @@ extension YOLO {
     vDSP_maxmgvi(x, 1, &max, &i,len)
     return (Int(i), max)
   }
-  
+
   private func sigmoid(_ x: Float) -> Float {
     return 1 / (1 + exp(-x))
   }
-  
-  private func softmax(_ x: inout [Float]) {
+
+/**
+ Computes the "softmax" function over an array.
+
+ Based on code from https://github.com/nikolaypavlov/MLPNeuralNet/
+
+ This is what softmax looks like in "pseudocode" (actually using Python
+ and numpy):
+
+ x -= np.max(x)
+ exp_scores = np.exp(x)
+ softmax = exp_scores / np.sum(exp_scores)
+
+ First we shift the values of x so that the highest value in the array is 0.
+ This ensures numerical stability with the exponents, so they don't blow up.
+ */
+  public func softmax(_ x: inout [Float]) {
+    var x = x
     let len = vDSP_Length(x.count)
+
+    // Find the maximum value in the input array.
+    var max: Float = 0
+    vDSP_maxv(x, 1, &max, len)
+
+    // Subtract the maximum from all the elements in the array.
+    // Now the highest value in the array is 0.
+    max = -max
+    vDSP_vsadd(x, 1, &max, &x, 1, len)
+
+    // Exponentiate all the elements in the array.
     var count = Int32(x.count)
     vvexpf(&x, x, &count)
+
+    // Compute the sum of all exponential values.
     var sum: Float = 0
     vDSP_sve(x, 1, &sum, len)
+
+    // Divide each element by the sum. This normalizes the array contents
+    // so that they all add up to 1.
     vDSP_vsdiv(x, 1, &sum, &x, 1, len)
   }
   
@@ -382,20 +414,20 @@ extension YOLO {
 
 @available(macOS 10.13, iOS 15.0, tvOS 11.0, watchOS 4.0, *)
 private class YOLOInput : MLFeatureProvider {
-  
+
   var inputImage: CVPixelBuffer
   var inputName: String
   var featureNames: Set<String> {
     get { return [inputName] }
   }
-  
+
   func featureValue(for featureName: String) -> MLFeatureValue? {
     if (featureName == inputName) {
       return MLFeatureValue(pixelBuffer: inputImage)
     }
     return nil
   }
-  
+
   init(inputImage: CVPixelBuffer, inputName: String) {
     self.inputName = inputName
     self.inputImage = inputImage
