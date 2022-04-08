@@ -8,14 +8,14 @@ import UIKit
 import Accelerate
 
 enum YOLOType {
-  case v3_nulp
+  case v4_512_ants
   case v4_416
   case v4_Tiny
 
   func description() -> String {
     switch self {
-    case .v3_nulp:
-      return "YOLOv3-nulp"
+    case .v4_512_ants:
+      return "YOLOv4_512_ants"
     case .v4_416:
       return "YOLOv4-416"
     case .v4_Tiny:
@@ -25,8 +25,8 @@ enum YOLOType {
 
   static func initFrom(name: String) -> YOLOType {
     switch name {
-    case "YOLOv3-nulp":
-      return .v3_nulp
+    case "YOLOv4_512_ants":
+      return .v4_512_ants
     case "YOLOv4-416":
       return .v4_416
     case "YOLOv4-tiny":
@@ -37,20 +37,19 @@ enum YOLOType {
   }
 
   static func modelNames() -> [String] {
-    return ["YOLOv3-nulp", "YOLOv4-tiny", "YOLOv4-416"]
+    return ["YOLOv4_512_ants", "YOLOv4-tiny", "YOLOv4-416"]
   }
 }
 
 class YOLO: NSObject {
 
-  static let inputSize: Float = 416.0
+  static var inputSize: Float = 416.0
+  static var anchors: [(Float,Float)] = [(0.0, 0.0)]
+  static var names: [Int:String] = [0: "person"]
+  static var classesCount: Int = 1
 
   private var model: MLModel?
-  private let pixelBufferSize = CGSize(width: CGFloat(YOLO.inputSize),
-                                       height: CGFloat(YOLO.inputSize))
   private let inputName = "input_1"
-
-  private var classes = [Float](repeating: 0, count: Settings.shared.isCustomModel() ? customLabels.count : labels.count)
 
   var confidenceThreshold: Float
   var iouThreshold: Float
@@ -78,10 +77,13 @@ class YOLO: NSObject {
     switch type {
     case .v4_Tiny:
       url = Bundle.main.url(forResource: "yolov4_tiny", withExtension:"mlmodelc")
+      YOLO.inputSize = 416.0
     case .v4_416:
       url = Bundle.main.url(forResource: "yolov4", withExtension:"mlmodelc")
-    case .v3_nulp:
-      url = Bundle.main.url(forResource: "yolo-nulp", withExtension:"mlmodelc")
+      YOLO.inputSize = 416.0
+    case .v4_512_ants:
+      url = Bundle.main.url(forResource: "yolov4_512_ants", withExtension:"mlmodelc")
+      YOLO.inputSize = 512.0
     }
 
     guard let modelURL = url else {
@@ -146,17 +148,16 @@ class YOLO: NSObject {
               Output(name: pair.0, array: pair.1, rows: pair.1.shape[1].intValue, cols: pair.1.shape[2].intValue, blockSize: pair.1.shape[3].intValue)
             }.sorted { $0.rows > $1.rows}
 
-    let anchors = YOLO.parseAnchors(model: model)
-
-    let names = try YOLO.parseNames(model: model)
-    let classesCount = names.count
+    YOLO.anchors = parseAnchors(model: model)
+    YOLO.names = try parseNames(model: model)
+    YOLO.classesCount = YOLO.names.count
 
     var index = 0
-    let anchorStride = anchors.count / outputFeatures.count
+    let anchorStride =  YOLO.anchors.count / outputFeatures.count
 
     for output in outputFeatures {
-      let _anchors = Array<(Float, Float)>(anchors[index * anchorStride ..< (index+1) * anchorStride])
-      let res = try process(output: output, anchors: _anchors, classesCount: classesCount)
+      let _anchors = Array<(Float, Float)>(YOLO.anchors[index * anchorStride ..< (index+1) * anchorStride])
+      let res = try process(output: output, anchors: _anchors)
       predictions.append(contentsOf: res)
       index += 1
     }
@@ -173,8 +174,8 @@ class YOLO: NSObject {
     var blockSize: Int
   }
 
-  private func process(output: Output, anchors: [(Float, Float)], classesCount: Int) throws -> [Prediction] {
-    let boxesPerCell = output.blockSize / (classesCount + 5)
+  private func process(output: Output, anchors: [(Float, Float)]) throws -> [Prediction] {
+    let boxesPerCell = output.blockSize / (YOLO.classesCount + 5)
 
     let cnt = output.array.count
     let cnt_req = output.blockSize * output.rows * output.cols
@@ -218,7 +219,7 @@ class YOLO: NSObject {
 
           // For the first bounding box (box_i=0) we have to read channels (boxOffset) 0-24,
           // for box_i=1 we have to read channels 25-49, and so on.
-          let boxOffset = box_i * (classesCount + 5)
+          let boxOffset = box_i * (YOLO.classesCount + 5)
 
           var bbx = Float(pointer[offset(boxOffset, x, y)])
           var bby = Float(pointer[offset(boxOffset + 1, x, y)])
@@ -233,10 +234,10 @@ class YOLO: NSObject {
 
           // Gather the predicted classes for this anchor box and softmax them,
           // so we can interpret these numbers as percentages.
-          var classes = [Float](repeating: 0, count: classesCount)
+          var classes = [Float](repeating: 0, count: YOLO.classesCount)
 
           if (obj > confidenceThreshold) {
-            for c in 0 ..< classesCount {
+            for c in 0 ..< YOLO.classesCount {
               let bbox_c = Float(pointer[offset(boxOffset + 5 + c, x, y)])
               let prob = bbox_c * obj
               if (prob > confidenceThreshold) {

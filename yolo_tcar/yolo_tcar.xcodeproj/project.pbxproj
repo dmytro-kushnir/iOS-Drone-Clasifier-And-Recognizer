@@ -22,6 +22,7 @@
 		1173E17022CB909900324100 /* YOLO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E16F22CB909900324100 /* YOLO.swift */; };
 		1173E17222CB940000324100 /* YOLOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E17122CB940000324100 /* YOLOError.swift */; };
 		2A5077ED2380314100C9EAB3 /* DroneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5077EC2380314100C9EAB3 /* DroneViewController.swift */; };
+		9F0324A52800338200CB9DEE /* yolov4_512_ants.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 9F03249E2800338200CB9DEE /* yolov4_512_ants.mlpackage */; };
 		9F30AF2E27FAD8AA007F2A4C /* yolov4.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 9F30AF2727FAD8AA007F2A4C /* yolov4.mlpackage */; };
 		9F3DD9642385AF00003D3094 /* wifi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DD9632385AF00003D3094 /* wifi.swift */; };
 		9F3DD9662385B20B003D3094 /* Tello.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DD9652385B20B003D3094 /* Tello.swift */; };
@@ -97,6 +98,7 @@
 		2A5077EC2380314100C9EAB3 /* DroneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DroneViewController.swift; sourceTree = "<group>"; };
 		5E9B8FBACEF9C8433C68447F /* Pods-yolo_tcar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yolo_tcar.release.xcconfig"; path = "Target Support Files/Pods-yolo_tcar/Pods-yolo_tcar.release.xcconfig"; sourceTree = "<group>"; };
 		65C52834356E97B37C51419C /* Pods_yolo_tcar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_yolo_tcar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F03249E2800338200CB9DEE /* yolov4_512_ants.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = yolov4_512_ants.mlpackage; path = ../../convertion_service_tcar/output_models/yolov4_512_ants/yolov4_512_ants.mlpackage; sourceTree = "<group>"; };
 		9F30AF2727FAD8AA007F2A4C /* yolov4.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = yolov4.mlpackage; path = ../../convertion_service_tcar/output_models/yolov4/yolov4.mlpackage; sourceTree = "<group>"; };
 		9F3DD9632385AF00003D3094 /* wifi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wifi.swift; sourceTree = "<group>"; };
 		9F3DD9652385B20B003D3094 /* Tello.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tello.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 			children = (
 				9F542DAB27FB48F500470C02 /* yolov4_tiny.mlpackage */,
 				9F30AF2727FAD8AA007F2A4C /* yolov4.mlpackage */,
+				9F03249E2800338200CB9DEE /* yolov4_512_ants.mlpackage */,
 			);
 			name = MLModels;
 			sourceTree = "<group>";
@@ -438,6 +441,7 @@
 				1173E14B22CB3C5B00324100 /* ModelProvider.swift in Sources */,
 				111A044822D5F91600D93262 /* PredictionLayer.swift in Sources */,
 				111A044322D4FB3D00D93262 /* PhotoViewController.swift in Sources */,
+				9F0324A52800338200CB9DEE /* yolov4_512_ants.mlpackage in Sources */,
 				1173E17022CB909900324100 /* YOLO.swift in Sources */,
 				113F20C422D74AEA001837AD /* OnlineViewController.swift in Sources */,
 				9F3DD9662385B20B003D3094 /* Tello.swift in Sources */,

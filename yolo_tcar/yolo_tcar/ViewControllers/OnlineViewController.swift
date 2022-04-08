@@ -107,7 +107,7 @@ class OnlineViewController: UIViewController {
       captureSession.addInput(videoInput)
     }
     let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-    previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+    previewLayer.videoGravity = AVLayerVideoGravity.resizeAspect
     previewLayer.connection?.videoOrientation = .portrait
     self.previewLayer = previewLayer
     let settings: [String : Any] = [
@@ -119,6 +119,9 @@ class OnlineViewController: UIViewController {
     if captureSession.canAddOutput(videoOutput) {
       captureSession.addOutput(videoOutput)
     }
+    
+    // We want the buffers to be in portrait orientation otherwise they are
+    // rotated by 90 degrees. Need to set this _after_ addOutput()!
     videoOutput.connection(with: AVMediaType.video)?.videoOrientation = .portrait
     captureSession.commitConfiguration()
     return true
@@ -149,6 +152,7 @@ extension OnlineViewController: ModelProviderDelegate {
       return
     }
     predictionLayer.clear()
+
     if Settings.shared.isSmoothed {
       smoother.addToFrameHistory(predictions: predictions)
       for prediction in predictions {
@@ -170,7 +174,9 @@ extension OnlineViewController: ModelProviderDelegate {
 }
 
 extension OnlineViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-  
+  // Because lowering the capture device's FPS looks ugly in the preview,
+  // we capture at full speed but only call the delegate at its desired
+  // framerate.
   public func captureOutput(_ output: AVCaptureOutput,
                             didOutput sampleBuffer: CMSampleBuffer,
                             from connection: AVCaptureConnection) {
@@ -178,9 +184,19 @@ extension OnlineViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     let deltaTime = timestamp - lastTimestamp
     if deltaTime >= CMTimeMake(value: 1, timescale: Int32(maxFPS)) {
       if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-        if let frame = UIImage(pixelBuffer: imageBuffer) {
-          modelProvider.predict(frame: frame)
-        }
+        let ciImage = CIImage(cvPixelBuffer: imageBuffer)
+        let sx = CGFloat(YOLO.inputSize) / CGFloat(CVPixelBufferGetWidth(imageBuffer))
+        let sy = CGFloat(YOLO.inputSize) / CGFloat(CVPixelBufferGetHeight(imageBuffer))
+        let scaleTransform = CGAffineTransform(scaleX: sx, y: sy)
+        let scaledImage = ciImage.transformed(by: scaleTransform)
+        
+        let image:UIImage = UIImage.init(ciImage: scaledImage)
+                modelProvider.predict(frame: image)
+
+//        if let frame = UIImage(pixelBuffer: imageBuffer) {
+//          modelProvider.predict(frame: frame)
+//        }
+
       }
     }
   }

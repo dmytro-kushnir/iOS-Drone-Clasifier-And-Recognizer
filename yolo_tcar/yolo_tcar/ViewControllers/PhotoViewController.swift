@@ -50,8 +50,11 @@ class PhotoViewController: UIViewController {
       predictionLayer.hide()
       imagePicker.delegate = self
       imagePicker.sourceType = .photoLibrary
+      imagePicker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary) ?? []
+      assert(!imagePicker.mediaTypes.isEmpty)
+      imagePicker.mediaTypes = ["public.image", "public.movie"]
       imagePicker.allowsEditing = false
-      self.present(imagePicker, animated: true)
+      self.present(imagePicker, animated: true, completion: nil)
     } else {
       showAlert(title: "Error!", msg: "Photo library is not available!")
     }
@@ -122,7 +125,7 @@ extension PhotoViewController: ModelProviderDelegate {
       processStarted = false
     }
   }
-  
+
 }
 
 // MARK: - UIImagePickerControllerDelegate
@@ -143,8 +146,14 @@ extension PhotoViewController: UIImagePickerControllerDelegate, UINavigationCont
       predictionLayer.update(imageViewFrame: imageView.frame, imageSize: pickedImage.size)
       predictionLayer.clear()
       processed = false
-      detectButton.setTitle("Detect", for: .normal)
     }
+
+    if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? NSURL {
+      print("videoURL \(videoURL)")
+    }
+
+
+    detectButton.setTitle("Detect", for: .normal)
     self.dismiss(animated: true)
   }
 
