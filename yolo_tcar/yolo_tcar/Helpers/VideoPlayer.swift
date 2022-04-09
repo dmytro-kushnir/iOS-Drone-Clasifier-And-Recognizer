@@ -75,12 +75,24 @@ class VideoPlayer {
                       print("Video has ended!!!!!!!!")
                   }
                 
+                
+                print(self!.currentFrame)
+                
                 let frame = self!.player?.currentItem?.asset
                 
-                let image = AVAssetImageGenerator(asset: frame!)
-                  print(frame)
-                  print(image)
-                  print(self!.currentFrame)
+                let imgGenerator = AVAssetImageGenerator(asset: frame!)
+                var cgImage: CGImage?
+                do {
+                  cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(value: 0, timescale: 1), actualTime: nil)
+                } catch let error as NSError {
+                    // Handle the error
+                    print(error)
+                }
+                // Handle the nil that cgImage might be
+                let uiImage = UIImage(cgImage: cgImage!)
+                
+                
+                print(uiImage)
               }
           }
       }
