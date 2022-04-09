@@ -1,6 +1,7 @@
 //
-//  Helpers.swift
-// yolo_tcar
+//  Colors.swift
+// Created by Dmytro Kushnir on 09.04.2022.
+// Copyright (c) 2022 dmytro_yolo_tcar. All rights reserved.
 //
 
 import Foundation

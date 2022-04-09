@@ -1,9 +1,8 @@
 //
 //  DroneViewController.swift
-// yolo_tcar
 //
 //  Created by DmytOlh on 16/11/2019.
-//  Copyright © 2019 DmytOlh. All rights reserved.
+//  Copyright © 2019 dmytro_yolo_tcar. All rights reserved.
 //
 
 import UIKit

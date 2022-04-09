@@ -1,9 +1,8 @@
 //
 //  OnlineViewController.swift
-// yolo_tcar
 //
 //  Created by Alexander on 11/07/2019.
-//  Copyright © 2019 DmytOlh. All rights reserved.
+//  Copyright © 2022 dmytro_yolo_tcar. All rights reserved.
 //
 
 import UIKit

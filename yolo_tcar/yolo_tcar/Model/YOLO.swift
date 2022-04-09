@@ -1,6 +1,7 @@
 //
 //  YOLO.swift
-// yolo_tcar
+// Created by Dmytro Kushnir on 09.04.2022.
+// Copyright (c) 2022 dmytro_yolo_tcar. All rights reserved.
 //
 
 import CoreML
@@ -148,8 +149,8 @@ class YOLO: NSObject {
               Output(name: pair.0, array: pair.1, rows: pair.1.shape[1].intValue, cols: pair.1.shape[2].intValue, blockSize: pair.1.shape[3].intValue)
             }.sorted { $0.rows > $1.rows}
 
-    YOLO.anchors = parseAnchors(model: model)
-    YOLO.names = try parseNames(model: model)
+    YOLO.anchors = YOLO.parseAnchors(model: model)
+    YOLO.names = try YOLO.parseNames(model: model)
     YOLO.classesCount = YOLO.names.count
 
     var index = 0

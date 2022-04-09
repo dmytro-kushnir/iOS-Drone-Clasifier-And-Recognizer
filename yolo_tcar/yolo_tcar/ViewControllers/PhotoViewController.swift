@@ -1,12 +1,12 @@
 //
 //  PhotoViewController.swift
-// yolo_tcar
-//
-//  Created by Alexander on 09/07/2019.
-//  Copyright © 2019 DmytOlh. All rights reserved.
+//  Created by Dmytro Kushnir on 16/11/2019.
+//  Copyright © 2022 dmytro_yolo_tcar. All rights reserved.
 //
 
 import UIKit
+import AVKit
+import AVFoundation
 
 class PhotoViewController: UIViewController {
   
@@ -15,6 +15,7 @@ class PhotoViewController: UIViewController {
   
   var processed = false
   var processStarted = false
+  var videoMode = false
   weak var modelProvider: ModelProvider!
   var predictionLayer: PredictionLayer!
 
@@ -140,20 +141,32 @@ extension PhotoViewController: UIImagePickerControllerDelegate, UINavigationCont
   @objc func imagePickerController(_ picker: UIImagePickerController,
                              didFinishPickingMediaWithInfo info:
     [UIImagePickerController.InfoKey : Any]) {
+
     if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
       self.imageView.image = pickedImage
       self.imageView.backgroundColor = .clear
       predictionLayer.update(imageViewFrame: imageView.frame, imageSize: pickedImage.size)
       predictionLayer.clear()
       processed = false
+      detectButton.setTitle("Detect", for: .normal)
     }
 
     if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? NSURL {
       print("videoURL \(videoURL)")
+
+      VideoPlayer.shared.configure(url: videoURL, parentLayer: self.imageView)
+      
+      
+      predictionLayer.update(
+        imageViewFrame: imageView.frame,
+        imageSize: CGSize(width: VideoPlayer.shared.playerLayer!.frame.width,  height: VideoPlayer.shared.playerLayer!.frame.height)
+      )
+      predictionLayer.clear()
+      
+      VideoPlayer.shared.isLoop = true
+      VideoPlayer.shared.play()
     }
-
-
-    detectButton.setTitle("Detect", for: .normal)
+    
     self.dismiss(animated: true)
   }
 

@@ -1,8 +1,7 @@
 //
 //  Smoother.swift
-// yolo_tcar
-//
-//  Created by Alexander on 23/07/2019.
+// Created by Dmytro Kushnir on 09.04.2022.
+// Copyright (c) 2022 dmytro_yolo_tcar. All rights reserved.
 //  
 //
 
