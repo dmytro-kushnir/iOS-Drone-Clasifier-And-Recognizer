@@ -15,7 +15,7 @@ class PhotoViewController: UIViewController {
   
   var processed = false
   var processStarted = false
-  var videoMode = false
+  var isVideoMode = false
   weak var modelProvider: ModelProvider!
   var predictionLayer: PredictionLayer!
 
@@ -25,12 +25,16 @@ class PhotoViewController: UIViewController {
     modelProvider.delegate = self
     predictionLayer = PredictionLayer()
     predictionLayer.addToParentLayer(imageView.layer)
+    self.imageView.frame = self.imageView.bounds
   }
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
     predictionLayer.hide()
     predictionLayer.clear()
+    if isVideoMode {
+      VideoPlayer.shared.pause()
+    }
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -76,17 +80,25 @@ class PhotoViewController: UIViewController {
   
   @IBAction func processImage() {
     if !processed {
-      guard let image = imageView.image else {
-        showAlert(title: "Warning!", msg: "Please choose image first or take a photo.")
-        return
+      if isVideoMode {
+        VideoPlayer.shared.play()
+        VideoPlayer.shared.predict(modelProvider: modelProvider)
+      } else {
+        guard let image = imageView.image else {
+          showAlert(title: "Warning!", msg: "Please choose image first or take a photo.")
+          return
+        }
+        modelProvider.predict(frame: image)
       }
       processStarted = true
-      modelProvider.predict(frame: image)
     } else {
       processed = false
       detectButton.setTitle("Detect", for: .normal)
       predictionLayer.hide()
       predictionLayer.clear()
+      if isVideoMode {
+        VideoPlayer.shared.stop()
+      }
     }
   }
   
@@ -143,30 +155,29 @@ extension PhotoViewController: UIImagePickerControllerDelegate, UINavigationCont
     [UIImagePickerController.InfoKey : Any]) {
 
     if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+      // image
       self.imageView.image = pickedImage
       self.imageView.backgroundColor = .clear
       predictionLayer.update(imageViewFrame: imageView.frame, imageSize: pickedImage.size)
-      predictionLayer.clear()
-      processed = false
-      detectButton.setTitle("Detect", for: .normal)
+      isVideoMode = false
     }
 
     if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? NSURL {
+      // video
       print("videoURL \(videoURL)")
-
       VideoPlayer.shared.configure(url: videoURL, parentLayer: self.imageView)
-      
       
       predictionLayer.update(
         imageViewFrame: imageView.frame,
         imageSize: CGSize(width: VideoPlayer.shared.playerLayer!.frame.width,  height: VideoPlayer.shared.playerLayer!.frame.height)
       )
-      predictionLayer.clear()
-      
       VideoPlayer.shared.isLoop = true
-      VideoPlayer.shared.play()
+      VideoPlayer.shared.pause()
+      isVideoMode = true
     }
-    
+    predictionLayer.clear()
+    detectButton.setTitle("Detect", for: .normal)
+    processed = false
     self.dismiss(animated: true)
   }
 

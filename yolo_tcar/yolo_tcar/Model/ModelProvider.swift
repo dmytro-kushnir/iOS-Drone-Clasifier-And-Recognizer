@@ -51,10 +51,13 @@ class ModelProvider {
       do {
         let startTime = CACurrentMediaTime()
         let predictions = try self.model.predict(frame: frame)
-        print(predictions)
+        print("predictions.count, \(predictions.count)")
         let elapsed = CACurrentMediaTime() - startTime
         print(elapsed)
-        self.showResultOnMain(predictions: predictions, elapsed: Float(elapsed), error: nil)
+
+        if (predictions.count != 0) {
+          self.showResultOnMain(predictions: predictions, elapsed: Float(elapsed), error: nil)
+        }
       } catch let error as YOLOError {
         self.showResultOnMain(predictions: nil, elapsed: -1, error: error)
       } catch {
