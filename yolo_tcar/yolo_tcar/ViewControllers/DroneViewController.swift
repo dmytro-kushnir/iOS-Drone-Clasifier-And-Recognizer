@@ -122,8 +122,12 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
     modelProvider = ModelProvider.shared
     modelProvider.delegate = self
     predictionLayer = PredictionLayer()
-    predictionLayer.addToParentLayer(videoView.layer)
     self.videoView.frame = self.videoView.bounds
+    predictionLayer.update(imageViewFrame: self.videoView.frame,
+                           imageSize: CGSize(width: self.videoView.frame.width,  height: self.videoView.frame.height))
+
+    predictionLayer.addToParentLayer(videoView.layer)
+
   }
   
   @objc func landTapped(gesture: UIGestureRecognizer) {

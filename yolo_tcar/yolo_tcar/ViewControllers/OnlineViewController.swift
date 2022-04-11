@@ -17,7 +17,7 @@ class OnlineViewController: UIViewController {
   
   let captureSession = AVCaptureSession()
   let videoOutput = AVCaptureVideoDataOutput()
-  let queue = DispatchQueue(label: "yolov3.camera-queue")
+  let queue = DispatchQueue(label: "yolov4-tcar.camera-queue")
   
   var previewLayer: AVCaptureVideoPreviewLayer?
   weak var modelProvider: ModelProvider!

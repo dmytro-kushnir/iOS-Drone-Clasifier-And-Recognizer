@@ -3,7 +3,6 @@
 // Copyright (c) 2022 dmytro_yolo_tcar. All rights reserved.
 //
 
-
 import UIKit
 import AVKit
 import AVFoundation
@@ -17,8 +16,6 @@ class VideoPlayer: NSObject {
   var videoOutput: AVPlayerItemVideoOutput?
   var isLoop: Bool = false
   var videoFPS: Int = 0
-  var currentFrame: Int = 0
-  var totalFrames: Int?
   // Key-value observing context
   private static var playerItemContext = 0
 
@@ -26,24 +23,23 @@ class VideoPlayer: NSObject {
       player = AVPlayer(url: url as URL)
       playerLayer = AVPlayerLayer(player: player)
       playerLayer?.frame = parentLayer.bounds
-    
-      playerLayer?.videoGravity = AVLayerVideoGravity.resize
-    
-      if self.playerLayer != nil {
-      NotificationCenter.default.addObserver(
-          self,
-          selector: #selector(reachTheEndOfTheVideo(_:)),
-          name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-          object: self.player?.currentItem
-      )
+      playerLayer?.videoGravity = AVLayerVideoGravity.resizeAspect
 
-      self.player?.currentItem?.addObserver(
-              self,
-              forKeyPath: #keyPath(AVPlayerItem.status),
-              options: [.initial, .old, .new],
-              context: &VideoPlayer.playerItemContext
-      )
-        
+      if self.playerLayer != nil {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(reachTheEndOfTheVideo(_:)),
+            name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+            object: self.player?.currentItem
+        )
+
+        self.player?.currentItem?.addObserver(
+                self,
+                forKeyPath: #keyPath(AVPlayerItem.status),
+                options: [.initial, .old, .new],
+                context: &VideoPlayer.playerItemContext
+        )
+
         parentLayer.layer.insertSublayer(playerLayer!, at: 0)
         
         let asset = self.player?.currentItem?.asset
@@ -56,9 +52,9 @@ class VideoPlayer: NSObject {
 
   func play() {
     if player?.timeControlStatus != AVPlayer.TimeControlStatus.playing {
-          if self.playerLayer?.superlayer != nil {
-              player?.play()
-          }
+        if self.playerLayer?.superlayer != nil {
+            player?.play()
+        }
     }
   }
 
@@ -70,20 +66,22 @@ class VideoPlayer: NSObject {
       player?.pause()
       player?.seek(to: CMTime.zero)
       self.playerLayer!.removeFromSuperlayer()
+      self.videoOutput = nil
       player?.replaceCurrentItem(with: nil)
   }
   
   func predict(modelProvider: ModelProvider) {
-      self.player?.addPeriodicTimeObserver(
-              forInterval: CMTimeMake(value: 1,timescale: Int32(VideoPlayer.shared.videoFPS)),
-              queue: DispatchQueue(label: "videoProcessing", qos: .background)
-      ) {[weak self] (time) in
-        guard let imageBuffer = self!.getNewFrame() else { return }
+      if self.playerLayer?.superlayer != nil {
+          self.player?.addPeriodicTimeObserver(
+                  forInterval: CMTimeMake(value: 1,timescale: Int32(VideoPlayer.shared.videoFPS)),
+                  queue: DispatchQueue(label: "yolov4-tcar.video-queue", qos: .background)
+          ) {[weak self] (time) in
+            guard let imageBuffer = self!.getNewFrame() else { return }
 
-        if let frame = UIImage(pixelBuffer: imageBuffer) {
-          modelProvider.predict(frame: frame)
-          print("!!! frame \(frame)")
-        }
+            if let frame = UIImage(pixelBuffer: imageBuffer) {
+              modelProvider.predict(frame: frame)
+            }
+          }
       }
   }
 
@@ -100,48 +98,44 @@ func getNewFrame() -> CVPixelBuffer? {
   override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
     // Only handle observations for the playerItemContext
     guard context == &VideoPlayer.playerItemContext else {
-          super.observeValue(forKeyPath: keyPath,
-                  of: object,
-                  change: change,
-                  context: context)
+          super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
           return
-      }
+    }
 
-      guard let keyPath = keyPath, let item = object as? AVPlayerItem
-              else { return }
+    guard let keyPath = keyPath, let item = object as? AVPlayerItem else { return }
 
-      switch keyPath {
+    switch keyPath {
       case #keyPath(AVPlayerItem.status):
           if item.status == .readyToPlay {
               self.setUpOutput()
           }
           break
       default: break
-      }
+    }
   }
 
   func setUpOutput() {
-      guard self.videoOutput == nil else { return }
-      let videoItem = self.player?.currentItem!
+    guard self.videoOutput == nil else { return }
+    let videoItem = self.player?.currentItem!
     if videoItem!.status != AVPlayerItem.Status.readyToPlay {
-          // see https://forums.developer.apple.com/thread/27589#128476
-          return
-      }
+      // see https://forums.developer.apple.com/thread/27589#128476
+      return
+    }
 
-      let pixelBuffAttributes = [
-          kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
-      ] as [String: Any]
+    let pixelBuffAttributes = [
+        kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,
+    ] as [String: Any]
 
-      let videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: pixelBuffAttributes)
-      videoItem!.add(videoOutput)
-      self.videoOutput = videoOutput
+    let videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: pixelBuffAttributes)
+    videoItem!.add(videoOutput)
+    self.videoOutput = videoOutput
   }
 
   @objc func reachTheEndOfTheVideo(_ notification: Notification) {
         if isLoop {
-            player?.pause()
+          player?.pause()
           player?.seek(to: CMTime.zero)
-            player?.play()
+          player?.play()
         }
-    }
+  }
 }

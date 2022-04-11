@@ -12,10 +12,9 @@ class PhotoViewController: UIViewController {
   
   @IBOutlet weak var imageView: UIImageView!
   @IBOutlet weak var detectButton: UIButton!
-  
-  var processed = false
-  var processStarted = false
+
   var isVideoMode = false
+  var toggleButton = false
   weak var modelProvider: ModelProvider!
   var predictionLayer: PredictionLayer!
 
@@ -41,7 +40,6 @@ class PhotoViewController: UIViewController {
     super.viewWillAppear(animated)
     modelProvider.delegate = self
     predictionLayer.clear()
-    processed = false
     detectButton.setTitle("Detect", for: .normal)
   }
   
@@ -53,6 +51,9 @@ class PhotoViewController: UIViewController {
     let imagePicker = UIImagePickerController()
     if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
       predictionLayer.hide()
+      if isVideoMode {
+        VideoPlayer.shared.stop()
+      }
       imagePicker.delegate = self
       imagePicker.sourceType = .photoLibrary
       imagePicker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary) ?? []
@@ -79,8 +80,8 @@ class PhotoViewController: UIViewController {
   }
   
   @IBAction func processImage() {
-    if !processed {
-      processStarted = true
+    if !toggleButton {
+      toggleButton = true
       if isVideoMode {
         VideoPlayer.shared.play()
         VideoPlayer.shared.predict(modelProvider: modelProvider)
@@ -91,14 +92,14 @@ class PhotoViewController: UIViewController {
         }
         modelProvider.predict(frame: image)
       }
-      processStarted = true
     } else {
-      processed = false
+      toggleButton = false
       detectButton.setTitle("Detect", for: .normal)
       predictionLayer.hide()
       predictionLayer.clear()
       if isVideoMode {
         VideoPlayer.shared.stop()
+        self.imageView.image = nil
       }
     }
   }
@@ -129,18 +130,17 @@ extension PhotoViewController: ModelProviderDelegate {
       }
       return
     }
-    if processStarted {
-      for prediction in predictions {
-        predictionLayer.addBoundingBoxes(prediction: prediction)
-      }
-      predictionLayer.show()
-      processed = true
-      detectButton.setTitle("Clear", for: .normal)
 
-      if !isVideoMode {
-        processStarted = false
-      }
+    if isVideoMode {
+      predictionLayer.clear()
     }
+
+    for prediction in predictions {
+      predictionLayer.addBoundingBoxes(prediction: prediction)
+    }
+
+    predictionLayer.show()
+    detectButton.setTitle("Stop", for: .normal)
   }
 
 }
@@ -168,20 +168,18 @@ extension PhotoViewController: UIImagePickerControllerDelegate, UINavigationCont
 
     if let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? NSURL {
       // video
-      print("videoURL \(videoURL)")
       VideoPlayer.shared.configure(url: videoURL, parentLayer: self.imageView)
-      
+
       predictionLayer.update(
-        imageViewFrame: imageView.frame,
-        imageSize: CGSize(width: VideoPlayer.shared.playerLayer!.frame.width,  height: VideoPlayer.shared.playerLayer!.frame.height)
+              imageViewFrame: imageView.frame,
+              imageSize: CGSize(width: VideoPlayer.shared.playerLayer!.frame.width, height: VideoPlayer.shared.playerLayer!.frame.height)
       )
-      VideoPlayer.shared.isLoop = true
+      VideoPlayer.shared.isLoop = false
       VideoPlayer.shared.pause()
       isVideoMode = true
     }
     predictionLayer.clear()
     detectButton.setTitle("Detect", for: .normal)
-    processed = false
     self.dismiss(animated: true)
   }
 
