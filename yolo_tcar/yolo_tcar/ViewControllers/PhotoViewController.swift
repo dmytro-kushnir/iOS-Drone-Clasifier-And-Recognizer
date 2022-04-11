@@ -33,7 +33,7 @@ class PhotoViewController: UIViewController {
     predictionLayer.hide()
     predictionLayer.clear()
     if isVideoMode {
-      VideoPlayer.shared.pause()
+      VideoPlayer.shared.stop()
     }
   }
   
@@ -80,6 +80,7 @@ class PhotoViewController: UIViewController {
   
   @IBAction func processImage() {
     if !processed {
+      processStarted = true
       if isVideoMode {
         VideoPlayer.shared.play()
         VideoPlayer.shared.predict(modelProvider: modelProvider)
@@ -135,7 +136,10 @@ extension PhotoViewController: ModelProviderDelegate {
       predictionLayer.show()
       processed = true
       detectButton.setTitle("Clear", for: .normal)
-      processStarted = false
+
+      if !isVideoMode {
+        processStarted = false
+      }
     }
   }
 
