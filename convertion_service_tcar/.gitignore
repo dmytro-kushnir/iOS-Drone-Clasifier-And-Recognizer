@@ -1,0 +1,4 @@
+.DS_Store
+.idea
+input_models/**/*.weights
+output_models/**/*.mlpackage
