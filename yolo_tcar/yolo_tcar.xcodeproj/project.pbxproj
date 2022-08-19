@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		111A044322D4FB3D00D93262 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111A044222D4FB3D00D93262 /* PhotoViewController.swift */; };
 		111A044822D5F91600D93262 /* PredictionLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111A044722D5F91600D93262 /* PredictionLayer.swift */; };
-		111A044A22D5FA3000D93262 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111A044922D5FA3000D93262 /* Helpers.swift */; };
 		111A044C22D6253800D93262 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 111A044B22D6253800D93262 /* Assets.xcassets */; };
 		111A8C3722E2015300F76A50 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111A8C3622E2015300F76A50 /* SettingsViewController.swift */; };
 		111A8C3922E20B2600F76A50 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111A8C3822E20B2600F76A50 /* Settings.swift */; };
@@ -18,60 +17,37 @@
 		1132B4D222C633D600E7E509 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1132B4D022C633D600E7E509 /* LaunchScreen.storyboard */; };
 		113F20C422D74AEA001837AD /* OnlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113F20C322D74AEA001837AD /* OnlineViewController.swift */; };
 		1173E14B22CB3C5B00324100 /* ModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E14A22CB3C5B00324100 /* ModelProvider.swift */; };
-		1173E16E22CB8E0100324100 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E16D22CB8E0100324100 /* UIImageExtension.swift */; };
 		1173E17022CB909900324100 /* YOLO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E16F22CB909900324100 /* YOLO.swift */; };
 		1173E17222CB940000324100 /* YOLOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E17122CB940000324100 /* YOLOError.swift */; };
 		2A5077ED2380314100C9EAB3 /* DroneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5077EC2380314100C9EAB3 /* DroneViewController.swift */; };
-		9F0324A52800338200CB9DEE /* yolov4_512_ants.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 9F03249E2800338200CB9DEE /* yolov4_512_ants.mlpackage */; };
-		9F30AF2E27FAD8AA007F2A4C /* yolov4.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 9F30AF2727FAD8AA007F2A4C /* yolov4.mlpackage */; };
+		66FFA1F328AFC07900EF1A04 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FFA1F228AFC07900EF1A04 /* Colors.swift */; };
+		66FFA20028AFC26900EF1A04 /* TrackerJsRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FFA1FF28AFC26900EF1A04 /* TrackerJsRunner.swift */; };
+		66FFA20228AFC28900EF1A04 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FFA20128AFC28900EF1A04 /* UIImageExtension.swift */; };
+		66FFA20428AFC29F00EF1A04 /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FFA20328AFC29F00EF1A04 /* VideoPlayer.swift */; };
+		66FFA20C28AFC2EB00EF1A04 /* scripts.js in Resources */ = {isa = PBXBuildFile; fileRef = 66FFA20A28AFC2EB00EF1A04 /* scripts.js */; };
+		66FFA20D28AFC2EB00EF1A04 /* trackerLib.js in Resources */ = {isa = PBXBuildFile; fileRef = 66FFA20B28AFC2EB00EF1A04 /* trackerLib.js */; };
+		9F0324A52800338200CB9DEE /* yolo-ants.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 9F03249E2800338200CB9DEE /* yolo-ants.mlpackage */; };
+		9F30AF2E27FAD8AA007F2A4C /* yolov4-mish-416.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 9F30AF2727FAD8AA007F2A4C /* yolov4-mish-416.mlpackage */; };
 		9F3DD9642385AF00003D3094 /* wifi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DD9632385AF00003D3094 /* wifi.swift */; };
 		9F3DD9662385B20B003D3094 /* Tello.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DD9652385B20B003D3094 /* Tello.swift */; };
 		9F4AC5D223B4A6B70014C9C8 /* H254Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4AC5D123B4A6B70014C9C8 /* H254Decoder.swift */; };
 		9F4AC5D623B4B3300014C9C8 /* AVJoyStick.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4AC5D523B4B3300014C9C8 /* AVJoyStick.swift */; };
-		9F542DB227FB48F600470C02 /* yolov4_tiny.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 9F542DAB27FB48F500470C02 /* yolov4_tiny.mlpackage */; };
+		9F542DB227FB48F600470C02 /* yolov4-tiny.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 9F542DAB27FB48F500470C02 /* yolov4-tiny.mlpackage */; };
 		C4692403DFDD7AE6C5C9D26E /* Pods_yolo_tcar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65C52834356E97B37C51419C /* Pods_yolo_tcar.framework */; };
 		E1ECB66223E75C8C00743FC4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E1ECB66123E75C8B00743FC4 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		9F4F461327551CD90027F62F /* PBXContainerItemProxy */ = {
+		66FFA21328AFC4DD00EF1A04 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 9F4F460E27551CD90027F62F /* Pods.xcodeproj */;
+			containerPortal = 66FFA20E28AFC4DD00EF1A04 /* Pods.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = EC0BB6DFB76C26D335E8035B48D42AEA;
 			remoteInfo = "Pods-yolo_tcar";
 		};
-		9F4F461527551CD90027F62F /* PBXContainerItemProxy */ = {
+		66FFA21528AFC4DD00EF1A04 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 9F4F460E27551CD90027F62F /* Pods.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3A59C9FE3D98CF2152E03CFA05A85BFC;
-			remoteInfo = SwiftSocket;
-		};
-		9F4F461C27551CDB0027F62F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9F4F461727551CDB0027F62F /* Pods.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EC0BB6DFB76C26D335E8035B48D42AEA;
-			remoteInfo = "Pods-yolo_tcar";
-		};
-		9F4F461E27551CDB0027F62F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9F4F461727551CDB0027F62F /* Pods.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3A59C9FE3D98CF2152E03CFA05A85BFC;
-			remoteInfo = SwiftSocket;
-		};
-		9F4F462527551D2F0027F62F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9F4F462027551D2F0027F62F /* Pods.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EC0BB6DFB76C26D335E8035B48D42AEA;
-			remoteInfo = "Pods-yolo_tcar";
-		};
-		9F4F462727551D2F0027F62F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9F4F462027551D2F0027F62F /* Pods.xcodeproj */;
+			containerPortal = 66FFA20E28AFC4DD00EF1A04 /* Pods.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 3A59C9FE3D98CF2152E03CFA05A85BFC;
 			remoteInfo = SwiftSocket;
@@ -81,7 +57,6 @@
 /* Begin PBXFileReference section */
 		111A044222D4FB3D00D93262 /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 		111A044722D5F91600D93262 /* PredictionLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionLayer.swift; sourceTree = "<group>"; };
-		111A044922D5FA3000D93262 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		111A044B22D6253800D93262 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		111A8C3622E2015300F76A50 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		111A8C3822E20B2600F76A50 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -92,22 +67,25 @@
 		1132B4D322C633D600E7E509 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		113F20C322D74AEA001837AD /* OnlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineViewController.swift; sourceTree = "<group>"; };
 		1173E14A22CB3C5B00324100 /* ModelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelProvider.swift; sourceTree = "<group>"; };
-		1173E16D22CB8E0100324100 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		1173E16F22CB909900324100 /* YOLO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YOLO.swift; sourceTree = "<group>"; };
 		1173E17122CB940000324100 /* YOLOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YOLOError.swift; sourceTree = "<group>"; };
 		2A5077EC2380314100C9EAB3 /* DroneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DroneViewController.swift; sourceTree = "<group>"; };
 		5E9B8FBACEF9C8433C68447F /* Pods-yolo_tcar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yolo_tcar.release.xcconfig"; path = "Target Support Files/Pods-yolo_tcar/Pods-yolo_tcar.release.xcconfig"; sourceTree = "<group>"; };
 		65C52834356E97B37C51419C /* Pods_yolo_tcar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_yolo_tcar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9F03249E2800338200CB9DEE /* yolov4_512_ants.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = yolov4_512_ants.mlpackage; path = ../../convertion_service_tcar/output_models/yolov4_512_ants/yolov4_512_ants.mlpackage; sourceTree = "<group>"; };
-		9F30AF2727FAD8AA007F2A4C /* yolov4.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = yolov4.mlpackage; path = ../../convertion_service_tcar/output_models/yolov4/yolov4.mlpackage; sourceTree = "<group>"; };
+		66FFA1F228AFC07900EF1A04 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		66FFA1FF28AFC26900EF1A04 /* TrackerJsRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerJsRunner.swift; sourceTree = "<group>"; };
+		66FFA20128AFC28900EF1A04 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
+		66FFA20328AFC29F00EF1A04 /* VideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayer.swift; sourceTree = "<group>"; };
+		66FFA20A28AFC2EB00EF1A04 /* scripts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = scripts.js; sourceTree = "<group>"; };
+		66FFA20B28AFC2EB00EF1A04 /* trackerLib.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = trackerLib.js; sourceTree = "<group>"; };
+		66FFA20E28AFC4DD00EF1A04 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Pods.xcodeproj; sourceTree = "<group>"; };
+		9F03249E2800338200CB9DEE /* yolo-ants.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = "yolo-ants.mlpackage"; path = "../../convertion_service_tcar/output_models/yolo-ants/yolo-ants.mlpackage"; sourceTree = "<group>"; };
+		9F30AF2727FAD8AA007F2A4C /* yolov4-mish-416.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = "yolov4-mish-416.mlpackage"; path = "../../convertion_service_tcar/output_models/yolov4-mish-416/yolov4-mish-416.mlpackage"; sourceTree = "<group>"; };
 		9F3DD9632385AF00003D3094 /* wifi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wifi.swift; sourceTree = "<group>"; };
 		9F3DD9652385B20B003D3094 /* Tello.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tello.swift; sourceTree = "<group>"; };
 		9F4AC5D123B4A6B70014C9C8 /* H254Decoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = H254Decoder.swift; sourceTree = "<group>"; };
 		9F4AC5D523B4B3300014C9C8 /* AVJoyStick.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVJoyStick.swift; sourceTree = "<group>"; };
-		9F4F460E27551CD90027F62F /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
-		9F4F461727551CDB0027F62F /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
-		9F4F462027551D2F0027F62F /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
-		9F542DAB27FB48F500470C02 /* yolov4_tiny.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = yolov4_tiny.mlpackage; path = ../../convertion_service_tcar/output_models/yolov4_tiny/yolov4_tiny.mlpackage; sourceTree = "<group>"; };
+		9F542DAB27FB48F500470C02 /* yolov4-tiny.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; name = "yolov4-tiny.mlpackage"; path = "../../convertion_service_tcar/output_models/yolov4-tiny/yolov4-tiny.mlpackage"; sourceTree = "<group>"; };
 		A6C1899E6AC1E823D0833AED /* Pods-yolo_tcar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yolo_tcar.debug.xcconfig"; path = "Target Support Files/Pods-yolo_tcar/Pods-yolo_tcar.debug.xcconfig"; sourceTree = "<group>"; };
 		E1B0751A23B909F300AE06B9 /* yolo_tcar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = yolo_tcar.entitlements; sourceTree = "<group>"; };
 		E1ECB66123E75C8B00743FC4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -139,11 +117,11 @@
 		111A044622D5F8AC00D93262 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				66FFA1F228AFC07900EF1A04 /* Colors.swift */,
 				1173E14A22CB3C5B00324100 /* ModelProvider.swift */,
 				1173E16F22CB909900324100 /* YOLO.swift */,
 				1173E17122CB940000324100 /* YOLOError.swift */,
 				111A044722D5F91600D93262 /* PredictionLayer.swift */,
-				111A044922D5FA3000D93262 /* Helpers.swift */,
 				111A8C3E22E706ED00F76A50 /* BBSmoother.swift */,
 			);
 			path = Model;
@@ -152,9 +130,7 @@
 		1132B4BB22C633D400E7E509 = {
 			isa = PBXGroup;
 			children = (
-				9F4F460E27551CD90027F62F /* Pods.xcodeproj */,
-				9F4F461727551CDB0027F62F /* Pods.xcodeproj */,
-				9F4F462027551D2F0027F62F /* Pods.xcodeproj */,
+				66FFA20E28AFC4DD00EF1A04 /* Pods.xcodeproj */,
 				1132B4C622C633D400E7E509 /* yolo_tcar */,
 				1132B4C522C633D400E7E509 /* Products */,
 				4DE49E4EA643C58E7723759A /* Pods */,
@@ -177,6 +153,7 @@
 		1132B4C622C633D400E7E509 /* yolo_tcar */ = {
 			isa = PBXGroup;
 			children = (
+				66FFA1FC28AFC20E00EF1A04 /* Helpers */,
 				E1B0751A23B909F300AE06B9 /* yolo_tcar.entitlements */,
 				9F3DD9622385AEEA003D3094 /* Drone */,
 				113F20C222D74A69001837AD /* MLModels */,
@@ -184,7 +161,6 @@
 				111A044522D5F87B00D93262 /* ViewControllers */,
 				1132B4C722C633D500E7E509 /* AppDelegate.swift */,
 				111A8C3822E20B2600F76A50 /* Settings.swift */,
-				1173E16D22CB8E0100324100 /* UIImageExtension.swift */,
 				1132B4D022C633D600E7E509 /* LaunchScreen.storyboard */,
 				111A044B22D6253800D93262 /* Assets.xcassets */,
 				E1ECB66123E75C8B00743FC4 /* Main.storyboard */,
@@ -196,9 +172,9 @@
 		113F20C222D74A69001837AD /* MLModels */ = {
 			isa = PBXGroup;
 			children = (
-				9F542DAB27FB48F500470C02 /* yolov4_tiny.mlpackage */,
-				9F30AF2727FAD8AA007F2A4C /* yolov4.mlpackage */,
-				9F03249E2800338200CB9DEE /* yolov4_512_ants.mlpackage */,
+				9F542DAB27FB48F500470C02 /* yolov4-tiny.mlpackage */,
+				9F30AF2727FAD8AA007F2A4C /* yolov4-mish-416.mlpackage */,
+				9F03249E2800338200CB9DEE /* yolo-ants.mlpackage */,
 			);
 			name = MLModels;
 			sourceTree = "<group>";
@@ -210,6 +186,35 @@
 				5E9B8FBACEF9C8433C68447F /* Pods-yolo_tcar.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		66FFA1FC28AFC20E00EF1A04 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				66FFA20528AFC2AC00EF1A04 /* JsScripts */,
+				66FFA1FF28AFC26900EF1A04 /* TrackerJsRunner.swift */,
+				66FFA20128AFC28900EF1A04 /* UIImageExtension.swift */,
+				66FFA20328AFC29F00EF1A04 /* VideoPlayer.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		66FFA20528AFC2AC00EF1A04 /* JsScripts */ = {
+			isa = PBXGroup;
+			children = (
+				66FFA20A28AFC2EB00EF1A04 /* scripts.js */,
+				66FFA20B28AFC2EB00EF1A04 /* trackerLib.js */,
+			);
+			path = JsScripts;
+			sourceTree = "<group>";
+		};
+		66FFA20F28AFC4DD00EF1A04 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66FFA21428AFC4DD00EF1A04 /* Pods_yolo_tcar.framework */,
+				66FFA21628AFC4DD00EF1A04 /* SwiftSocket.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		6BC679396FC3F4EE0E44C488 /* Frameworks */ = {
@@ -229,33 +234,6 @@
 				9F4AC5D523B4B3300014C9C8 /* AVJoyStick.swift */,
 			);
 			path = Drone;
-			sourceTree = "<group>";
-		};
-		9F4F460F27551CD90027F62F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9F4F461427551CD90027F62F /* Pods_yolo_tcar.framework */,
-				9F4F461627551CD90027F62F /* SwiftSocket.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		9F4F461827551CDB0027F62F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9F4F461D27551CDB0027F62F /* Pods_yolo_tcar.framework */,
-				9F4F461F27551CDB0027F62F /* SwiftSocket.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		9F4F462127551D2F0027F62F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9F4F462627551D2F0027F62F /* Pods_yolo_tcar.framework */,
-				9F4F462827551D2F0027F62F /* SwiftSocket.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -308,16 +286,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 9F4F461827551CDB0027F62F /* Products */;
-					ProjectRef = 9F4F461727551CDB0027F62F /* Pods.xcodeproj */;
-				},
-				{
-					ProductGroup = 9F4F462127551D2F0027F62F /* Products */;
-					ProjectRef = 9F4F462027551D2F0027F62F /* Pods.xcodeproj */;
-				},
-				{
-					ProductGroup = 9F4F460F27551CD90027F62F /* Products */;
-					ProjectRef = 9F4F460E27551CD90027F62F /* Pods.xcodeproj */;
+					ProductGroup = 66FFA20F28AFC4DD00EF1A04 /* Products */;
+					ProjectRef = 66FFA20E28AFC4DD00EF1A04 /* Pods.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -328,46 +298,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		9F4F461427551CD90027F62F /* Pods_yolo_tcar.framework */ = {
+		66FFA21428AFC4DD00EF1A04 /* Pods_yolo_tcar.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Pods_yolo_tcar.framework;
-			remoteRef = 9F4F461327551CD90027F62F /* PBXContainerItemProxy */;
+			remoteRef = 66FFA21328AFC4DD00EF1A04 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		9F4F461627551CD90027F62F /* SwiftSocket.framework */ = {
+		66FFA21628AFC4DD00EF1A04 /* SwiftSocket.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = SwiftSocket.framework;
-			remoteRef = 9F4F461527551CD90027F62F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		9F4F461D27551CDB0027F62F /* Pods_yolo_tcar.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Pods_yolo_tcar.framework;
-			remoteRef = 9F4F461C27551CDB0027F62F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		9F4F461F27551CDB0027F62F /* SwiftSocket.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SwiftSocket.framework;
-			remoteRef = 9F4F461E27551CDB0027F62F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		9F4F462627551D2F0027F62F /* Pods_yolo_tcar.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Pods_yolo_tcar.framework;
-			remoteRef = 9F4F462527551D2F0027F62F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		9F4F462827551D2F0027F62F /* SwiftSocket.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SwiftSocket.framework;
-			remoteRef = 9F4F462727551D2F0027F62F /* PBXContainerItemProxy */;
+			remoteRef = 66FFA21528AFC4DD00EF1A04 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -378,7 +320,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1ECB66223E75C8C00743FC4 /* Main.storyboard in Resources */,
+				66FFA20C28AFC2EB00EF1A04 /* scripts.js in Resources */,
 				1132B4D222C633D600E7E509 /* LaunchScreen.storyboard in Resources */,
+				66FFA20D28AFC2EB00EF1A04 /* trackerLib.js in Resources */,
 				111A044C22D6253800D93262 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -432,25 +376,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F542DB227FB48F600470C02 /* yolov4_tiny.mlpackage in Sources */,
-				9F30AF2E27FAD8AA007F2A4C /* yolov4.mlpackage in Sources */,
+				9F542DB227FB48F600470C02 /* yolov4-tiny.mlpackage in Sources */,
+				9F30AF2E27FAD8AA007F2A4C /* yolov4-mish-416.mlpackage in Sources */,
+				66FFA20228AFC28900EF1A04 /* UIImageExtension.swift in Sources */,
 				111A8C3922E20B2600F76A50 /* Settings.swift in Sources */,
 				1132B4C822C633D500E7E509 /* AppDelegate.swift in Sources */,
 				9F3DD9642385AF00003D3094 /* wifi.swift in Sources */,
-				111A044A22D5FA3000D93262 /* Helpers.swift in Sources */,
 				1173E14B22CB3C5B00324100 /* ModelProvider.swift in Sources */,
 				111A044822D5F91600D93262 /* PredictionLayer.swift in Sources */,
+				66FFA20028AFC26900EF1A04 /* TrackerJsRunner.swift in Sources */,
 				111A044322D4FB3D00D93262 /* PhotoViewController.swift in Sources */,
-				9F0324A52800338200CB9DEE /* yolov4_512_ants.mlpackage in Sources */,
+				9F0324A52800338200CB9DEE /* yolo-ants.mlpackage in Sources */,
 				1173E17022CB909900324100 /* YOLO.swift in Sources */,
 				113F20C422D74AEA001837AD /* OnlineViewController.swift in Sources */,
 				9F3DD9662385B20B003D3094 /* Tello.swift in Sources */,
+				66FFA1F328AFC07900EF1A04 /* Colors.swift in Sources */,
 				2A5077ED2380314100C9EAB3 /* DroneViewController.swift in Sources */,
 				111A8C3F22E706ED00F76A50 /* BBSmoother.swift in Sources */,
-				1173E16E22CB8E0100324100 /* UIImageExtension.swift in Sources */,
 				1173E17222CB940000324100 /* YOLOError.swift in Sources */,
 				111A8C3722E2015300F76A50 /* SettingsViewController.swift in Sources */,
 				9F4AC5D623B4B3300014C9C8 /* AVJoyStick.swift in Sources */,
+				66FFA20428AFC29F00EF1A04 /* VideoPlayer.swift in Sources */,
 				9F4AC5D223B4A6B70014C9C8 /* H254Decoder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

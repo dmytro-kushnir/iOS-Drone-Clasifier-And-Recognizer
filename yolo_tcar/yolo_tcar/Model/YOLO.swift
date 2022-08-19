@@ -8,6 +8,10 @@ import CoreML
 import UIKit
 import Accelerate
 
+let yolov4 = "yolov4-mish-416"
+let yolov4Tiny = "yolov4-tiny"
+let yolov4Ants = "yolo-ants"
+
 enum YOLOType {
   case v4_512_ants
   case v4_416
@@ -16,21 +20,21 @@ enum YOLOType {
   func description() -> String {
     switch self {
     case .v4_512_ants:
-      return "YOLOv4_512_ants"
+      return yolov4Ants
     case .v4_416:
-      return "YOLOv4-416"
+      return yolov4
     case .v4_Tiny:
-      return "YOLOv4-tiny"
+      return yolov4Tiny
     }
   }
 
   static func initFrom(name: String) -> YOLOType {
     switch name {
-    case "YOLOv4_512_ants":
+    case yolov4Ants:
       return .v4_512_ants
-    case "YOLOv4-416":
+    case yolov4:
       return .v4_416
-    case "YOLOv4-tiny":
+    case yolov4Tiny:
       return .v4_Tiny
     default:
       return .v4_Tiny
@@ -38,7 +42,7 @@ enum YOLOType {
   }
 
   static func modelNames() -> [String] {
-    return ["YOLOv4_512_ants", "YOLOv4-tiny", "YOLOv4-416"]
+    return [yolov4Ants, yolov4Tiny, yolov4]
   }
 }
 
@@ -77,13 +81,13 @@ class YOLO: NSObject {
 
     switch type {
     case .v4_Tiny:
-      url = Bundle.main.url(forResource: "yolov4_tiny", withExtension:"mlmodelc")
+      url = Bundle.main.url(forResource: yolov4Tiny, withExtension:"mlmodelc")
       YOLO.inputSize = 416.0
     case .v4_416:
-      url = Bundle.main.url(forResource: "yolov4", withExtension:"mlmodelc")
+      url = Bundle.main.url(forResource: yolov4, withExtension:"mlmodelc")
       YOLO.inputSize = 416.0
     case .v4_512_ants:
-      url = Bundle.main.url(forResource: "yolov4_512_ants", withExtension:"mlmodelc")
+      url = Bundle.main.url(forResource: yolov4Ants, withExtension:"mlmodelc")
       YOLO.inputSize = 512.0
     }
 
