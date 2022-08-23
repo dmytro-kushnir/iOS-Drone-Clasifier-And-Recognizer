@@ -23,9 +23,9 @@ import Foundation
 import JavaScriptCore
 
 
-class RitaJSRunner{
-    let pathToLibrary = "JSScripts/trackerLib"
-    let pathToMyScripts = "JSScripts/scripts"
+class JSRunner{
+    let pathToLibrary = "trackerLib"
+    let pathToCustomScripts = "scripts"
     // 1 - JSContext is an environment for running JavaScript code - it represents the global object in the environment - and is analagous to the `window` object of a web browser
     let context = JSContext()!
 
@@ -35,8 +35,9 @@ class RitaJSRunner{
             print("JSError: \(value!)")
         }
         // 3 - get path to library in our main bundle
-        var path = Bundle.main.path(forResource: pathToLibrary, ofType: "js")!
-
+      if var path = Bundle.main.path(forResource: pathToLibrary, ofType: "js") {
+        print(path)
+        
         // 4 - Load library contents to a String variable
         var jsSource = try! String(contentsOfFile: path)
 
@@ -45,16 +46,18 @@ class RitaJSRunner{
         // now we can call all of the Library functions!
 
         // 8 - but more usefully, we can load our own JS scripts
-        path = Bundle.main.path(forResource: pathToMyScripts, ofType: "js")!
+        path = Bundle.main.path(forResource: pathToCustomScripts, ofType: "js")!
         jsSource = try! String(contentsOfFile: path)
         context.evaluateScript(jsSource)
+      }
     }
 
 
-    //call get syllables from the scripts file (in Methods)
-    func callJSsyllables(word:String)->String{
-        let syllables = context.objectForKeyedSubscript("syllables")
-        return syllables?.call(withArguments: [word])?.toString() ?? ""
+    //call method from the scripts file
+    func getFrames()->Void {
+      let test = ""
+        let function = context.objectForKeyedSubscript("getFrames")
+        print(function?.call(withArguments: [test])?.toString() ?? "")
     }
 
 }

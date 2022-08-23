@@ -17,9 +17,11 @@ class PhotoViewController: UIViewController {
   var toggleButton = false
   weak var modelProvider: ModelProvider!
   var predictionLayer: PredictionLayer!
+  let jsRunner = JSRunner()
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    // jsRunner.getFrames()
     modelProvider = ModelProvider.shared
     modelProvider.delegate = self
     predictionLayer = PredictionLayer()

@@ -160,24 +160,24 @@
 			name = MLModels;
 			sourceTree = "<group>";
 		};
-		66FFA1FC28AFC20E00EF1A04 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				66FFA20528AFC2AC00EF1A04 /* JsScripts */,
-				66FFA1FF28AFC26900EF1A04 /* TrackerJsRunner.swift */,
-				66FFA20128AFC28900EF1A04 /* UIImageExtension.swift */,
-				66FFA20328AFC29F00EF1A04 /* VideoPlayer.swift */,
-			);
-			path = Helpers;
-			sourceTree = "<group>";
-		};
-		66FFA20528AFC2AC00EF1A04 /* JsScripts */ = {
+		662B81FB28B5307A007242A2 /* JS */ = {
 			isa = PBXGroup;
 			children = (
 				66FFA20A28AFC2EB00EF1A04 /* scripts.js */,
 				66FFA20B28AFC2EB00EF1A04 /* trackerLib.js */,
 			);
-			path = JsScripts;
+			path = JS;
+			sourceTree = "<group>";
+		};
+		66FFA1FC28AFC20E00EF1A04 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				662B81FB28B5307A007242A2 /* JS */,
+				66FFA1FF28AFC26900EF1A04 /* TrackerJsRunner.swift */,
+				66FFA20128AFC28900EF1A04 /* UIImageExtension.swift */,
+				66FFA20328AFC29F00EF1A04 /* VideoPlayer.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		7529AE2AA03ED0C960C5D723 /* Frameworks */ = {
