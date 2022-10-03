@@ -23,15 +23,19 @@ import Foundation
 import JavaScriptCore
 
 
-class JSRunner{
+class JSRunner {
     let pathToLibrary = "trackerLib"
     let pathToCustomScripts = "scripts"
     // 1 - JSContext is an environment for running JavaScript code - it represents the global object in the environment - and is analagous to the `window` object of a web browser
-    let context = JSContext()!
+    let context: JSContext?
 
-    init(){
+    init() {
+        context = .init()
+        // 1.1 - After the context is created, load a js file and execute the top-level code, loading functions and objects in the global object
+        context?.enhancementMode()
+
         // 2 - we can see JS errors inside of this exception handler
-        context.exceptionHandler = { context, value in
+        context?.exceptionHandler = { context, value in
             print("JSError: \(value!)")
         }
         // 3 - get path to library in our main bundle
@@ -42,22 +46,52 @@ class JSRunner{
         var jsSource = try! String(contentsOfFile: path)
 
         // 5 - add the JS code in Library to the JSContext runtime
-        context.evaluateScript(jsSource)
+        context?.evaluateScript(jsSource)
         // now we can call all of the Library functions!
 
         // 8 - but more usefully, we can load our own JS scripts
         path = Bundle.main.path(forResource: pathToCustomScripts, ofType: "js")!
-        jsSource = try! String(contentsOfFile: path)
-        context.evaluateScript(jsSource)
+        jsSource = try! String(contentsOfFile: path , encoding: .utf8)
+        context?.evaluateScript(jsSource)
       }
     }
 
-
     //call method from the scripts file
     func getFrames()->Void {
-      let test = ""
-        let function = context.objectForKeyedSubscript("getFrames")
-        print(function?.call(withArguments: [test])?.toString() ?? "")
+        let function = context?.objectForKeyedSubscript("getFrames")i
+        function?.call(withArguments: [])
     }
 
+    func updateFrames()->Void {
+        let function = context?.objectForKeyedSubscript("updateFrames")
+        function?.call(withArguments: [])
+    }
+}
+
+extension JSContext {
+
+    // node js-like require import functionality
+    func enhancementMode() {
+        addUtils()
+    }
+
+    func addUtils() {
+        // inject js script
+        // used to define some global objects and functions
+        // define a simple console.log function
+        let js = """
+                 const console = {
+                     log: (...message) => {
+                         _consoleLog(message.join(" "))
+                     }
+                 }
+                 """
+        evaluateScript(js)
+
+        // Set callback for native use, for outputting print information to the Xcode Console
+        let callback: @convention(block) (String?) -> Void = {
+            print("[JavaScriptCore]: \($0 ?? "undefined")")
+        }
+        setObject(callback, forKeyedSubscript: "_consoleLog" as NSCopying & NSObjectProtocol)
+    }
 }

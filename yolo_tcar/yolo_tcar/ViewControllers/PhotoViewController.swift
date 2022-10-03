@@ -21,7 +21,10 @@ class PhotoViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    // jsRunner.getFrames()
+    jsRunner.getFrames()
+    jsRunner.updateFrames()
+     jsRunner.getFrames()
+
     modelProvider = ModelProvider.shared
     modelProvider.delegate = self
     predictionLayer = PredictionLayer()
