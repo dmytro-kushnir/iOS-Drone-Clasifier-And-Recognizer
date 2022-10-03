@@ -47,7 +47,9 @@ const detections = [
 
 function updateFrames(detectionScaledOfThisFrame, currentFrame) {
     console.log("!! 2.1 updateFrames")
-    Tracker.updateTrackedItemsWithNewFrame(detections, 0);
+    detections.forEach((frame, frameNb) => {
+        Tracker.updateTrackedItemsWithNewFrame(frame, frameNb);
+    });
     console.log("!! 2.2 updateFrames done")
 }
 

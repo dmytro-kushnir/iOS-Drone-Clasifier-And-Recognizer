@@ -58,7 +58,7 @@ class JSRunner {
 
     //call method from the scripts file
     func getFrames()->Void {
-        let function = context?.objectForKeyedSubscript("getFrames")i
+        let function = context?.objectForKeyedSubscript("getFrames")
         function?.call(withArguments: [])
     }
 
