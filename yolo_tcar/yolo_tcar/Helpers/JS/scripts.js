@@ -27,7 +27,7 @@ function updateTrackedFrames(framesString, currentFrame) {
 
 function getTrackedFrames() {
     console.log("-------- getTrackedFrames start --------");
-    const res = Tracker.getJSONOfTrackedItems();
+    const res = Tracker.getJSONDebugOfTrackedItems();
     console.log(`-------- getTrackedFrames done. Response:  ${JSON.stringify(res)} --------`);
     return res;
 }

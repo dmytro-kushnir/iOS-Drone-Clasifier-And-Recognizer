@@ -25,20 +25,7 @@ class PredictionLayer {
           color: CGColor) {
       layer.fillColor = UIColor.clear.cgColor
       layer.lineWidth = 2
-      // The predicted bounding box is in the coordinate space of the input
-      // image, which is a square image of 416x416 pixels. We want to show it
-      // on the video preview, which is as wide as the screen and has a 16:9
-     // aspect ratio. The video preview also may be letterboxed at the top
-     // and bottom.
-      var rect = predRect
-      rect.origin.x *=  transform.ratioX
-      rect.origin.x += transform.addX
-      rect.origin.y *= transform.ratioY
-      rect.origin.y += transform.addY
-      rect.size.width *=  transform.ratioX
-      rect.size.height *= transform.ratioY
-
-      let path = UIBezierPath(rect: rect)
+      let path = UIBezierPath(rect: predRect)
       layer.path = path.cgPath
       layer.strokeColor = color
       
@@ -47,7 +34,7 @@ class PredictionLayer {
       textLayer.fontSize = 9
       textLayer.font = UIFont(name: "Avenir", size: textLayer.fontSize)
       textLayer.alignmentMode = CATextLayerAlignmentMode.left
-      textLayer.frame = CGRect(x: rect.origin.x - 1, y: rect.origin.y - 13,
+      textLayer.frame = CGRect(x: predRect.origin.x - 1, y: predRect.origin.y - 13,
                                width: 80, height: 14)
       textLayer.backgroundColor = color
       textLayer.string = "\(label):" + String(format: "%.2f", confidence)
@@ -61,10 +48,12 @@ class PredictionLayer {
   
   private let layer: CAShapeLayer
   private var imageRect: CGRect?
-  private var transform = Transform(ratioX: 1,
-                                    ratioY: 1,
-                                    addX: 0,
-                                    addY: 0)
+  private var transform = Transform(
+          ratioX: 1,
+          ratioY: 1,
+          addX: 0,
+          addY: 0
+  )
   
   init() {
     layer = CAShapeLayer()
@@ -95,17 +84,36 @@ class PredictionLayer {
   func addToParentLayer(_ parent: CALayer) {
     parent.addSublayer(layer)
   }
+
+  // The predicted bounding box is in the coordinate space of the input
+  // image, which is a square image of 416x416 pixels. We want to show it
+  // on the video preview, which is as wide as the screen and has a 16:9
+  // aspect ratio. The video preview also may be letterboxed at the top
+  // and bottom.
+  func scalePrediction(rect: CGRect) -> CGRect {
+      var scaledRect = rect
+      scaledRect.origin.x *= transform.ratioX
+      scaledRect.origin.x += transform.addX
+      scaledRect.origin.y *= transform.ratioY
+      scaledRect.origin.y += transform.addY
+      scaledRect.size.width *= transform.ratioX
+      scaledRect.size.height *= transform.ratioY
+
+      return scaledRect
+  }
   
   func addBoundingBoxes(prediction: YOLO.Prediction) {
       let color = ColorPallete.shared.colors[prediction.classIndex]
       let label = prediction.name
 
-      let boundingBox = BoundingBox(predRect: prediction.rect,
-                                    transform: transform,
-                                    label: label,
-                                    confidence: prediction.score,
-                                    color: color
-                                    )
+      let boundingBox = BoundingBox(
+            predRect: prediction.rect,
+            transform: transform,
+            label: label,
+            confidence: prediction.score,
+            color: color
+      )
+
       boundingBox.addTo(layer: layer)
   }
   
@@ -120,5 +128,4 @@ class PredictionLayer {
   func clear() {
     layer.sublayers = nil
   }
-
 }

@@ -3235,13 +3235,13 @@ var Tracker = (function (exports) {
         return {
           id: this.id,
           idDisplay: this.idDisplay,
-          x: roundInt ? parseInt(this.x, 10) : this.x,
-          y: roundInt ? parseInt(this.y, 10) : this.y,
-          w: roundInt ? parseInt(this.w, 10) : this.w,
-          h: roundInt ? parseInt(this.h, 10) : this.h,
+          x: roundInt ? parseFloat(this.x) : this.x,
+          y: roundInt ? parseFloat(this.y) : this.y,
+          w: roundInt ? parseFloat(this.w) : this.w,
+          h: roundInt ? parseFloat(this.h) : this.h,
           confidence: Math.round(this.confidence * 100) / 100,
           // Here we negate dy to be in "normal" carthesian coordinates
-          bearing: parseInt(computeBearingIn360(this.velocity.dx, -this.velocity.dy)),
+          bearing: parseFloat(computeBearingIn360(this.velocity.dx, -this.velocity.dy)),
           name: this.getMostlyMatchedName(),
           isZombie: this.isZombie,
           appearFrame: this.appearFrame,
@@ -3253,13 +3253,13 @@ var Tracker = (function (exports) {
         var roundInt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
         return {
           id: this.idDisplay,
-          x: roundInt ? parseInt(this.x, 10) : this.x,
-          y: roundInt ? parseInt(this.y, 10) : this.y,
-          w: roundInt ? parseInt(this.w, 10) : this.w,
-          h: roundInt ? parseInt(this.h, 10) : this.h,
+          x: roundInt ? parseFloat(this.x) : this.x,
+          y: roundInt ? parseFloat(this.y) : this.y,
+          w: roundInt ? parseFloat(this.w) : this.w,
+          h: roundInt ? parseFloat(this.h) : this.h,
           confidence: Math.round(this.confidence * 100) / 100,
           // Here we negate dy to be in "normal" carthesian coordinates
-          bearing: parseInt(computeBearingIn360(this.velocity.dx, -this.velocity.dy), 10),
+          bearing: parseFloat(computeBearingIn360(this.velocity.dx, -this.velocity.dy)),
           name: this.getMostlyMatchedName(),
           isZombie: this.isZombie
         };

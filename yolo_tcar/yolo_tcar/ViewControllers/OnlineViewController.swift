@@ -153,21 +153,37 @@ extension OnlineViewController: ModelProviderDelegate {
     }
     predictionLayer.clear()
 
-    var frames = jsRunner.getTrackedFrames()
-    jsRunner.updateTrackedFrames(predictions: predictions, frameNumber: frameNumber)
+    var scaledPredictions = predictions
+    for index in 0..<predictions.count {
+      scaledPredictions[index].rect = predictionLayer.scalePrediction(rect: predictions[index].rect)
+    }
+
+    jsRunner.updateTrackedFrames(predictions: scaledPredictions, frameNumber: frameNumber)
     frameNumber += 1
-    frames = jsRunner.getTrackedFrames()
+    let frames = jsRunner.getTrackedFrames()
+
+    for item in frames ?? [] {
+      if let myDictionary = item as? [String : AnyObject] {
+        let name = myDictionary["name"]
+        let idDisplay = myDictionary["idDisplay"]
+        let confidence = myDictionary["confidence"]
+        let x = myDictionary["x"]
+        let y = myDictionary["y"]
+        let w = myDictionary["w"]
+        let h = myDictionary["h"]
+      }
+    }
 
     if Settings.shared.isSmoothed {
-      smoother.addToFrameHistory(predictions: predictions)
-      for prediction in predictions {
+      smoother.addToFrameHistory(predictions: scaledPredictions)
+      for prediction in scaledPredictions {
         predictionLayer.addBoundingBoxes(prediction: prediction)
       }
       for prediction in smoother.getSmoothedBBoxes() {
         predictionLayer.addBoundingBoxes(prediction: prediction)
       }
     } else {
-      for prediction in predictions {
+      for prediction in scaledPredictions {
         predictionLayer.addBoundingBoxes(prediction: prediction)
       }
     }
