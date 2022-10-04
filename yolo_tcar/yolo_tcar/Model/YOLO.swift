@@ -61,8 +61,9 @@ class YOLO: NSObject {
 
   var type: YOLOType!
 
-  struct Prediction {
+  struct Prediction: Codable {
     let classIndex: Int
+    let name: String
     let score: Float
     let rect: CGRect
   }
@@ -300,9 +301,12 @@ class YOLO: NSObject {
             let rect = CGRect(x: CGFloat(bbx - bbw/2.0), y: CGFloat(bby - bbh/2.0),
                     width: CGFloat(bbw), height: CGFloat(bbh))
 
-            let prediction = Prediction(classIndex: detectedClass,
+            let prediction = Prediction(
+                    classIndex: detectedClass,
+                    name: YOLO.names[detectedClass] ?? "<unknown>",
                     score: confidenceInClass,
-                    rect: rect)
+                    rect: rect
+            )
 
             predictions.append(prediction)
           }

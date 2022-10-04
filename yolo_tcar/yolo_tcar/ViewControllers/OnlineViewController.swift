@@ -1,7 +1,6 @@
 //
 //  OnlineViewController.swift
 //
-//  Created by Alexander on 11/07/2019.
 //  Copyright © 2022 dmytro_yolo_tcar. All rights reserved.
 //
 
@@ -18,6 +17,8 @@ class OnlineViewController: UIViewController {
   let captureSession = AVCaptureSession()
   let videoOutput = AVCaptureVideoDataOutput()
   let queue = DispatchQueue(label: "yolov4-tcar.camera-queue")
+  let jsRunner = JSRunner()
+  var frameNumber: Int32 = 0
   
   var previewLayer: AVCaptureVideoPreviewLayer?
   weak var modelProvider: ModelProvider!
@@ -151,6 +152,11 @@ extension OnlineViewController: ModelProviderDelegate {
       return
     }
     predictionLayer.clear()
+
+    var frames = jsRunner.getTrackedFrames()
+    jsRunner.updateTrackedFrames(predictions: predictions, frameNumber: frameNumber)
+    frameNumber += 1
+    frames = jsRunner.getTrackedFrames()
 
     if Settings.shared.isSmoothed {
       smoother.addToFrameHistory(predictions: predictions)

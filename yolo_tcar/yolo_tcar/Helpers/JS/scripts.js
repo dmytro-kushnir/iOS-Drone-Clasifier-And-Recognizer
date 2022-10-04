@@ -1,69 +1,43 @@
 
-// Assume Tracker should be in the global context
+// Middleware scripts to communicate with the main library
 
-const detections = [
-    [
-        {
-            x: 0.688212,
-            y: 0.755398,
-            w: 0.026031,
-            h: 0.048941,
-            confidence: 16.5444,
-            name: 'object',
-        },
-    ],
-    [], // This empty frame ensure that the object will be removed if fastDelete is enabled.
-    [
-        {
-            x: 0.686925,
-            y: 0.796403,
-            w: 0.028142,
-            h: 0.050919,
-            confidence: 25.7651,
-            name: 'object',
-        },
-    ],
-    [
-        {
-            x: 0.686721,
-            y: 0.837579,
-            w: 0.027887,
-            h: 0.054398,
-            confidence: 34.285399999999996,
-            name: 'object',
-        },
-    ],
-    [
-        {
-            x: 0.686436,
-            y: 0.877328,
-            w: 0.026603,
-            h: 0.058,
-            confidence: 18.104300000000002,
-            name: 'object',
-        },
-    ],
-];
-
-function updateFrames(detectionScaledOfThisFrame, currentFrame) {
-    console.log("!! 2.1 updateFrames")
-    detections.forEach((frame, frameNb) => {
-        Tracker.updateTrackedItemsWithNewFrame(frame, frameNb);
+const convertPredictionsToTrackerFormat = (predictions) => predictions.reduce((acc, { score, name, rect }) => {
+    acc.push({
+        confidence: score,
+        name,
+        x: rect[0][0],
+        y: rect[0][1],
+        w: rect[1][0],
+        h: rect[1][1]
     });
-    console.log("!! 2.2 updateFrames done")
+
+    return acc;
+}, []);
+
+function updateTrackedFrames(framesString, currentFrame) {
+    console.log(`-------- updateFrames start. FrameNB:  ${currentFrame} Frames: ${framesString} --------`);
+    try {
+        const predictions = JSON.parse(framesString);
+        Tracker.updateTrackedItemsWithNewFrame(convertPredictionsToTrackerFormat(predictions), currentFrame);
+        console.log(`-------- updateFrames done. FrameNB:  ${currentFrame} Frames: ${framesString} --------`);
+    } catch (err) {
+        console.log(`-------- updateFrames error. Error: ${err}  --------`);
+    }
 }
 
-function getFrames() {
-    console.log("!! 1.1 getFrames")
+function getTrackedFrames() {
+    console.log("-------- getTrackedFrames start --------");
     const res = Tracker.getJSONOfTrackedItems();
-    console.log("!! 1.2 getFrames response ", JSON.stringify(res))
+    console.log(`-------- getTrackedFrames done. Response:  ${JSON.stringify(res)} --------`);
     return res;
 }
 
-function reset() {
+function resetTracker() {
+    console.log(`-------- resetTracker start. --------`);
     Tracker.reset();
+    console.log(`-------- resetTracker done. --------`);
 }
 
-function setInitialParams(params) {
+function setTrackerInitialParams(params) {
     Tracker.setParams(params);
 }

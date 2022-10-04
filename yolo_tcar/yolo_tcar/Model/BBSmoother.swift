@@ -46,12 +46,17 @@ class Smoother {
           }
         }
       }
-      smoothedBBoxes.append(YOLO.Prediction(classIndex: lastPred.classIndex,
-                                            score: lastPred.score,
-                                            rect: CGRect(x: smoothedRect.origin.x / count,
-                                                         y: smoothedRect.origin.y / count,
-                                                         width: smoothedRect.width / count,
-                                                         height: smoothedRect.height / count)))
+      smoothedBBoxes.append(YOLO.Prediction(
+        classIndex: lastPred.classIndex,
+        name: lastPred.name,
+        score: lastPred.score,
+        rect: CGRect(
+          x: smoothedRect.origin.x / count,
+          y: smoothedRect.origin.y / count,
+          width: smoothedRect.width / count,
+          height: smoothedRect.height / count)
+        )
+      )
     }
     return smoothedBBoxes
   }

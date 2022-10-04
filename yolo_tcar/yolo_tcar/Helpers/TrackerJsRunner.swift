@@ -39,38 +39,46 @@ class JSRunner {
             print("JSError: \(value!)")
         }
         // 3 - get path to library in our main bundle
-      if var path = Bundle.main.path(forResource: pathToLibrary, ofType: "js") {
-        print(path)
-        
-        // 4 - Load library contents to a String variable
-        var jsSource = try! String(contentsOfFile: path)
+        if var path = Bundle.main.path(forResource: pathToLibrary, ofType: "js") {
+          print(path)
 
-        // 5 - add the JS code in Library to the JSContext runtime
-        context?.evaluateScript(jsSource)
-        // now we can call all of the Library functions!
+          // 4 - Load library contents to a String variable
+          var jsSource = try! String(contentsOfFile: path)
 
-        // 8 - but more usefully, we can load our own JS scripts
-        path = Bundle.main.path(forResource: pathToCustomScripts, ofType: "js")!
-        jsSource = try! String(contentsOfFile: path , encoding: .utf8)
-        context?.evaluateScript(jsSource)
-      }
+          // 5 - add the JS code in Library to the JSContext runtime
+          context?.evaluateScript(jsSource)
+          // now we can call all of the Library functions!
+
+          // 8 - but more usefully, we can load our own JS scripts
+          path = Bundle.main.path(forResource: pathToCustomScripts, ofType: "js")!
+          jsSource = try! String(contentsOfFile: path , encoding: .utf8)
+          context?.evaluateScript(jsSource)
+        }
     }
 
-    //call method from the scripts file
-    func getFrames()->Void {
-        let function = context?.objectForKeyedSubscript("getFrames")
-        function?.call(withArguments: [])
+    func getTrackedFrames()-> [Any]! {
+        let function = context?.objectForKeyedSubscript("getTrackedFrames")
+        return function?.call(withArguments: [])?.toArray()
     }
 
-    func updateFrames()->Void {
-        let function = context?.objectForKeyedSubscript("updateFrames")
+    func updateTrackedFrames(predictions: [YOLO.Prediction]!, frameNumber: Int32!)->Void {
+        let function = context?.objectForKeyedSubscript("updateTrackedFrames")
+        do {
+            let encodePredictions =  try JSONEncoder().encode(predictions)
+            let PredictionsJsonString = String(data: encodePredictions, encoding: .utf8)
+            function?.call(withArguments: [PredictionsJsonString as Any, frameNumber as Any])
+        } catch {
+            print("Unable To Convert in Json. FrameNumber: ", frameNumber as Any)
+        }
+    }
+
+    func resetTracker()->Void {
+        let function = context?.objectForKeyedSubscript("resetTracker")
         function?.call(withArguments: [])
     }
 }
 
 extension JSContext {
-
-    // node js-like require import functionality
     func enhancementMode() {
         addUtils()
     }
