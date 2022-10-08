@@ -53,7 +53,7 @@ class ModelProvider {
         let predictions = try self.model.predict(frame: frame)
         print("predictions.count, \(predictions.count)")
         let elapsed = CACurrentMediaTime() - startTime
-        print(elapsed)
+        print("elapsed: \(elapsed)")
 
         if (predictions.count != 0) {
           self.showResultOnMain(predictions: predictions, elapsed: Float(elapsed), error: nil)

@@ -139,7 +139,7 @@ extension OnlineViewController: ModelProviderDelegate {
 
   func show(predictions: [YOLO.Prediction]?,
             stat: ModelProvider.Statistics, error: YOLOError?) {
-    guard let predictions = predictions else {
+    guard var predictions = predictions else {
       guard let error = error else {
         showAlert(title: "Error!", msg: "Unknow error")
         return
@@ -153,13 +153,31 @@ extension OnlineViewController: ModelProviderDelegate {
     }
     predictionLayer.clear()
 
-    var scaledPredictions = predictions
-    for index in 0..<predictions.count {
-      scaledPredictions[index].rect = predictionLayer.scalePrediction(rect: predictions[index].rect)
+    if Settings.shared.isSmoothed {
+      smoother.addToFrameHistory(predictions: predictions)
+      for index in 0..<smoother.getSmoothedBBoxes().count {
+        draw(predictions: predictions, index: index)
+      }
     }
 
-    jsRunner.updateTrackedFrames(predictions: scaledPredictions, frameNumber: frameNumber)
+    for index in 0..<predictions.count  {
+      draw(predictions: predictions, index: index)
+    }
+
     frameNumber += 1
+    predictionLayer.show()
+    self.fpsLabel.text = "FPS: " + String(format: "%.2f", stat.fps)
+    self.secPerFrameLabel.text = "SecPerFrame: " + String(format: "%.2f", stat.timeForFrame)
+  }
+
+  func draw(predictions: [YOLO.Prediction], index: Int) {
+    var scaledPredictions = predictions
+
+    // rescale boxes, depend on the screen size
+    scaledPredictions[index].rect = predictionLayer.scalePrediction(rect: predictions[index].rect)
+
+    // Track object
+    jsRunner.updateTrackedFrames(predictions: scaledPredictions, frameNumber: frameNumber)
     let frames = jsRunner.getTrackedFrames()
 
     for item in frames ?? [] {
@@ -171,25 +189,12 @@ extension OnlineViewController: ModelProviderDelegate {
         let y = myDictionary["y"]
         let w = myDictionary["w"]
         let h = myDictionary["h"]
+        print("!!", myDictionary["name"], myDictionary)
       }
     }
 
-    if Settings.shared.isSmoothed {
-      smoother.addToFrameHistory(predictions: scaledPredictions)
-      for prediction in scaledPredictions {
-        predictionLayer.addBoundingBoxes(prediction: prediction)
-      }
-      for prediction in smoother.getSmoothedBBoxes() {
-        predictionLayer.addBoundingBoxes(prediction: prediction)
-      }
-    } else {
-      for prediction in scaledPredictions {
-        predictionLayer.addBoundingBoxes(prediction: prediction)
-      }
-    }
-    predictionLayer.show()
-    self.fpsLabel.text = "FPS: " + String(format: "%.2f", stat.fps)
-    self.secPerFrameLabel.text = "SecPerFrame: " + String(format: "%.2f", stat.timeForFrame)
+    // add bounding box
+    predictionLayer.addBoundingBoxes(prediction: scaledPredictions[index])
   }
   
 }

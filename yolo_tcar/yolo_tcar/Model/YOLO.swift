@@ -65,7 +65,7 @@ class YOLO: NSObject {
     let classIndex: Int
     let name: String
     let score: Float
-    let rect: CGRect
+    var rect: CGRect
   }
 
   override init() {
@@ -95,8 +95,15 @@ class YOLO: NSObject {
     guard let modelURL = url else {
       throw YOLOError.modelFileNotFound
     }
+
     do {
       model = try MLModel(contentsOf: modelURL)
+      guard let model = self.model else {
+        throw YOLOError.noModel
+      }
+      YOLO.anchors = YOLO.parseAnchors(model: model)
+      YOLO.names = try YOLO.parseNames(model: model)
+      YOLO.classesCount = YOLO.names.count
     } catch let error {
       print(error)
       throw YOLOError.modelCreationError
@@ -104,7 +111,6 @@ class YOLO: NSObject {
   }
 
   public static func parseAnchors(model: MLModel) -> [(Float,Float)] {
-    print(model.modelDescription)
     let userDefines = model.modelDescription.metadata[MLModelMetadataKey.creatorDefinedKey] as? NSDictionary
     let anchorsString = userDefines?["yolo.anchors"] as? String
 
@@ -153,10 +159,6 @@ class YOLO: NSObject {
               (name, output.featureValue(for: name)!.multiArrayValue!)}.map { pair in
               Output(name: pair.0, array: pair.1, rows: pair.1.shape[1].intValue, cols: pair.1.shape[2].intValue, blockSize: pair.1.shape[3].intValue)
             }.sorted { $0.rows > $1.rows}
-
-    YOLO.anchors = YOLO.parseAnchors(model: model)
-    YOLO.names = try YOLO.parseNames(model: model)
-    YOLO.classesCount = YOLO.names.count
 
     var index = 0
     let anchorStride =  YOLO.anchors.count / outputFeatures.count
