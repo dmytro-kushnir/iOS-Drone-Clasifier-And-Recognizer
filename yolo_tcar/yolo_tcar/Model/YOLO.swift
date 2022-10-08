@@ -63,6 +63,7 @@ class YOLO: NSObject {
 
   struct Prediction: Codable {
     let classIndex: Int
+    var objectId: Int = -1
     let name: String
     let score: Float
     var rect: CGRect

@@ -10,7 +10,7 @@ import Foundation
 private let defaultModel = YOLOType.v4_Tiny
 private let defaultIOUThreshold: Float = 0.2
 private let defaultConfidenceThreshold: Float = 0.4
-private let defaultIsSmoothed = false
+private let defaultIsSmoothed = true
 
 protocol SettingsDelegate: AnyObject {
   func reloadingFinished()

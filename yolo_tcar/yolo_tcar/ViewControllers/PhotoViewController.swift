@@ -135,12 +135,21 @@ extension PhotoViewController: ModelProviderDelegate {
       predictionLayer.clear()
     }
 
-    for prediction in predictions {
-      predictionLayer.addBoundingBoxes(prediction: prediction)
+    for index in 0..<predictions.count  {
+      draw(predictions: predictions, index: index)
     }
 
     predictionLayer.show()
     detectButton.setTitle("Stop", for: .normal)
+  }
+
+  func draw(predictions: [YOLO.Prediction], index: Int) {
+    var scaledPredictions = predictions
+    // rescale boxes, depend on the screen size
+    scaledPredictions[index].rect = predictionLayer.scalePrediction(rect: predictions[index].rect)
+
+    // add bounding box
+    predictionLayer.addBoundingBoxes(prediction: scaledPredictions[index])
   }
 
 }

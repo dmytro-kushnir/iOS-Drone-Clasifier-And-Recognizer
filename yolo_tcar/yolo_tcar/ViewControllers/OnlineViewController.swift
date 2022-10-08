@@ -13,25 +13,25 @@ class OnlineViewController: UIViewController {
   @IBOutlet weak var fpsLabel: UILabel!
   @IBOutlet weak var secPerFrameLabel: UILabel!
   @IBOutlet weak var modelLabel: UILabel!
-  
+
   let captureSession = AVCaptureSession()
   let videoOutput = AVCaptureVideoDataOutput()
   let queue = DispatchQueue(label: "yolov4-tcar.camera-queue")
   let jsRunner = JSRunner()
   var frameNumber: Int32 = 0
-  
+
   var previewLayer: AVCaptureVideoPreviewLayer?
   weak var modelProvider: ModelProvider!
   var predictionLayer: PredictionLayer!
   let smoother = Smoother()
   let semaphore = DispatchSemaphore(value: 1)
-  
+
   var lastTimestamp = CMTime()
   let maxFPS = 30
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+
     modelProvider = ModelProvider.shared
     predictionLayer = PredictionLayer()
     predictionLayer.update(imageViewFrame: previewView.frame,
@@ -53,13 +53,13 @@ class OnlineViewController: UIViewController {
       }
     }
   }
-  
+
   override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
     self.stopVideo()
     semaphore.signal()
   }
-  
+
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     smoother.frameHistory = []
@@ -68,11 +68,11 @@ class OnlineViewController: UIViewController {
     modelProvider.delegate = self
     self.startVideo()
   }
-  
+
   override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
   }
-  
+
   func startVideo() {
     if !captureSession.isRunning {
       DispatchQueue.main.async {
@@ -81,17 +81,17 @@ class OnlineViewController: UIViewController {
       }
     }
   }
-  
+
   func stopVideo() {
     if captureSession.isRunning {
       captureSession.stopRunning()
     }
   }
-  
+
   func resizePreviewLayer() {
     previewLayer?.frame = previewView.bounds
   }
-  
+
   func setUpCamera() -> Bool {
     captureSession.beginConfiguration ()
     captureSession.sessionPreset = .hd1280x720
@@ -119,14 +119,14 @@ class OnlineViewController: UIViewController {
     if captureSession.canAddOutput(videoOutput) {
       captureSession.addOutput(videoOutput)
     }
-    
+
     // We want the buffers to be in portrait orientation otherwise they are
     // rotated by 90 degrees. Need to set this _after_ addOutput()!
     videoOutput.connection(with: AVMediaType.video)?.videoOrientation = .portrait
     captureSession.commitConfiguration()
     return true
   }
-  
+
   func showAlert(title: String, msg: String) {
     let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -155,13 +155,16 @@ extension OnlineViewController: ModelProviderDelegate {
 
     if Settings.shared.isSmoothed {
       smoother.addToFrameHistory(predictions: predictions)
-      for index in 0..<smoother.getSmoothedBBoxes().count {
-        draw(predictions: predictions, index: index)
-      }
     }
 
     for index in 0..<predictions.count  {
       draw(predictions: predictions, index: index)
+    }
+
+    if Settings.shared.isSmoothed {
+      for index in 0..<smoother.getSmoothedBBoxes().count {
+        draw(predictions: predictions, index: index)
+      }
     }
 
     frameNumber += 1
@@ -182,21 +185,23 @@ extension OnlineViewController: ModelProviderDelegate {
 
     for item in frames ?? [] {
       if let myDictionary = item as? [String : AnyObject] {
-        let name = myDictionary["name"]
-        let idDisplay = myDictionary["idDisplay"]
-        let confidence = myDictionary["confidence"]
-        let x = myDictionary["x"]
-        let y = myDictionary["y"]
-        let w = myDictionary["w"]
-        let h = myDictionary["h"]
-        print("!!", myDictionary["name"], myDictionary)
+        let prediction = YOLO.Prediction(
+                classIndex: 0,
+                objectId: myDictionary["idDisplay"] as? Int ?? 0,
+                name: myDictionary["name"] as! String,
+                score: Float(myDictionary["confidence"] as! Double),
+                rect: CGRect(
+                        x: myDictionary["x"] as? Double ?? 0.0,
+                        y: myDictionary["y"] as? Double ?? 0.0,
+                        width: myDictionary["w"] as? Double ?? 0.0,
+                        height: myDictionary["h"] as? Double ?? 0.0
+                )
+        )
+        predictionLayer.addBoundingBoxes(prediction: prediction)
       }
     }
-
-    // add bounding box
-    predictionLayer.addBoundingBoxes(prediction: scaledPredictions[index])
   }
-  
+
 }
 
 extension OnlineViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -215,7 +220,7 @@ extension OnlineViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         let sy = CGFloat(YOLO.inputSize) / CGFloat(CVPixelBufferGetHeight(imageBuffer))
         let scaleTransform = CGAffineTransform(scaleX: sx, y: sy)
         let scaledImage = ciImage.transformed(by: scaleTransform)
-        
+
         let image:UIImage = UIImage.init(ciImage: scaledImage)
                 modelProvider.predict(frame: image)
 

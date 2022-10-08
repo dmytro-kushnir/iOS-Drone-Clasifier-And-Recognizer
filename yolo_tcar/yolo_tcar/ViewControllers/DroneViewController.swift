@@ -335,32 +335,42 @@ extension DroneViewController: ModelProviderDelegate {
       return
     }
     if processStarted {
-      for prediction in predictions {
-        // person class filtering
-        if prediction.classIndex == 0 {
-          predictionLayer.addBoundingBoxes(prediction: prediction)
-          // 375x600, with coordinates: x=0, y=0
-          let frame = videoView.frame
-
-          // recalculate center position
-          // let center = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
-            
-          let frameSize =  frame.size.width * frame.size.height
-          let predictionSize = prediction.rect.size.width * prediction.rect.size.height
-
-          let distanceRatio = (frameSize / predictionSize)
-          let (angle, distance) = getAngleAndDistance(fromPoint: videoView.center, toPoint: prediction.rect.origin)
-//          print(angle)
-//          print(distance)
-          
-          let box = (angle, distance, prediction.score, prediction.classIndex)
-//          predictMovement(box: box)
-        }
+      for index in 0..<predictions.count  {
+        draw(predictions: predictions, index: index)
       }
       predictionLayer.show()
       processed = true
       processStarted = false
     }
+  }
+
+  func draw(predictions: [YOLO.Prediction], index: Int) {
+    var scaledPredictions = predictions
+    // rescale boxes, depend on the screen size
+    scaledPredictions[index].rect = predictionLayer.scalePrediction(rect: predictions[index].rect)
+
+    // person class filtering
+    if scaledPredictions[index].classIndex == 0 {
+      // 375x600, with coordinates: x=0, y=0
+      let frame = videoView.frame
+
+      // recalculate center position
+      // let center = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+
+      let frameSize =  frame.size.width * frame.size.height
+      let predictionSize = scaledPredictions[index].rect.size.width * scaledPredictions[index].rect.size.height
+
+      let distanceRatio = (frameSize / predictionSize)
+      let (angle, distance) = getAngleAndDistance(fromPoint: videoView.center, toPoint: scaledPredictions[index].rect.origin)
+//          print(angle)
+//          print(distance)
+
+      let box = (angle, distance, scaledPredictions[index].score, scaledPredictions[index].classIndex)
+//          predictMovement(box: box)
+    }
+
+    // add bounding box
+    predictionLayer.addBoundingBoxes(prediction: scaledPredictions[index])
   }
 }
 

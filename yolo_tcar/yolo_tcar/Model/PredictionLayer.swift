@@ -104,7 +104,7 @@ class PredictionLayer {
   
   func addBoundingBoxes(prediction: YOLO.Prediction) {
       let color = ColorPallete.shared.colors[prediction.classIndex]
-      let label = prediction.name
+      let label = prediction.name + " " + String(prediction.objectId)
 
       let boundingBox = BoundingBox(
             predRect: prediction.rect,
