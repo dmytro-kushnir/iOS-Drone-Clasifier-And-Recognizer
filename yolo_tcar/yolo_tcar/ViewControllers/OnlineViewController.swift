@@ -17,7 +17,6 @@ class OnlineViewController: UIViewController {
   let captureSession = AVCaptureSession()
   let videoOutput = AVCaptureVideoDataOutput()
   let queue = DispatchQueue(label: "yolov4-tcar.camera-queue")
-  let jsRunner = JSRunner()
   var frameNumber: Int32 = 0
 
   var previewLayer: AVCaptureVideoPreviewLayer?
@@ -178,28 +177,11 @@ extension OnlineViewController: ModelProviderDelegate {
 
     // rescale boxes, depend on the screen size
     scaledPredictions[index].rect = predictionLayer.scalePrediction(rect: predictions[index].rect)
-
     // Track object
-    jsRunner.updateTrackedFrames(predictions: scaledPredictions, frameNumber: frameNumber)
-    let frames = jsRunner.getTrackedFrames()
-
-    for item in frames ?? [] {
-      if let myDictionary = item as? [String : AnyObject] {
-        let prediction = YOLO.Prediction(
-                classIndex: 0,
-                objectId: myDictionary["idDisplay"] as? Int ?? 0,
-                name: myDictionary["name"] as! String,
-                score: Float(myDictionary["confidence"] as! Double),
-                rect: CGRect(
-                        x: myDictionary["x"] as? Double ?? 0.0,
-                        y: myDictionary["y"] as? Double ?? 0.0,
-                        width: myDictionary["w"] as? Double ?? 0.0,
-                        height: myDictionary["h"] as? Double ?? 0.0
-                )
-        )
-        predictionLayer.addBoundingBoxes(prediction: prediction)
-      }
-    }
+    // if tracker enabled
+    ObjectTracker.shared.formTrackedBoundingBoxes(predictions: scaledPredictions, frameNumber: frameNumber, predictionLayer: predictionLayer)
+    // else do ordinary prediction
+//    predictionLayer.addBoundingBoxes(prediction: scaledPredictions[index])
   }
 
 }

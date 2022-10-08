@@ -19,6 +19,7 @@
 		1173E14B22CB3C5B00324100 /* ModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E14A22CB3C5B00324100 /* ModelProvider.swift */; };
 		1173E17022CB909900324100 /* YOLO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E16F22CB909900324100 /* YOLO.swift */; };
 		1173E17222CB940000324100 /* YOLOError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1173E17122CB940000324100 /* YOLOError.swift */; };
+		6617167B28F1FEE50033C5F7 /* ObjectTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6617167A28F1FEE50033C5F7 /* ObjectTracker.swift */; };
 		66748CB528AFDC9E00AEEC1C /* DroneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66748CB428AFDC9E00AEEC1C /* DroneViewController.swift */; };
 		66748CB728AFDCA600AEEC1C /* Tello.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66748CB628AFDCA600AEEC1C /* Tello.swift */; };
 		66FFA1F328AFC07900EF1A04 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66FFA1F228AFC07900EF1A04 /* Colors.swift */; };
@@ -53,6 +54,7 @@
 		1173E16F22CB909900324100 /* YOLO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YOLO.swift; sourceTree = "<group>"; };
 		1173E17122CB940000324100 /* YOLOError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YOLOError.swift; sourceTree = "<group>"; };
 		13DBCDD03A8265E1FE7C4241 /* Pods-yolo_tcar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-yolo_tcar.debug.xcconfig"; path = "Target Support Files/Pods-yolo_tcar/Pods-yolo_tcar.debug.xcconfig"; sourceTree = "<group>"; };
+		6617167A28F1FEE50033C5F7 /* ObjectTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectTracker.swift; sourceTree = "<group>"; };
 		66748CB428AFDC9E00AEEC1C /* DroneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DroneViewController.swift; sourceTree = "<group>"; };
 		66748CB628AFDCA600AEEC1C /* Tello.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tello.swift; sourceTree = "<group>"; };
 		66FFA1F228AFC07900EF1A04 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				1173E17122CB940000324100 /* YOLOError.swift */,
 				111A044722D5F91600D93262 /* PredictionLayer.swift */,
 				111A8C3E22E706ED00F76A50 /* BBSmoother.swift */,
+				6617167A28F1FEE50033C5F7 /* ObjectTracker.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -344,6 +347,7 @@
 				111A8C3F22E706ED00F76A50 /* BBSmoother.swift in Sources */,
 				1173E17222CB940000324100 /* YOLOError.swift in Sources */,
 				111A8C3722E2015300F76A50 /* SettingsViewController.swift in Sources */,
+				6617167B28F1FEE50033C5F7 /* ObjectTracker.swift in Sources */,
 				9F4AC5D623B4B3300014C9C8 /* AVJoyStick.swift in Sources */,
 				66FFA20428AFC29F00EF1A04 /* VideoPlayer.swift in Sources */,
 				9F4AC5D223B4A6B70014C9C8 /* H254Decoder.swift in Sources */,

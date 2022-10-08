@@ -17,6 +17,7 @@ class PhotoViewController: UIViewController {
   var toggleButton = false
   weak var modelProvider: ModelProvider!
   var predictionLayer: PredictionLayer!
+  var frameNumber: Int32 = 0
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -139,6 +140,7 @@ extension PhotoViewController: ModelProviderDelegate {
       draw(predictions: predictions, index: index)
     }
 
+    frameNumber += 1
     predictionLayer.show()
     detectButton.setTitle("Stop", for: .normal)
   }
@@ -149,7 +151,11 @@ extension PhotoViewController: ModelProviderDelegate {
     scaledPredictions[index].rect = predictionLayer.scalePrediction(rect: predictions[index].rect)
 
     // add bounding box
-    predictionLayer.addBoundingBoxes(prediction: scaledPredictions[index])
+    ObjectTracker.shared.formTrackedBoundingBoxes(
+            predictions: scaledPredictions,
+            frameNumber: frameNumber,
+            predictionLayer: predictionLayer
+    )
   }
 
 }
