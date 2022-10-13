@@ -180,11 +180,11 @@ extension OnlineViewController: ModelProviderDelegate {
 
     // rescale boxes, depend on the screen size
     scaledPredictions[index].rect = predictionLayer.scalePrediction(rect: predictions[index].rect)
-    // Track object
-    // if tracker enabled
-    ObjectTracker.shared.formTrackedBoundingBoxes(predictions: scaledPredictions, frameNumber: frameNumber, predictionLayer: predictionLayer)
-    // else do ordinary prediction
-//    predictionLayer.addBoundingBoxes(prediction: scaledPredictions[index])
+    if Settings.shared.isTrackEnabled {
+      ObjectTracker.shared.formTrackedBoundingBoxes(predictions: scaledPredictions, frameNumber: frameNumber, predictionLayer: predictionLayer)
+    } else {
+      predictionLayer.addBoundingBoxes(prediction: scaledPredictions[index])
+    }
   }
 
 }

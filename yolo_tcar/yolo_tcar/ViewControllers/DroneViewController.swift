@@ -25,6 +25,7 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
   var processStarted = false
   var lastTimestamp = CMTime()
   let maxFPS = 30
+  var frameNumber: Int32 = 0
   
   // this is for boxes prediction
   var predictedBoxes: [(angle: CGFloat, distance: CGFloat, score: Float, classIndex: Int)] = []
@@ -127,7 +128,7 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
                            imageSize: CGSize(width: self.videoView.frame.width,  height: self.videoView.frame.height))
 
     predictionLayer.addToParentLayer(videoView.layer)
-
+    ObjectTracker.shared.setInitialParams()
   }
   
   @objc func landTapped(gesture: UIGestureRecognizer) {
@@ -155,8 +156,8 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
   }
   
   override func viewDidDisappear(_ animated: Bool) {
+    ObjectTracker.shared.reset()
     super.viewDidDisappear(animated)
-    
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -335,6 +336,7 @@ extension DroneViewController: ModelProviderDelegate {
       return
     }
     if processStarted {
+      frameNumber += 1
       for index in 0..<predictions.count  {
         draw(predictions: predictions, index: index)
       }
@@ -370,7 +372,16 @@ extension DroneViewController: ModelProviderDelegate {
     }
 
     // add bounding box
-    predictionLayer.addBoundingBoxes(prediction: scaledPredictions[index])
+    if Settings.shared.isTrackEnabled {
+      ObjectTracker.shared.formTrackedBoundingBoxes(
+              predictions: scaledPredictions,
+              frameNumber: frameNumber,
+              predictionLayer: predictionLayer
+      )
+      // todo - add logic for drone to follow tracked object (probably by number Id)
+    } else {
+      predictionLayer.addBoundingBoxes(prediction: scaledPredictions[index])
+    }
   }
 }
 

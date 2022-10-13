@@ -26,6 +26,7 @@ class PhotoViewController: UIViewController {
     predictionLayer = PredictionLayer()
     predictionLayer.addToParentLayer(imageView.layer)
     self.imageView.frame = self.imageView.bounds
+    ObjectTracker.shared.setInitialParams()
   }
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -35,6 +36,7 @@ class PhotoViewController: UIViewController {
     if isVideoMode {
       VideoPlayer.shared.stop()
     }
+    ObjectTracker.shared.reset()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -151,11 +153,15 @@ extension PhotoViewController: ModelProviderDelegate {
     scaledPredictions[index].rect = predictionLayer.scalePrediction(rect: predictions[index].rect)
 
     // add bounding box
-    ObjectTracker.shared.formTrackedBoundingBoxes(
-            predictions: scaledPredictions,
-            frameNumber: frameNumber,
-            predictionLayer: predictionLayer
-    )
+    if Settings.shared.isTrackEnabled {
+      ObjectTracker.shared.formTrackedBoundingBoxes(
+              predictions: scaledPredictions,
+              frameNumber: frameNumber,
+              predictionLayer: predictionLayer
+      )
+    } else {
+      predictionLayer.addBoundingBoxes(prediction: scaledPredictions[index])
+    }
   }
 
 }

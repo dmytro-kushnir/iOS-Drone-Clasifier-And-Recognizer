@@ -11,6 +11,7 @@ private let defaultModel = YOLOType.v4_Tiny
 private let defaultIOUThreshold: Float = 0.2
 private let defaultConfidenceThreshold: Float = 0.4
 private let defaultIsSmoothed = true
+private let defaultIsTrackEnabled = true
 
 protocol SettingsDelegate: AnyObject {
   func reloadingFinished()
@@ -25,7 +26,8 @@ class Settings {
   var iouThreshold: Float
   var modelType: YOLOType
   var isSmoothed: Bool
-  
+  var isTrackEnabled: Bool
+
   weak var delegate: SettingsDelegate?
   
   private weak var modelProvider: ModelProvider?
@@ -35,6 +37,7 @@ class Settings {
     iouThreshold = defaultIOUThreshold
     modelType = defaultModel
     isSmoothed = defaultIsSmoothed
+    isTrackEnabled = defaultIsTrackEnabled
   }
   
   func save(modelType: YOLOType) -> Bool {
@@ -62,6 +65,7 @@ class Settings {
     iouThreshold = defaultIOUThreshold
     modelType = defaultModel
     isSmoothed = defaultIsSmoothed
+    isTrackEnabled = defaultIsTrackEnabled
   }
   
 }

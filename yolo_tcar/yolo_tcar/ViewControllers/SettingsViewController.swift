@@ -14,6 +14,7 @@ class SettingsViewController: UIViewController {
   @IBOutlet weak var iouLabel: UILabel!
   @IBOutlet weak var confLabel: UILabel!
   @IBOutlet weak var isSmoothed: UISwitch!
+  @IBOutlet weak var isTrackEnabled: UISwitch!
   
   var alert: UIAlertController?
   
@@ -42,6 +43,7 @@ class SettingsViewController: UIViewController {
   
   @IBAction func save() {
     settings.isSmoothed = isSmoothed.isOn
+    settings.isTrackEnabled = isTrackEnabled.isOn
     let isReloading = settings.save(modelType: YOLOType.initFrom(name:
       pickerData[modelPicker.selectedRow(inComponent: 0)]))
     if isReloading {
@@ -58,6 +60,7 @@ class SettingsViewController: UIViewController {
     confSlider.value = settings.confidenceThreshold
     confLabel.text = String(format: "%.2f", confSlider.value)
     isSmoothed.isOn = settings.isSmoothed
+    isTrackEnabled.isOn = settings.isTrackEnabled
     modelPicker.selectRow(pickerData.firstIndex(of: settings.modelType.description())!,
                           inComponent: 0, animated: true)
   }
