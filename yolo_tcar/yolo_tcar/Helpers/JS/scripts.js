@@ -38,6 +38,15 @@ function resetTracker() {
     console.log(`-------- resetTracker done. --------`);
 }
 
-function setTrackerInitialParams(params) {
+
+function setTrackerInitialParams(jsonString) {
+    console.log(`-------- setTrackerInitialParams start. --------`);
+    // const params = JSON.parse(jsonString);
+    const params = {
+        unMatchedFramesTolerance: 10,
+        fastDelete: false,
+        matchingAlgorithm: 'munkres',
+    }
     Tracker.setParams(params);
+    console.log(`-------- setTrackerInitialParams done. --------`);
 }

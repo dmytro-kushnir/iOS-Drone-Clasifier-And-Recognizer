@@ -35,4 +35,12 @@ class ObjectTracker {
             }
         }
     }
+
+    func setInitialParams() {
+        jsRunner.setTrackerInitialParams()
+    }
+
+    func reset() {
+        jsRunner.resetTracker()
+    }
 }

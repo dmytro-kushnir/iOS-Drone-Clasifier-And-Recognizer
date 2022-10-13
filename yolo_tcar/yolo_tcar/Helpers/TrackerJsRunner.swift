@@ -76,6 +76,11 @@ class JSRunner {
         let function = context?.objectForKeyedSubscript("resetTracker")
         function?.call(withArguments: [])
     }
+
+    func setTrackerInitialParams()->Void {
+        let function = context?.objectForKeyedSubscript("setTrackerInitialParams")
+        function?.call(withArguments: [])
+    }
 }
 
 extension JSContext {

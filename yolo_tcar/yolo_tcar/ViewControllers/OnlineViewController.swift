@@ -35,6 +35,8 @@ class OnlineViewController: UIViewController {
     predictionLayer = PredictionLayer()
     predictionLayer.update(imageViewFrame: previewView.frame,
                            imageSize: CGSize(width: 720, height: 1280))
+    ObjectTracker.shared.setInitialParams()
+
     queue.async {
       self.semaphore.wait()
       let success = self.setUpCamera()
@@ -56,6 +58,7 @@ class OnlineViewController: UIViewController {
   override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
     self.stopVideo()
+    ObjectTracker.shared.reset()
     semaphore.signal()
   }
 
@@ -138,7 +141,7 @@ extension OnlineViewController: ModelProviderDelegate {
 
   func show(predictions: [YOLO.Prediction]?,
             stat: ModelProvider.Statistics, error: YOLOError?) {
-    guard var predictions = predictions else {
+    guard let predictions = predictions else {
       guard let error = error else {
         showAlert(title: "Error!", msg: "Unknow error")
         return

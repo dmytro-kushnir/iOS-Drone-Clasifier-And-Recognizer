@@ -363,7 +363,6 @@
             <point key="canvasLocation" x="-4201" y="-444"/>
         </scene>
     </scenes>
-    <color key="tintColor" systemColor="systemGreenColor"/>
     <resources>
         <image name="drone-land" width="512" height="512"/>
         <image name="drone-take-off" width="512" height="512"/>
