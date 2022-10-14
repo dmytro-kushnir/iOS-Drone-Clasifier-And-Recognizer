@@ -9,9 +9,5 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
-RUN echo $(ls)
-RUN echo $(pwd)
-
-
 ENTRYPOINT  sh ./prepare_config.sh ${MODEL_CFG_PATH} ${MODEL_CFG_TEMP_PATH} & \
             python ./convert.py -n ${MODEL_NAMES} -c ${MODEL_CFG_TEMP_PATH} -w ${MODEL_WEIGHTS_PATH} -m ${MODEL_COREML_PATH}
