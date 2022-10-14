@@ -1,12 +1,12 @@
 version: '3.7'
 services:
     convertion-service:
-      build: .
-      image: tcar-network:convertion-service
+      build: ./services/convertion
+      image: getr-network:convertion-service
       expose:
         - '5000'
       networks:
-        - tcar-network
+        - getr-network
       environment:
         PYTHONUNBUFFERED: 1,
         PYTHONIOENCODING: UTF-8
@@ -15,7 +15,14 @@ services:
         MODEL_CFG_TEMP_PATH: './input_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}_tmp.cfg'
         MODEL_WEIGHTS_PATH: './input_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}.weights'
         MODEL_COREML_PATH: './output_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}.mlpackage'
-      volumes: ['./:/app']
+      volumes: ['./services/convertion:/app']
+    train-service:
+      build: ./services/train
+      image: getr-network:train-service
+      expose:
+        - '6000'
+      networks:
+        - getr-network
 networks:
-  tcar-network:
+  getr-network:
     driver: bridge

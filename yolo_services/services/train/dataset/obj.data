@@ -1,0 +1,9 @@
+classes= 6
+
+valid = data/val.txt
+
+names = data/yolo-obj.names
+
+backup = backup/
+
+train = data/train.txt
