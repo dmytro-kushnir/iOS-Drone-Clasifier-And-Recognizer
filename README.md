@@ -1,9 +1,11 @@
-# Yolov4 models compilation on iOS.
+<img align="left" width="100" height="100" src="yolo_tcar/yolo_tcar/Assets.xcassets/RETR.imageset/RETR.png">
 
-Introducing online object detection tool with convolutional neural network architecture.
+# GETR - Mobile Recognizer and Tracker.
+
+Introducing scalable object detection and tracking tool with convolutional neural network architecture.
 
 It consists of:
 
-- python service for converting Yolo family model weights to coreML format (picked up in the Docker composition)
-- ios app that preforms several types of tasks
-- service for tracking objct movements (TODO)
+- 3 python services, wrapped into docker composition, to load, train and convert Neural Network model into CoreML format for IOS
+- Swift iOS application for performing all ML (Machine Learning) tasks
+- Injected Object Tracker module
