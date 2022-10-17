@@ -1,12 +1,8 @@
 version: '3.7'
 services:
-    convertion-service:
-      build: ./services/convertion
-      image: getr-network:convertion-service
-      expose:
-        - '5000'
-      networks:
-        - getr-network
+    conversion-service:
+      build: ./services/conversion
+      image: getr-network:conversion-service
       environment:
         PYTHONUNBUFFERED: 1,
         PYTHONIOENCODING: UTF-8
@@ -15,21 +11,34 @@ services:
         MODEL_CFG_TEMP_PATH: './input_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}_tmp.cfg'
         MODEL_WEIGHTS_PATH: './input_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}.weights'
         MODEL_COREML_PATH: './output_models/${MODEL_FILE_NAME}/${MODEL_FILE_NAME}.mlpackage'
-      volumes: ['./services/convertion:/app']
+      volumes: ['./services/conversion:/app']
+      expose:
+        - '5000'
+      networks:
+        - getr-network
     images-download-service:
       build: ./services/images-download
       image: getr-network:images-download-service
-      expose:
-        - '6000'
-      networks:
-        - getr-network
       environment:
         PYTHONUNBUFFERED: 1,
         PYTHONIOENCODING: UTF-8
       volumes: [ './services/images-download:/app' ]
+      expose:
+        - '6000'
+      networks:
+        - getr-network
     train-service:
       build: ./services/train
       image: getr-network:train-service
+      volumes:
+        - ./services/train/dataset/data/obj:/darknet/data/obj
+        - ./services/train/dataset/data/test:/darknet/data/test
+        - ./services/train/dataset/data/test.txt:/darknet/data/val.txt
+        - ./services/train/dataset/data/obj.txt:/darknet/data/train.txt
+        - ./services/train/dataset/data/yolo-obj.names:/darknet/data/yolo-obj.names
+        - ./services/train/dataset/obj.data:/darknet/obj.data
+        - ./services/train/dataset/yolo-obj.cfg:/darknet/yolo-obj.cfg
+        - ./services/train/dataset/backup:/darknet/backup
       expose:
         - '7000'
       networks:

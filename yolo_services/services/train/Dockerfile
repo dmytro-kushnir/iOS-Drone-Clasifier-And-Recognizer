@@ -43,3 +43,5 @@ RUN make -j$(cat /proc/cpuinfo | grep processor | wc -l)
 WORKDIR  /darknet
 RUN wget https://github.com/AlexeyAB/darknet/releases/download/yolov4/yolov4-tiny.conv.29
 RUN wget https://github.com/AlexeyAB/darknet/releases/download/yolov4/yolov4-tiny.weights
+
+CMD [ "sleep", "infinity" ]

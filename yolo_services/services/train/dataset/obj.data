@@ -1,9 +1,6 @@
-classes= 6
-
-valid = data/val.txt
-
+classes = 2
+train = data/train.txt
+valid = data/test.txt
 names = data/yolo-obj.names
-
 backup = backup/
 
-train = data/train.txt
