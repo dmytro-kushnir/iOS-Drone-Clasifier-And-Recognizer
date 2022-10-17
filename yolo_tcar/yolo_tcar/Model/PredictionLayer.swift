@@ -8,68 +8,79 @@ import Foundation
 import UIKit
 
 class PredictionLayer {
-  
-  struct Transform {
-    var ratioX: CGFloat
-    var ratioY: CGFloat
-    var addX: CGFloat
-    var addY: CGFloat
-  }
-  
-  struct BoundingBox {
-    let layer = CAShapeLayer()
-    let textLayer = CATextLayer()
 
-    init (predRect: CGRect, transform: Transform,
-          label: String, confidence: Float,
-          color: CGColor) {
-      layer.fillColor = UIColor.clear.cgColor
-      layer.lineWidth = 2
-      let path = UIBezierPath(rect: predRect)
-      layer.path = path.cgPath
-      layer.strokeColor = color
-      
-      textLayer.foregroundColor = UIColor.black.cgColor
-      textLayer.contentsScale = UIScreen.main.scale
-      textLayer.fontSize = 9
-      textLayer.font = UIFont(name: "Avenir", size: textLayer.fontSize)
-      textLayer.alignmentMode = CATextLayerAlignmentMode.left
-      textLayer.frame = CGRect(x: predRect.origin.x - 1, y: predRect.origin.y - 13,
-                               width: 80, height: 14)
-      textLayer.backgroundColor = color
-      textLayer.string = "\(label):" + String(format: "%.2f", confidence)
-    }
-    
-    func addTo(layer: CALayer) {
-      layer.addSublayer(self.layer)
-      layer.addSublayer(self.textLayer)
-    }
-  }
-  
   private let layer: CAShapeLayer
   private var imageRect: CGRect?
-  private var transform = Transform(
-          ratioX: 1,
-          ratioY: 1,
-          addX: 0,
-          addY: 0
-  )
-  
+  private var transform = Transform(ratioX: 1, ratioY: 1, addX: 0, addY: 0)
+
   init() {
     layer = CAShapeLayer()
     layer.fillColor = UIColor.clear.cgColor
     layer.isHidden = true
   }
 
+  struct Transform {
+    var ratioX: CGFloat
+    var ratioY: CGFloat
+    var addX: CGFloat
+    var addY: CGFloat
+  }
+
+  struct BoundingBox {
+    let layer = CAShapeLayer()
+    let textLayer = CATextLayer()
+    let dotLayer = CAShapeLayer()
+
+    init (prediction: YOLO.Prediction, transform: Transform, color: CGColor) {
+      layer.fillColor = UIColor.clear.cgColor
+      layer.lineWidth = 2
+      let path = UIBezierPath(rect: prediction.rect)
+
+      layer.path = path.cgPath
+      layer.strokeColor = color
+      formTextLayer(prediction.rect, prediction.score, color, prediction.objectId, prediction.name)
+
+
+      dotLayer.path =  UIBezierPath.init(ovalIn: CGRect.init(x: 0, y: 0, width: 5, height: 5)).cgPath
+      dotLayer.name = "dotLayer"
+      dotLayer.fillColor = color
+      dotLayer.position = CGPoint(x: prediction.rect.midX, y: prediction.rect.midY)
+    }
+
+    func formTextLayer(_ rect: CGRect,_ score: Float,_ color: CGColor,_ objectId: Int,_ name: String) {
+      textLayer.foregroundColor = UIColor.black.cgColor
+      textLayer.contentsScale = UIScreen.main.scale
+      textLayer.fontSize = 9
+      textLayer.font = UIFont(name: "Avenir", size: textLayer.fontSize)
+      textLayer.alignmentMode = CATextLayerAlignmentMode.left
+      textLayer.frame = CGRect(x: rect.origin.x - 1, y: rect.origin.y - 13,
+              width: 80, height: 14)
+
+
+      textLayer.backgroundColor = color
+      var string = "\(name):" + String(format: "%.2f", score)
+      if (objectId != -1) {
+        string += " \(String(objectId))"
+      }
+      textLayer.string = string
+    }
+
+    func addTo(layer: CALayer) {
+      layer.addSublayer(self.layer)
+      layer.addSublayer(self.textLayer)
+      layer.addSublayer(self.dotLayer)
+    }
+  }
+
   func update(imageViewFrame: CGRect, imageSize: CGSize) {
     let ratio = fmin(imageViewFrame.width / imageSize.width,
-                 imageViewFrame.height / imageSize.height)
+            imageViewFrame.height / imageSize.height)
 
     imageRect = CGRect(
-          x: 0,
-          y: 0,
-          width: imageSize.width * ratio,
-          height: imageSize.height * ratio
+            x: 0,
+            y: 0,
+            width: imageSize.width * ratio,
+            height: imageSize.height * ratio
     )
 
     imageRect!.origin.x = imageViewFrame.width / 2 - imageRect!.width / 2
@@ -80,7 +91,7 @@ class PredictionLayer {
     transform.addX = imageRect!.origin.x
     transform.addY = imageRect!.origin.y
   }
-  
+
   func addToParentLayer(_ parent: CALayer) {
     parent.addSublayer(layer)
   }
@@ -91,41 +102,40 @@ class PredictionLayer {
   // aspect ratio. The video preview also may be letterboxed at the top
   // and bottom.
   func scalePrediction(rect: CGRect) -> CGRect {
-      var scaledRect = rect
-      scaledRect.origin.x *= transform.ratioX
-      scaledRect.origin.x += transform.addX
-      scaledRect.origin.y *= transform.ratioY
-      scaledRect.origin.y += transform.addY
-      scaledRect.size.width *= transform.ratioX
-      scaledRect.size.height *= transform.ratioY
+    var scaledRect = rect
+    scaledRect.origin.x *= transform.ratioX
+    scaledRect.origin.x += transform.addX
+    scaledRect.origin.y *= transform.ratioY
+    scaledRect.origin.y += transform.addY
+    scaledRect.size.width *= transform.ratioX
+    scaledRect.size.height *= transform.ratioY
 
-      return scaledRect
+    return scaledRect
   }
-  
+
   func addBoundingBoxes(prediction: YOLO.Prediction) {
-      let color = ColorPallete.shared.colors[prediction.classIndex]
-      let label = prediction.name + " " + String(prediction.objectId)
-
-      let boundingBox = BoundingBox(
-            predRect: prediction.rect,
+    let boundingBox = BoundingBox(
+            prediction: prediction,
             transform: transform,
-            label: label,
-            confidence: prediction.score,
-            color: color
-      )
+            color: ColorPallete.shared.colors[prediction.classIndex]
+    )
 
-      boundingBox.addTo(layer: layer)
+    boundingBox.addTo(layer: layer)
   }
-  
+
   func show() {
     layer.isHidden = false
   }
-  
+
   func hide() {
     layer.isHidden = true
   }
-  
+
   func clear() {
-    layer.sublayers = nil
+//    layer.sublayers = nil
+
+    for item in layer.sublayers ?? [] where item.name != "dotLayer" {
+      item.removeFromSuperlayer()
+    }
   }
 }
