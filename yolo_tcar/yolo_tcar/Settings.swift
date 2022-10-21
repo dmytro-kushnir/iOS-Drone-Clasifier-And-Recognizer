@@ -12,6 +12,7 @@ private let defaultIOUThreshold: Float = 0.2
 private let defaultConfidenceThreshold: Float = 0.4
 private let defaultIsSmoothed = true
 private let defaultIsTrackEnabled = true
+private let defaultFrameHistoryLimit: Int32 = 64
 
 protocol SettingsDelegate: AnyObject {
   func reloadingFinished()
@@ -27,6 +28,7 @@ class Settings {
   var modelType: YOLOType
   var isSmoothed: Bool
   var isTrackEnabled: Bool
+  var frameHistoryLimit: Int32
 
   weak var delegate: SettingsDelegate?
   
@@ -38,6 +40,7 @@ class Settings {
     modelType = defaultModel
     isSmoothed = defaultIsSmoothed
     isTrackEnabled = defaultIsTrackEnabled
+    frameHistoryLimit = defaultFrameHistoryLimit
   }
   
   func save(modelType: YOLOType) -> Bool {
@@ -66,6 +69,7 @@ class Settings {
     modelType = defaultModel
     isSmoothed = defaultIsSmoothed
     isTrackEnabled = defaultIsTrackEnabled
+    frameHistoryLimit = defaultFrameHistoryLimit
   }
   
 }

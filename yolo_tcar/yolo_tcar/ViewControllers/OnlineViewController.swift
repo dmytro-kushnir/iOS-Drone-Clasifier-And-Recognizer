@@ -59,6 +59,7 @@ class OnlineViewController: UIViewController {
     super.viewDidDisappear(animated)
     self.stopVideo()
     ObjectTracker.shared.reset()
+    predictionLayer.clear()
     semaphore.signal()
   }
 
@@ -69,6 +70,7 @@ class OnlineViewController: UIViewController {
     modelLabel.text = "Model: " + modelType
     modelProvider.delegate = self
     self.startVideo()
+    predictionLayer.clear()
   }
 
   override var preferredStatusBarStyle: UIStatusBarStyle {

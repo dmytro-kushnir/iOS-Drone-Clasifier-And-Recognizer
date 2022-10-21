@@ -19,7 +19,7 @@ class ObjectTracker {
         for item in frames ?? [] {
             if let myDictionary = item as? [String : AnyObject] {
                 let prediction = YOLO.Prediction(
-                        classIndex: YOLO.names.filter({ $0.value == myDictionary["name"] as! String }).first?.key ?? -1,
+                        classIndex: YOLO.names.filter({ $0.value == myDictionary["name"] as! String }).first?.key ?? 0,
                         objectId: myDictionary["idDisplay"] as? Int ?? 0,
                         name: myDictionary["name"] as! String,
                         score: Float(myDictionary["confidence"] as! Double),

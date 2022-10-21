@@ -95,7 +95,7 @@ extension SettingsViewController: UIPickerViewDelegate, UIPickerViewDataSource {
   }
   
   func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-    return 3
+    return pickerData.count
   }
   
   func pickerView(_ pickerView: UIPickerView, titleForRow row: Int,

@@ -12,7 +12,6 @@ class PredictionLayer {
   private let layers: CAShapeLayer
   private var imageRect: CGRect?
   private var transform = Transform(ratioX: 1, ratioY: 1, addX: 0, addY: 0)
-  private var frameHistoryLimit: Int32 = 64
 
   init() {
     layers = CAShapeLayer()
@@ -55,10 +54,15 @@ class PredictionLayer {
       textLayer.frame = CGRect(x: rect.origin.x - 1, y: rect.origin.y - 13,
               width: 80, height: 14)
 
-      dotLayer.fillColor = ColorPallete.shared.colors[objectId % ColorPallete.shared.colorsCount]
       textLayer.backgroundColor = color
       var string = "\(name):" + String(format: "%.2f", score)
+
       if (objectId != -1) {
+        // tracker is enabled
+        let trackColor = ColorPallete.shared.colors[objectId % ColorPallete.shared.colorsCount]
+        dotLayer.fillColor = trackColor
+        textLayer.backgroundColor = trackColor
+        layer.strokeColor = trackColor
         string += " \(String(objectId))"
       }
       textLayer.string = string
@@ -129,7 +133,8 @@ class PredictionLayer {
     for layer in layers.sublayers ?? []
       where
         layer.name != "dotLayer" ||
-        layer.name == "dotLayer" && ((frameNumber % frameHistoryLimit) == 0) // remove history every $(frameHistoryLimit) frames
+        layer.name == "dotLayer" && ((frameNumber % Settings.shared.frameHistoryLimit) == 0) || // remove history every $(frameHistoryLimit) frames
+        layer.name == "dotLayer" && frameNumber == 0
           {
             layer.removeFromSuperlayer()
           }
