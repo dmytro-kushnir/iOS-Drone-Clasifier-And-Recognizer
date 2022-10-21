@@ -9,14 +9,15 @@ import UIKit
 
 class PredictionLayer {
 
-  private let layer: CAShapeLayer
+  private let layers: CAShapeLayer
   private var imageRect: CGRect?
   private var transform = Transform(ratioX: 1, ratioY: 1, addX: 0, addY: 0)
+  private var frameHistoryLimit: Int32 = 64
 
   init() {
-    layer = CAShapeLayer()
-    layer.fillColor = UIColor.clear.cgColor
-    layer.isHidden = true
+    layers = CAShapeLayer()
+    layers.fillColor = UIColor.clear.cgColor
+    layers.isHidden = true
   }
 
   struct Transform {
@@ -40,10 +41,8 @@ class PredictionLayer {
       layer.strokeColor = color
       formTextLayer(prediction.rect, prediction.score, color, prediction.objectId, prediction.name)
 
-
       dotLayer.path =  UIBezierPath.init(ovalIn: CGRect.init(x: 0, y: 0, width: 5, height: 5)).cgPath
       dotLayer.name = "dotLayer"
-      dotLayer.fillColor = color
       dotLayer.position = CGPoint(x: prediction.rect.midX, y: prediction.rect.midY)
     }
 
@@ -56,7 +55,7 @@ class PredictionLayer {
       textLayer.frame = CGRect(x: rect.origin.x - 1, y: rect.origin.y - 13,
               width: 80, height: 14)
 
-
+      dotLayer.fillColor = ColorPallete.shared.colors[objectId % ColorPallete.shared.colorsCount]
       textLayer.backgroundColor = color
       var string = "\(name):" + String(format: "%.2f", score)
       if (objectId != -1) {
@@ -93,7 +92,7 @@ class PredictionLayer {
   }
 
   func addToParentLayer(_ parent: CALayer) {
-    parent.addSublayer(layer)
+    parent.addSublayer(layers)
   }
 
   // The predicted bounding box is in the coordinate space of the input
@@ -114,28 +113,25 @@ class PredictionLayer {
   }
 
   func addBoundingBoxes(prediction: YOLO.Prediction) {
-    let boundingBox = BoundingBox(
-            prediction: prediction,
-            transform: transform,
-            color: ColorPallete.shared.colors[prediction.classIndex]
-    )
-
-    boundingBox.addTo(layer: layer)
+    let boundingBox = BoundingBox(prediction: prediction, transform: transform, color: ColorPallete.shared.colors[prediction.classIndex])
+    boundingBox.addTo(layer: layers)
   }
 
   func show() {
-    layer.isHidden = false
+    layers.isHidden = false
   }
 
   func hide() {
-    layer.isHidden = true
+    layers.isHidden = true
   }
 
-  func clear() {
-//    layer.sublayers = nil
-
-    for item in layer.sublayers ?? [] where item.name != "dotLayer" {
-      item.removeFromSuperlayer()
-    }
+  func clear(frameNumber: Int32 = 0) {
+    for layer in layers.sublayers ?? []
+      where
+        layer.name != "dotLayer" ||
+        layer.name == "dotLayer" && ((frameNumber % frameHistoryLimit) == 0) // remove history every $(frameHistoryLimit) frames
+          {
+            layer.removeFromSuperlayer()
+          }
   }
 }

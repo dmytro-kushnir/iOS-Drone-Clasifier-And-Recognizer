@@ -10,6 +10,8 @@ import UIKit
 struct ColorPallete {
   static let shared = ColorPallete()
   var colors: [CGColor] = []
+  var colorsCount = 120
+
   init() {
     // Make colors for the bounding boxes. There is one color for each class,
     // 20 classes in total.

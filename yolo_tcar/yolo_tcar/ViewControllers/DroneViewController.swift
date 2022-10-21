@@ -210,7 +210,7 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
       VTCreateCGImageFromCVPixelBuffer(frame, options: nil, imageOut: &cgImage)
       
       if let cgImage = cgImage {
-          DispatchQueue.main.async {
+          DispatchQueue.main.async { [self] in
               self.videoView.image = UIImage(cgImage: cgImage)
             if !self.processed {
                 guard let image = self.videoView.image else {
@@ -222,7 +222,7 @@ class DroneViewController: UIViewController, CLLocationManagerDelegate, VideoFra
               } else {
                 self.processed = false
                 self.predictionLayer.hide()
-                self.predictionLayer.clear()
+                self.predictionLayer.clear(frameNumber: frameNumber)
               }
           }
       } else {

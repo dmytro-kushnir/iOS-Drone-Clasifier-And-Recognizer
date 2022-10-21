@@ -153,7 +153,7 @@ extension OnlineViewController: ModelProviderDelegate {
       }
       return
     }
-    predictionLayer.clear()
+    predictionLayer.clear(frameNumber: frameNumber)
 
     if Settings.shared.isSmoothed {
       smoother.addToFrameHistory(predictions: predictions)

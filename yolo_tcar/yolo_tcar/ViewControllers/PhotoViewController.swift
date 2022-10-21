@@ -199,7 +199,7 @@ extension PhotoViewController: UIImagePickerControllerDelegate, UINavigationCont
       VideoPlayer.shared.pause()
       isVideoMode = true
     }
-    predictionLayer.clear()
+    predictionLayer.clear(frameNumber: frameNumber)
     detectButton.setTitle("Detect", for: .normal)
     self.dismiss(animated: true)
   }
