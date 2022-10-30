@@ -1,2 +1,1 @@
-Tank
-Person
+Ant

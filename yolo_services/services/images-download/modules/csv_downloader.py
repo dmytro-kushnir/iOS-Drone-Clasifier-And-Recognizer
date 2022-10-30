@@ -6,7 +6,7 @@ import pandas as pd
 
 from modules.utils import bcolors as bc
 
-OID_URL = 'https://storage.googleapis.com/openimages/2018_04/'
+OID_URL = 'https://storage.googleapis.com/openimages/v6/'
 
 def TTV(csv_dir, name_file, args_y):
     '''
