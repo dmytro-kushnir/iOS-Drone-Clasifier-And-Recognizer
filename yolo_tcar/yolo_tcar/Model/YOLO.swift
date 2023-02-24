@@ -334,7 +334,7 @@ extension YOLO {
     while i < boxes.count {
       var j = i + 1
       while j < boxes.count {
-        let iou = IOU(a: boxes[i].rect, b: boxes[j].rect)
+        let iou = YOLO.IOU(a: boxes[i].rect, b: boxes[j].rect)
         if iou > threshold {
           if boxes[i].score > boxes[j].score {
             if boxes[i].classIndex == boxes[j].classIndex {
@@ -358,7 +358,7 @@ extension YOLO {
     }
   }
 
-  private func IOU(a: CGRect, b: CGRect) -> Float {
+  static func IOU(a: CGRect, b: CGRect) -> Float {
     let areaA = a.width * a.height
     if areaA <= 0 { return 0 }
     let areaB = b.width * b.height
@@ -395,7 +395,7 @@ extension YOLO {
  First we shift the values of x so that the highest value in the array is 0.
  This ensures numerical stability with the exponents, so they don't blow up.
  */
-  private func softmax(_ x: inout [Float]) {
+  public func softmax(_ x: inout [Float]) {
     var x = x
     let len = vDSP_Length(x.count)
 

@@ -8,7 +8,7 @@
 import UIKit
 import CoreML
 
-protocol ModelProviderDelegate: AnyObject {
+protocol ModelProviderDelegate: class {
   func show(predictions: [YOLO.Prediction]?,
             stat: ModelProvider.Statistics,
             error: YOLOError?)
