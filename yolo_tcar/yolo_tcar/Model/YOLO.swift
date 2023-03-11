@@ -62,7 +62,7 @@ class YOLO: NSObject {
   var type: YOLOType!
 
   struct Prediction: Codable {
-    let classIndex: Int
+    var classIndex: Int = 0
     var objectId: Int = -1
     let name: String
     let score: Float
