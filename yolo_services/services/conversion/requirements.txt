@@ -1,5 +1,6 @@
 yolov4==3.2.0
 opencv-python==4.5.4.60
-coremltools==5.1.0
+coremltools==6.2.0
 keras==2.2.4
 tensorflow==2.5.0
+scikit-learn==0.19.2

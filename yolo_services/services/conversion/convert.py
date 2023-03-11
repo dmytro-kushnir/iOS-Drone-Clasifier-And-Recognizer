@@ -1,5 +1,8 @@
 import argparse
 import os
+import shutil
+from pathlib import Path
+
 import numpy as np
 from coremltools import ImageType
 from coremltools.models.utils import save_spec
@@ -12,6 +15,9 @@ parser.add_argument('-n', '--names_path', help='Path to names file.')
 parser.add_argument('-c', '--config_path', help='Path to Darknet cfg file.')
 parser.add_argument('-w', '--weights_path', help='Path to Darknet weights file.')
 parser.add_argument('-m', '--mlpackage_path', help='Path to output CoreML mlpackage file.')
+parser.add_argument('-af', '--affine_quantize', action='store_true',  help='Enable Affine quantize of the CoreML model.')
+parser.add_argument('-km', '--k_means_quantize', action='store_true',  help='Enable K-means LUT quantize of the CoreML model.')
+parser.add_argument('-f32', '--precision_float32', action='store_true', help='Enable option to convert model with 32 floating-point precision.')
 
 yolo = YOLOv4()
 
@@ -50,23 +56,45 @@ def _main(args):
 
     # Convert to Core ML
     model = ct.convert(yolo.model,
-                       inputs=[ImageType(name='input_1', scale=1/255., color_layout="BGR",
-                                         channel_first=False)],
-                       minimum_deployment_target=ct.target.iOS15,
-                       compute_precision=ct.precision.FLOAT16,
-                       compute_units=ct.ComputeUnit.ALL,
-                       skip_model_load=False,
-                       debug=False
-                       )
+       inputs=[ct.ImageType(name='input_1', scale=1/255., color_layout="BGR", channel_first=False)],
+       minimum_deployment_target=ct.target.iOS15,
+       compute_precision=ct.precision.FLOAT32 if args.precision_float32 else ct.precision.FLOAT16,
+       compute_units=ct.ComputeUnit.ALL,
+       skip_model_load=False,
+       debug=False
+   )
+
+    if args.affine_quantize :
+        # Model compression to 8 floating-point precision
+        model = ct.compression_utils.affine_quantize_weights(model, mode="linear")
+    elif args.k_means_quantize :
+        # Model compression to 4 floating-point precision
+        model = ct.compression_utils.palettize_weights(model, nbits=4, mode="kmeans")
+
+    print('yolo.config.model_name', yolo.config.model_name)
+    print('yolo.config.metalayers', yolo.config.metalayers)
+    print('yolo.config.metayolos', yolo.config.metayolos)
+    print('yolo.config.masks', yolo.config.masks)
+    print('yolo.config.layer_count', yolo.config.layer_count)
+    print('yolo.config.summary', yolo.config.summary)
 
     model.user_defined_metadata['yolo.anchors'] = np.array2string(yolo.config.anchors, separator=',')
     model.user_defined_metadata['yolo.names'] = names
-
-    model.save(mlpackage_path)
+    model.user_defined_metadata['yolo.size'] = yolo.config.model_name
+    model.author = 'dmytro.kushnir'
 
     print('model.is_package', model.is_package)
+
     if (model.is_package) :
-        save_spec(model.get_spec(), mlpackage_path)
+        spec = model.get_spec()
+        # if package exists, it needs to be removed before saving new configurations
+        dirpath = Path(mlpackage_path)
+        if dirpath.exists() and dirpath.is_dir():
+            shutil.rmtree(dirpath)
+        save_spec(spec, mlpackage_path, False, model.weights_dir)
+    else :
+        model.save(mlpackage_path)
+
 
 
 if __name__ == '__main__':
