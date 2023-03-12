@@ -4,7 +4,6 @@ import shutil
 from pathlib import Path
 
 import numpy as np
-from coremltools import ImageType
 from coremltools.models.utils import save_spec
 from yolov4.tf import YOLOv4
 import coremltools as ct
@@ -87,6 +86,7 @@ def _main(args):
 
     if (model.is_package) :
         spec = model.get_spec()
+        print("model type: {}".format(spec.WhichOneof('Type')))
         # if package exists, it needs to be removed before saving new configurations
         dirpath = Path(mlpackage_path)
         if dirpath.exists() and dirpath.is_dir():
