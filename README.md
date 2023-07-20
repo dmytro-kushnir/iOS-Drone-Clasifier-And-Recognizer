@@ -15,3 +15,11 @@ It consists of:
   - run the converter: <pre>docker-compose up --build conversion-service</pre>
 - Swift iOS application for performing all ML (Machine Learning) tasks
 - Injected Object Tracker module
+
+# Structure Diagram
+
+<img src="./assets/structure.png">
+
+# UML Diagram of the Mobile System
+
+<img src="./assets/uml.png">
